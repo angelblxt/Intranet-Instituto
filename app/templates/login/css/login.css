@@ -1,0 +1,150 @@
+@font-face {
+	
+	font-family: "Raleway";
+	
+	src: url('../fonts/Raleway.ttf') format('truetype');
+	
+	font-weight: normal;
+	font-style: normal;
+
+}
+
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@-moz-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@-webkit-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@-ms-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@-o-keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+body, html{
+
+	background-image: url('../img/background.png');
+	background-position: center;
+	background-attachment: fixed;
+	background-size: 100%;
+	
+	/* background-color: #F0F0F0; */
+
+	font-family: 'Helvetica';
+	font-size: 12px;
+
+	margin: 0;
+
+	min-width: 900px;
+
+}
+
+table{
+
+	font-family: 'Helvetica';
+	font-size: 12px;
+
+}
+
+a, img{
+
+	text-decoration: none;
+	border: 0;
+
+}
+
+.logo{
+
+	background-image: url('../img/logo_login.png');
+
+	width: 600px;
+	height: 156px;
+
+	-webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
+	   -moz-animation: fadein 3s; /* Firefox < 16 */
+		-ms-animation: fadein 3s; /* Internet Explorer */
+		 -o-animation: fadein 3s; /* Opera < 12.1 */
+			animation: fadein 3s;
+
+}
+
+.center{
+
+	position: absolute;
+	left: 50%;
+	top: 40%;
+
+	-webkit-transform: translate(-50%, -50%);
+	   -moz-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+
+}
+
+.center .box{
+
+	background-color: #FFFFFF;
+	width: 600px;
+	height: auto;
+
+	padding: 20px 15px;
+
+	opacity: 0.8;
+
+	border-radius : 3px;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing   : border-box;
+	box-sizing        : border-box;
+
+}
+
+.center .box .title{
+
+	font-family: 'Raleway';
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+
+	color: rgba(0,0,0, .8);
+
+	margin-bottom: 10px;
+
+}
+
+	.center .box .title > span{
+		
+		position: relative;
+		display: inline-block;
+
+	}
+
+		.center .box .title > span:before, .center .box .title > span:after{
+		   
+			content: '';
+			position: absolute;
+			top: 50%;
+
+			border-bottom: 1px solid;
+			border-color: rgba(0,0,0, .5);
+			width: 50px;
+			margin: 0 15px;
+
+		}
+
+		.center .box .title > span:before{
+			
+			right: 100%;
+
+		}
+
+		.center .box .title > span:after{
+			
+			left: 100%;
+			
+		}
+
+.center .copyright{
+
+	width: 100%;
+
+	margin-top: 10px;
+
+	color: rgba(0,0,0, .4);
+	text-align: center;
+
+}
