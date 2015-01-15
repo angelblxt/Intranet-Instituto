@@ -84,6 +84,62 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener el Usuario actual.
+	*
+	* @param string $hash HASH del Usuario.
+	*
+	* @return string Usuario.
+	*
+	*/
+
+		public function getUser($hash = '')
+		{
+
+			if(empty($hash)){
+
+				return ($this->isLogged())? Session::get('username') : false;
+
+			} else {
+
+				$username = $this->_db->select("SELECT usuario FROM usuarios WHERE hash = '". $hash ."' LIMIT 1")[0]->usuario;
+				$username = Seguridad::desencriptar($username, 1);
+
+				return $username;
+
+			}
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el Nombre y los Apellidos del Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return array [nombre, apellidos].
+	*
+	*/
+
+		public function getNameSurname($user = '')
+		{
+
+			if(empty($user))
+				$user = $this->getUser();
+
+			$hash = $this->getHash($user);
+
+			$data = $this->_db->select("SELECT nombre, apellidos FROM datos_personales WHERE hash_usuario = '". $hash ."' LIMIT 1")[0];
+
+			$nombre = [
+				'nombre'    => $data->nombre,
+				'apellidos' => $data->apellidos];
+
+			return $nombre;
+
+		}
+
 }
 
 ?>

@@ -7,18 +7,23 @@ use core\view,
 
 class User extends \core\controller{
 
+	public $username;
+
 	public function __construct(){
 
 		parent::__construct();
 
 		$this->language->load('login');
 
+		// Cargamos Modelos.
+			$this->_user = new \models\user();
+
+		if($this->_user->isLogged())
+			$this->username = Session::get('username');
+
 	}
 
 	public function login(){
-
-		// Cargamos Modelos.
-			$this->_user = new \models\user();
 
 		if(isset($_POST['login']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
 
@@ -45,12 +50,61 @@ class User extends \core\controller{
 				$hashUser = $this->_user->getHash($user);
 
 				Session::set('user', [$encriptado['user'], $hashUser]);
+				Session::set('username', $user);
 
 				Url::redirect('user/');
 
 			}
 
 		} else {
+
+			Url::redirect('');
+
+		}
+
+	}
+
+	public function me()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$nombreApellidos = $this->_user->getNameSurname();
+
+			$data = [
+				'title' => 'Inicio'];
+
+			$personalData = [
+				'nombre'  => $nombreApellidos,
+				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $personalData);
+			View::rendertemplate('aside', $personalData);
+			View::render('user/me', $data);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function logout()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			Session::destroy('user');
+			Session::destroy('username');
 
 			Url::redirect('');
 
