@@ -34,6 +34,9 @@ class Config {
 		define('DB_PASS', 'pass');
 		define('PREFIX', 'smvc_');
 
+		// Clave de encriptación.
+		define('ENCRYPTION_KEY', 'cdff38g0rc15dzas8axb');
+
 		//set prefix for sessions
 		define('SESSION_PREFIX', 'intr_');
 
