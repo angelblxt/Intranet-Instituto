@@ -63,8 +63,13 @@ new \core\config();
 use \core\router,
     \helpers\url;
 
-//define routes
-Router::any('', '\controllers\login@index');
+// Rutas de los Formularios.
+    Router::post('post/login', '\controllers\user@login');
+
+// Rutas normales.
+	Router::any('', '\controllers\login@index');
+	Router::any('user', '\controllers\user@me');
+	Router::any('user/logout', '\controllers\user@logout');
 
 //if no route found
 Router::error('\core\error@index');
