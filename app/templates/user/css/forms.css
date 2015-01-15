@@ -1,0 +1,113 @@
+/* RESETEAMOS LOS FORMULARIOS */
+
+	input,
+	label,
+	select,
+	button,
+	textarea{
+
+		margin:0;
+		border:0;
+		padding:0;
+		display:inline-block;
+		vertical-align:middle;
+		white-space:normal;
+		background:none;
+		line-height:1;
+
+		font-size:14px;
+		font-family:Helvetica;
+
+	}
+
+	input:focus{
+
+		outline:0;
+
+	}
+
+	input,
+	textarea{
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing   : border-box;
+		box-sizing        : border-box;
+
+	}
+
+/* NUEVOS FORMULARIOS */
+
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=range],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week]{
+
+	background-color: #f8f8f8;
+
+	width: calc(100% - 35px);
+	height: 35px;
+
+	padding: 0 10px;
+	margin-bottom: 20px;
+
+	color: #8A8A8A;
+
+	border-top: 1px solid #D7D7D7;
+	border-right: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+	border-left: 1px solid #9BBD74;
+
+	float: left;
+
+}
+
+form .wrapper{
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing   : border-box;
+	box-sizing        : border-box;
+
+}
+
+form .wrapper .inputIcon{
+
+	background-color: #aed581;
+
+	width: 35px;
+	height: 35px;
+
+	border-top: 1px solid #9BBD74;
+	border-bottom: 1px solid #9BBD74;
+	border-left: 1px solid #9BBD74;
+
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+
+	text-align: center;
+
+	float: left;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing   : border-box;
+	box-sizing        : border-box;
+
+}
+
+	form .wrapper .inputIcon i{
+
+		line-height: 35px;
+		font-size: 18px;
+		color: #FFFFFF;
+		text-shadow: 0 1px 0 rgba(0,0,0, .2);
+
+	}
