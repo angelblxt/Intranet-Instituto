@@ -9,14 +9,37 @@
 
 	<div class="about_socialNetworks">
 
-		<a href="mailto:angelquerolgarcia@gmail.com" target="_blank" class="about_socialButton"><i class="fa fa-envelope-square"></i></a>
-		<a href="https://www.facebook.com/angel.querolgarcia" target="_blank" class="about_socialButton"><i class="fa fa-facebook-square"></i></a>
-		<a href="https://twitter.com/angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-twitter-square"></i></a>
-		<a href="https://instagram.com/angelquerol" target="_blank" class="about_socialButton"><i class="fa fa-instagram"></i></a>
-		<a href="https://plus.google.com/118236736571237059283" target="_blank" class="about_socialButton"><i class="fa fa-google-plus-square"></i></a>
-		<a href="https://es.linkedin.com/pub/ángel-querol-garcía/66/a73/a75/" target="_blank" class="about_socialButton"><i class="fa fa-linkedin-square"></i></a>
-		<a href="https://github.com/angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-git-square"></i></a>
-		<a href="skype:angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-skype"></i></a>
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Correo Electrónico">
+			<a href="mailto:angelquerolgarcia@gmail.com" target="_blank" class="about_socialButton"><i class="fa fa-envelope-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Facebook">
+			<a href="https://www.facebook.com/angel.querolgarcia" target="_blank" class="about_socialButton"><i class="fa fa-facebook-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Twitter">
+			<a href="https://twitter.com/angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-twitter-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Instagram">
+			<a href="https://instagram.com/angelquerol" target="_blank" class="about_socialButton"><i class="fa fa-instagram"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Google+">
+			<a href="https://plus.google.com/118236736571237059283" target="_blank" class="about_socialButton"><i class="fa fa-google-plus-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="LinkedIn">
+			<a href="https://es.linkedin.com/pub/ángel-querol-garcía/66/a73/a75/" target="_blank" class="about_socialButton"><i class="fa fa-linkedin-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="GitHub">
+			<a href="https://github.com/angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-git-square"></i></a>
+		</span>
+
+		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Skype">
+			<a href="skype:angelblxt" target="_blank" class="about_socialButton"><i class="fa fa-skype"></i></a>
+		</span>
 
 	</div>
 
