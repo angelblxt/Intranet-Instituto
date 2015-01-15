@@ -87,7 +87,7 @@ class User extends \core\controller{
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $personalData);
 			View::rendertemplate('aside', $personalData);
-			View::render('user/me', $data);
+			View::render('user/me');
 			View::rendertemplate('footer');
 
 		}
@@ -107,6 +107,36 @@ class User extends \core\controller{
 			Session::destroy('username');
 
 			Url::redirect('');
+
+		}
+
+	}
+
+	public function about()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$nombreApellidos = $this->_user->getNameSurname();
+
+			$data = [
+				'title' => 'Inicio'];
+
+			$personalData = [
+				'nombre'  => $nombreApellidos,
+				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $personalData);
+			View::rendertemplate('aside', $personalData);
+			View::render('user/about');
+			View::rendertemplate('footer');
 
 		}
 

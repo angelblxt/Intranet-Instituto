@@ -66,10 +66,11 @@ use \core\router,
 // Rutas de los Formularios.
     Router::post('post/login', '\controllers\user@login');
 
-// Rutas normales.
+// Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
 	Router::any('user', '\controllers\user@me');
 	Router::any('user/logout', '\controllers\user@logout');
+	Router::any('about', '\controllers\user@about');
 
 //if no route found
 Router::error('\core\error@index');
