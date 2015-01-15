@@ -306,3 +306,65 @@ a{
 			color: rgba(0,0,0, .4);
 
 		}
+
+.about_logo{
+
+	background-image: url('../img/logo_login.png');
+
+	width: 600px;
+	height: 156px;
+
+}
+
+.about_title{
+
+	font-family: 'Raleway';
+	font-size: 40px;
+	color: rgba(0,0,0, .8);
+
+}
+
+.about_subtitle{
+
+	font-family: 'Raleway';
+	font-size: 20px;
+	color: rgba(0,0,0, .5);
+
+}
+
+.about_developer{
+
+	font-family: 'Raleway';
+	font-size: 15px;
+	color: rgba(0,0,0, .7);
+
+	margin-top: 30px;
+
+}
+
+.about_socialNetworks{
+
+	margin: 20px 0 10px 0;
+
+}
+
+.about_socialButton{
+
+	font-size: 40px;
+	color: rgba(0,0,0, .8);
+
+	margin: 0 5px;
+
+	-webkit-transition: all 0.1s linear;
+			transition: all 0.1s linear;
+
+}
+
+	.about_socialButton:hover{
+
+		color: rgba(0,0,0, .6);
+
+		-webkit-transition: all 0.1s linear;
+				transition: all 0.1s linear;
+
+	}
