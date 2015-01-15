@@ -124,7 +124,7 @@ class User extends \core\controller{
 			$nombreApellidos = $this->_user->getNameSurname();
 
 			$data = [
-				'title' => 'Inicio'];
+				'title' => 'Acerca De'];
 
 			$personalData = [
 				'nombre'  => $nombreApellidos,
