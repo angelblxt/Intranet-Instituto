@@ -68,6 +68,8 @@ use \core\router,
 
 // Rutas normales.
 	Router::any('', '\controllers\login@index');
+	Router::any('user', '\controllers\user@me');
+	Router::any('user/logout', '\controllers\user@logout');
 
 //if no route found
 Router::error('\core\error@index');
