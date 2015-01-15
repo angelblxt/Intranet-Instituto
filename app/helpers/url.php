@@ -52,6 +52,21 @@ class Url {
 	}
 
 	/**
+	*
+	* Método encargado de devolver la sección actual.
+	*
+	* @return string Sección actual.
+	*
+	*/
+
+	public function actual()
+	{
+
+		return $_SERVER['REDIRECT_QUERY_STRING'];
+
+	}
+
+	/**
 	 * This function converts and url segment to an safe one, for example:
 	 * `test name @132` will be converted to `test-name--123`
 	 * Basicly it works by replacing every character that isn't an letter or an number to an dash sign

@@ -29,10 +29,13 @@ class Config {
 		//database details ONLY NEEDED IF USING A DATABASE
 		define('DB_TYPE', 'mysql');
 		define('DB_HOST', 'localhost');
-		define('DB_NAME', 'lkl_clientes');
-		define('DB_USER', 'lookeylock');
-		define('DB_PASS', 'rCp9YyTdWzQhT9mc');
+		define('DB_NAME', 'intranet');
+		define('DB_USER', 'root');
+		define('DB_PASS', 'k9cbbzk9cbbz');
 		define('PREFIX', 'smvc_');
+
+		// Clave de encriptación.
+		define('ENCRYPTION_KEY', 'cdff38g0rc15dzas8axb');
 
 		//set prefix for sessions
 		define('SESSION_PREFIX', 'intr_');
