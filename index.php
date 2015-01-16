@@ -67,6 +67,7 @@ use \core\router,
 // Rutas de los Formularios.
     Router::post('post/login', '\controllers\user@login');
     Router::post('post/changePassword', '\controllers\user@changePassword');
+    Router::any('post/changeCircleColor/(:any)', '\controllers\user@changeCircleColor');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
@@ -79,6 +80,7 @@ use \core\router,
 // Ruta de las secciones de "Preferencias".
 	Router::any('preferences', '\controllers\preferences@preferences');
 	Router::any('preferences/password', '\controllers\preferences@password');
+	Router::any('preferences/circleColor', '\controllers\preferences@circleColor');
 
 //if no route found
 Router::error('\core\error@index');
