@@ -159,4 +159,37 @@
 
             }
 
+        /**
+        *
+        * Método encargado de limpiar los INPUT.
+        *
+        * @param string $value Texto a limpiar.
+        *
+        * @return string Texto limpio.
+        *
+        */
+
+            public function cleanInput( $value )
+            {
+
+                if(is_array($value)){
+
+                    foreach( $value as $key => $val ) {
+
+                        $value[$key] = cleanInput($val);
+
+                    }
+
+                    return $value;
+
+                } else {
+
+                    $value = strip_tags(trim($value));
+
+                    return $this->mysql->real_escape_string($value);
+                
+                }
+
+            }
+
     }
