@@ -34,7 +34,7 @@ class Language {
 		} else {
 
 			// display error
-			echo \core\error::display("Could not load language file '$code/$name.php'");
+			echo \core\error::display("No se pudo encontrar la ruta del lenguaje '$code/$name.php'");
 			die;
 
 		}
@@ -77,7 +77,7 @@ class Language {
 		} else {
 
 			// display error
-			echo \core\error::display("Could not load language file '$code/$name.php'");
+			echo \core\error::display("No se pudo encontrar la ruta del lenguaje '$code/$name.php'");
 			die;
 
 		}

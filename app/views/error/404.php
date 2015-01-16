@@ -1,14 +1,12 @@
-<h1>404</h1>
+<div class="sectionTitle"><i class="fa fa-warning"></i> 404</div>
 
-<?php echo $data['error'];?>
+<?php echo $error;?>
 
-<hr />
-
-<h3>The page you were looking for could not be found</h3>
-<p>This could be the result of the page being removed, the name being changed or the page being temporarily unavailable</p>
-<h3>Troubleshooting</h3>
+<h3>La página que estás buscando no existe o ha cambiado de localización.</h3>
+<p>Esto puede ser resultado de que la página haya sido eliminada, el nombre haya cambiado o la página esté temporalmente no disponible.</p>
+<h3>Recomendaciones</h3>
 
 <ul>
-  <li>If you spelled the URL manually, double check the spelling</li>
-  <li>Go to our website's home page, and navigate to the content in question</li>
+  <li>Si escribiste la URL manualmente, vuelve a comprobarla.</li>
+  <li>Ve a nuestra página de Inicio y navega hasta el contenido en cuestión.</li>
 </ul>  

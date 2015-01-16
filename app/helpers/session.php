@@ -64,6 +64,23 @@ class Session {
 	}
 
 	/**
+	*
+	* Método encargado de comprobar si existe una sesión.
+	*
+	* @param string $key Nombre de la sesión.
+	*
+	* @return boolean TRUE si existe, FALSE si no.
+	*
+	*/
+
+	public static function exists($key)
+	{
+
+		return (isset($_SESSION[SESSION_PREFIX.$key]))? true : false;
+
+	}
+
+	/**
 	 * get item from session
 	 * 
 	 * @param  string  $key       item to look for in session
