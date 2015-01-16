@@ -140,6 +140,31 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de cambiar la Contraseña de un Usuario.
+	*
+	* @param string $user Usuario.
+	* @param string $password Nueva Contraseña.
+	*
+	* @return boolean TRUE si se cambió, FALSE si no.
+	*
+	*/
+
+		public function setPassword($user, $password)
+		{
+
+			$hash = $this->getHash($user);
+
+			$update = [
+				'password' => hash('sha512', $password)];
+
+			$query = $this->_db->update('usuarios', $update, ['hash' => $hash]);
+
+			return ($query)? true : false;
+
+		}
+
 }
 
 ?>

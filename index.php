@@ -65,12 +65,19 @@ use \core\router,
 
 // Rutas de los Formularios.
     Router::post('post/login', '\controllers\user@login');
+    Router::post('post/changePassword', '\controllers\user@changePassword');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
 	Router::any('user', '\controllers\user@me');
 	Router::any('user/logout', '\controllers\user@logout');
-	Router::any('about', '\controllers\user@about');
+	
+// Ruta de la sección de "Acerca De".
+	Router::any('about', '\controllers\about@about');
+
+// Ruta de las secciones de "Preferencias".
+	Router::any('preferences', '\controllers\preferences@preferences');
+	Router::any('preferences/password', '\controllers\preferences@password');
 
 //if no route found
 Router::error('\core\error@index');
