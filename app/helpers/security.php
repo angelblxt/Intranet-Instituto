@@ -184,9 +184,7 @@
 
                 } else {
 
-                    $value = strip_tags(trim($value));
-
-                    return $this->mysql->real_escape_string($value);
+                    return strip_tags(trim($value));
                 
                 }
 
