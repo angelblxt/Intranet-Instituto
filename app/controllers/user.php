@@ -8,6 +8,7 @@ use core\view,
 class User extends \core\controller{
 
 	public $username;
+	public $templateData;
 
 	public function __construct(){
 
@@ -21,6 +22,14 @@ class User extends \core\controller{
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
+
+		// Datos del Template.
+			$nombreApellidos = $this->_user->getNameSurname();
+
+			$this->templateData = [
+				'nombre'       => $nombreApellidos,
+				'inicial'      => utf8_encode($nombreApellidos['nombre'][0]),
+				'colorCirculo' => $this->_user->getCircleColor()];
 
 	}
 
@@ -76,20 +85,14 @@ class User extends \core\controller{
 
 		} else {
 
-			$nombreApellidos = $this->_user->getNameSurname();
-
 			$data = [
 				'title' => 'Inicio'];
-
-			$personalData = [
-				'nombre'  => $nombreApellidos,
-				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $personalData);
-			View::rendertemplate('aside', $personalData);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
 			View::render('user/me');
 			View::rendertemplate('footer');
 
@@ -163,6 +166,42 @@ class User extends \core\controller{
 			Url::redirect('');
 
 		}
+
+	}
+
+	public function changeCircleColor($color)
+	{
+
+		switch($color){
+
+			case 'red': $hex      = 'f44336'; break;
+			case 'pink': $hex     = 'e91e63'; break;
+			case 'purple': $hex   = '9c27b0'; break;
+			case 'blue': $hex     = '3f51b5'; break;
+			case 'teal': $hex     = '009688'; break;
+			case 'green': $hex    = '8bc34a'; break;
+			case 'orange': $hex   = 'ff9800'; break;
+			case 'brown': $hex    = '795548'; break;
+			case 'bluegrey': $hex = '607d8b'; break;
+			default: $hex         = '607d8b'; break;
+
+		}
+
+		$result = $this->_user->setCircleColor($hex);
+
+		if($result){
+
+			$this->_log->add('Ha cambiado de color el Círculo de la Interfaz.');
+
+			$_SESSION['error'] = ['Color del Círculo cambiado con éxito.', 'bien'];
+
+		} else {
+
+			$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+		}
+
+		Url::redirect('preferences/circleColor');
 
 	}
 
