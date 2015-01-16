@@ -268,7 +268,7 @@ class Router {
 			if(!is_object(self::$error_callback)){
 
 				//call object controller and method
-				self::invokeObject(self::$error_callback,null,'No routes found.');
+				self::invokeObject(self::$error_callback,null,'La ruta especificada no existe.');
 				if (self::$halts) return;
 
 			} else {
