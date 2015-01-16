@@ -112,31 +112,40 @@ class User extends \core\controller{
 
 	}
 
-	public function about()
+	public function changePassword()
 	{
 
-		if(!$this->_user->isLogged()){
+		$passActual = $_POST['pass_actual'];
+		$passNueva1 = $_POST['pass_nueva_1'];
+		$passNueva2 = $_POST['pass_nueva_2'];
 
-			Url::redirect('');
+		if(isset($_POST['change']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+			if(empty($passActual) || empty($passNueva1) || empty($passNueva2)){
+
+				$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+			} elseif(!$this->_user->checkPassword($this->username, $passActual)) {
+
+				$_SESSION['error'] = ['La Contraseña actual no es correcta.', 'mal'];
+
+			} elseif($passNueva1 !== $passNueva2){
+
+				$_SESSION['error'] = ['Las nuevas Contraseñas no coinciden.', 'mal'];
+
+			} else {
+
+				$result = $this->_user->setPassword($this->username, $passNueva2);
+
+				$_SESSION['error'] = ($result)? ['Contraseña cambiada con éxito.', 'bien'] : ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+			}
+
+			Url::redirect('preferences/password');
 
 		} else {
 
-			$nombreApellidos = $this->_user->getNameSurname();
-
-			$data = [
-				'title' => 'Acerca De'];
-
-			$personalData = [
-				'nombre'  => $nombreApellidos,
-				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
-			
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $personalData);
-			View::rendertemplate('aside', $personalData);
-			View::render('user/about');
-			View::rendertemplate('footer');
+			Url::redirect('');
 
 		}
 

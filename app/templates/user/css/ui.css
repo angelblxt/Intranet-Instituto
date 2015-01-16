@@ -161,7 +161,6 @@ a{
 				text-align: center;
 				font-family: 'Raleway';
 				font-size: 35px;
-				/* font-weight: bold; */
 				color: #FFFFFF;
 
 				margin-bottom: calc(50% - 30px);
@@ -307,64 +306,134 @@ a{
 
 		}
 
-.about_logo{
-
-	background-image: url('../img/logo_login.png');
-
-	width: 600px;
-	height: 156px;
-
-}
-
-.about_title{
-
-	font-family: 'Raleway';
-	font-size: 40px;
-	color: rgba(0,0,0, .8);
-
-}
-
-.about_subtitle{
+.sectionTitle{
 
 	font-family: 'Raleway';
 	font-size: 20px;
-	color: rgba(0,0,0, .5);
+	color: rgba(0,0,0, .4);
+
+	margin-bottom: 20px;
 
 }
 
-.about_developer{
+/* SECCIÓN ACERCA DE */
 
-	font-family: 'Raleway';
-	font-size: 15px;
-	color: rgba(0,0,0, .7);
+	.about_logo{
 
-	margin-top: 30px;
+		background-image: url('../img/logo_login.png');
 
-}
+		width: 600px;
+		height: 156px;
 
-.about_socialNetworks{
+	}
 
-	margin: 20px 0 10px 0;
+	.about_title{
 
-}
+		font-family: 'Raleway';
+		font-size: 40px;
+		color: rgba(0,0,0, .8);
 
-.about_socialButton{
+	}
 
-	font-size: 40px;
-	color: rgba(0,0,0, .8);
+	.about_subtitle{
 
-	margin: 0 5px;
+		font-family: 'Raleway';
+		font-size: 20px;
+		color: rgba(0,0,0, .5);
 
-	-webkit-transition: all 0.1s linear;
-			transition: all 0.1s linear;
+	}
 
-}
+	.about_developer{
 
-	.about_socialButton:hover{
+		font-family: 'Raleway';
+		font-size: 15px;
+		color: rgba(0,0,0, .7);
 
-		color: rgba(0,0,0, .6);
+		margin-top: 30px;
+
+	}
+
+	.about_socialNetworks{
+
+		margin: 20px 0 10px 0;
+
+	}
+
+	.about_socialButton{
+
+		font-size: 40px;
+		color: rgba(0,0,0, .8);
+
+		margin: 0 5px;
 
 		-webkit-transition: all 0.1s linear;
 				transition: all 0.1s linear;
 
 	}
+
+		.about_socialButton:hover{
+
+			color: rgba(0,0,0, .6);
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+/* SECCIÓN DE PREFERENCIAS */
+
+	.preferences_button{
+
+		width: calc(20% - 3px);
+
+		margin: 0;
+
+		text-align: center;
+
+		display: inline-block;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing   : border-box;
+		box-sizing        : border-box;
+
+	}
+
+		.preferences_button a i{
+
+			color: rgba(0,0,0, .2);
+			font-size: 100px;
+
+			display: block;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a span{
+
+			color: rgba(0,0,0, .4);
+			font-size: 14px;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a:hover i{
+
+			color: #8bc34a;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a:hover span{
+
+			color: #8bc34a;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
