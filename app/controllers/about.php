@@ -33,6 +33,8 @@ class About extends \core\controller{
 
 		} else {
 
+			$this->_log->add('Ha entrado en la sección "Acerca de".');
+
 			$nombreApellidos = $this->_user->getNameSurname();
 
 			$data = [
