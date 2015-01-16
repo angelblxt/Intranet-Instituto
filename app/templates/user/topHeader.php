@@ -8,6 +8,6 @@
 
 	</div>
 
-	<a href="user/logout"><i class="logoutButton fa fa-sign-out"></i></a>
+	<a href="<?php echo DIR; ?>user/logout"><i class="logoutButton fa fa-sign-out"></i></a>
 
 </header>
