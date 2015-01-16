@@ -55,6 +55,9 @@ class Config {
 
 		//set the default template
 		\helpers\session::set('template', 'login');
+
+		
+		
 	}
 
 }
