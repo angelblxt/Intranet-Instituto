@@ -155,6 +155,8 @@ a{
 				width: 60px;
 				height: 60px;
 
+				position: relative;
+
 				border-radius: 30px;
 
 				line-height: 60px;
@@ -168,6 +170,45 @@ a{
 				margin-left: calc(50% - 30px);
 
 			}
+
+			.container aside .topZone .circle .circle_edit{
+
+				background-color: #5A5A5A;
+
+				position: absolute;
+				top: 43px;
+				left: 0px;
+
+				line-height: 18px;
+				font-size: 10px;
+
+				width: 18px;
+				height: 18px;
+
+				border-radius: 18px;
+				border: 2px solid #3F3F3F;
+
+				display: none;
+
+			}
+
+				.container aside .topZone .circle .circle_edit i{
+
+					color: #FFFFFF;
+					
+				}
+
+				.container aside .topZone .circle:hover .circle_edit{
+
+					display: block;
+
+				}
+
+				.container aside .topZone .circle .circle_edit:hover{
+
+					background-color: #666666;
+
+				}
 
 			.container aside .topZone .logout{
 
