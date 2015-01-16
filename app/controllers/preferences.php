@@ -17,6 +17,7 @@ class Preferences extends \core\controller{
 
 		// Cargamos Modelos.
 			$this->_user = new \models\user();
+			$this->_log  = new \models\log();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
@@ -31,6 +32,8 @@ class Preferences extends \core\controller{
 			Url::redirect('');
 
 		} else {
+
+			$this->_log->add('Ha entrado en la sección "Preferencias".');
 
 			$nombreApellidos = $this->_user->getNameSurname();
 
@@ -61,6 +64,8 @@ class Preferences extends \core\controller{
 			Url::redirect('');
 
 		} else {
+
+			$this->_log->add('Ha entrado en la sección "Cambio de Contraseña".');
 
 			$nombreApellidos = $this->_user->getNameSurname();
 
