@@ -1,6 +1,7 @@
 <?php namespace core;
 use core\controller,
-    core\view;
+    core\view,
+    helpers\session as Session;
 
 /*
  * error class - calls a 404 page
@@ -35,8 +36,12 @@ class Error extends Controller {
 		
 		$data['title'] = '404';
 		$data['error'] = $this->_error;
+
+		Session::set('template', 'user');
 		
-		View::rendertemplate('header',$data);
+		View::rendertemplate('header', $data);
+		View::rendertemplate('topHeader', $data);
+		View::rendertemplate('aside', $data);
 		View::render('error/404',$data);
 		View::rendertemplate('footer',$data);
 		
