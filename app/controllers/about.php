@@ -8,6 +8,7 @@ use core\view,
 class About extends \core\controller{
 
 	public $username;
+	public $templateData;
 
 	public function __construct(){
 
@@ -22,6 +23,14 @@ class About extends \core\controller{
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
 
+		// Datos del Template.
+			$nombreApellidos = $this->_user->getNameSurname();
+
+			$this->templateData = [
+				'nombre'       => $nombreApellidos,
+				'inicial'      => utf8_encode($nombreApellidos['nombre'][0]),
+				'colorCirculo' => $this->_user->getCircleColor()];
+
 	}
 
 	public function about()
@@ -35,20 +44,14 @@ class About extends \core\controller{
 
 			$this->_log->add('Ha entrado en la sección "Acerca de".');
 
-			$nombreApellidos = $this->_user->getNameSurname();
-
 			$data = [
 				'title' => 'Acerca De'];
-
-			$personalData = [
-				'nombre'  => $nombreApellidos,
-				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $personalData);
-			View::rendertemplate('aside', $personalData);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
 			View::render('user/about');
 			View::rendertemplate('footer');
 
