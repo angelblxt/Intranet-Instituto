@@ -17,6 +17,7 @@ class User extends \core\controller{
 
 		// Cargamos Modelos.
 			$this->_user = new \models\user();
+			$this->_log  = new \models\log();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
