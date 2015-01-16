@@ -169,4 +169,40 @@ class User extends \core\controller{
 
 	}
 
+	public function changeCircleColor($color)
+	{
+
+		switch($color){
+
+			case 'red': $hex      = 'f44336'; break;
+			case 'pink': $hex     = 'e91e63'; break;
+			case 'purple': $hex   = '9c27b0'; break;
+			case 'blue': $hex     = '3f51b5'; break;
+			case 'teal': $hex     = '009688'; break;
+			case 'green': $hex    = '8bc34a'; break;
+			case 'orange': $hex   = 'ff9800'; break;
+			case 'brown': $hex    = '795548'; break;
+			case 'bluegrey': $hex = '607d8b'; break;
+			default: $hex         = '607d8b'; break;
+
+		}
+
+		$result = $this->_user->setCircleColor($hex);
+
+		if($result){
+
+			$this->_log->add('Ha cambiado de color el Círculo de la Interfaz.');
+
+			$_SESSION['error'] = ['Color del Círculo cambiado con éxito.', 'bien'];
+
+		} else {
+
+			$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+		}
+
+		Url::redirect('preferences/circleColor');
+
+	}
+
 }

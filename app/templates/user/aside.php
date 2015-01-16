@@ -34,7 +34,7 @@
 
 			<div class="circle_edit">
 
-				<span class="hint--rounded hint--bounce hint--right" data-hint="Editar Color"><a href=""><i class="fa fa-pencil"></i></a></span>
+				<span class="hint--rounded hint--bounce hint--right" data-hint="Editar Color"><a href="<?php echo DIR; ?>preferences/circleColor"><i class="fa fa-pencil"></i></a></span>
 
 			</div>
 

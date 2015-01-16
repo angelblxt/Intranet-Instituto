@@ -88,4 +88,30 @@ class Preferences extends \core\controller{
 
 	}
 
+	public function circleColor()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$this->_log->add('Ha entrado en la sección "Cambio de Color del Círculo".');
+
+			$data = [
+				'title' => 'Colores'];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/preferences/circleColor');
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
 }

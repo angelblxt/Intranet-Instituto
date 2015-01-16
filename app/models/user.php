@@ -191,6 +191,34 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de cambiar el color del círculo 
+	* del Menú Izquierdo de la Interfaz.
+	*
+	* @param string $hex Color Hexadecimal.
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si se ha cambiado, FALSE si no.
+	*
+	*/
+
+		public function setCircleColor($hex, $user = '')
+		{
+
+			$user = (empty($user))? Session::get('username') : $user;
+
+			$hashUsuario = $this->getHash($user);
+
+			$update = [
+				'color_circulo' => $hex];
+
+			$result = $this->_db->update('usuarios', $update, ['hash' => $hashUsuario]);
+
+			return ($result)? true : false;
+
+		}
+
 }
 
 ?>
