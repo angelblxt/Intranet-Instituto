@@ -29,6 +29,6 @@
 
 <center>
 
-	<button type="submit" name="change" class="button button-rounded button-flat-action" style="margin-top: 10px"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Guardar</button>
+	<button onClick="location.href='<?php echo DIR ?>preferences'" class="button button-rounded button-flat-primary" style="margin-top: 10px"><i class="fa fa-chevron-left" style="margin-left: -4px"></i> Volver atrás</button>
 
 </center>
