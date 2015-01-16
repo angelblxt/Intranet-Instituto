@@ -8,6 +8,7 @@ use core\view,
 class User extends \core\controller{
 
 	public $username;
+	public $templateData;
 
 	public function __construct(){
 
@@ -21,6 +22,14 @@ class User extends \core\controller{
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
+
+		// Datos del Template.
+			$nombreApellidos = $this->_user->getNameSurname();
+
+			$this->templateData = [
+				'nombre'       => $nombreApellidos,
+				'inicial'      => utf8_encode($nombreApellidos['nombre'][0]),
+				'colorCirculo' => $this->_user->getCircleColor()];
 
 	}
 
@@ -76,20 +85,14 @@ class User extends \core\controller{
 
 		} else {
 
-			$nombreApellidos = $this->_user->getNameSurname();
-
 			$data = [
 				'title' => 'Inicio'];
-
-			$personalData = [
-				'nombre'  => $nombreApellidos,
-				'inicial' => utf8_encode($nombreApellidos['nombre'][0])];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $personalData);
-			View::rendertemplate('aside', $personalData);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
 			View::render('user/me');
 			View::rendertemplate('footer');
 

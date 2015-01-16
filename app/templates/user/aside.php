@@ -30,7 +30,15 @@
 					
 	<div class="topZone">
 
-		<div class="circle" style="background-color: #607d8b"><?php echo $inicial ?></div>
+		<div class="circle" style="background-color: #<?php echo $colorCirculo ?>"><?php echo $inicial ?>
+
+			<div class="circle_edit">
+
+				<span class="hint--rounded hint--bounce hint--right" data-hint="Editar Color"><a href=""><i class="fa fa-pencil"></i></a></span>
+
+			</div>
+
+		</div>
 
 		<div class="logout"><a href="<?php echo DIR; ?>user/logout"><i class="fa fa-sign-out"></i> Salir</a></div>
 

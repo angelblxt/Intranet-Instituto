@@ -4,6 +4,8 @@ use \helpers\security as Seguridad,
 	\helpers\session as Session;
 	 
 class User extends \core\model {
+
+	public $username;
 	
 	function __construct(){
 		
@@ -162,6 +164,30 @@ class User extends \core\model {
 			$query = $this->_db->update('usuarios', $update, ['hash' => $hash]);
 
 			return ($query)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el color del círculo del 
+	* Menú Izquierdo de la Interfaz.
+	*
+	* @param string $user Usuario.
+	*
+	* @return string Hexadecimal del color.
+	*
+	*/
+
+		public function getCircleColor($user = '')
+		{
+
+			$user = (empty($user))? Session::get('username') : $user;
+
+			$hashUsuario = $this->getHash($user);
+
+			$hexadecimal = $this->_db->select("SELECT color_circulo FROM usuarios WHERE hash = '". $hashUsuario ."'")[0]->color_circulo;
+
+			return $hexadecimal;
 
 		}
 
