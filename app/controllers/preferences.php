@@ -33,6 +33,8 @@ class Preferences extends \core\controller{
 
 		} else {
 
+			$this->_log->add('Ha entrado en la sección "Preferencias".');
+
 			$nombreApellidos = $this->_user->getNameSurname();
 
 			$data = [
@@ -62,6 +64,8 @@ class Preferences extends \core\controller{
 			Url::redirect('');
 
 		} else {
+
+			$this->_log->add('Ha entrado en la sección "Cambio de Contraseña".');
 
 			$nombreApellidos = $this->_user->getNameSurname();
 
