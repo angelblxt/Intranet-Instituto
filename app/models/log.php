@@ -10,27 +10,36 @@ class Log extends \core\model {
 		
 		parent::__construct();
 
+		// Cargamos modelos.
+			$this->_user = new \models\user();
+
+		if($this->_user->isLogged())
+			$this->username = Session::get('username');
+
 	}
 
 	/**
 	*
 	* Método encargado de almacenar un LOG.
 	*
-	* @param string $hashUsuario HASH del Usuario.
 	* @param string $log LOG a almacenar.
+	* @param string $user Usuario.
 	*
 	* @return boolean TRUE si se ha almacenado, FALSE si no.
 	*
 	*/
 
-		public function add($hashUsuario, $log)
+		public function add($log, $user = '')
 		{
 
-			if(!empty($hashUsuario) || !empty($log)){
+			if(!empty($log)){
 
-				$ip     = ip2long(System::getIP());
-				$tiempo = time();
-				$log    = Seguridad::encriptar($log, 2);
+				$user = (empty($user))? $this->username : $user;
+
+				$hashUsuario = $this->_user->getHash($user);
+				$ip          = ip2long(System::getIP());
+				$tiempo      = time();
+				$log         = Seguridad::encriptar($log, 2);
 
 				$insert = [
 					'hash_usuario' => $hashUsuario,
