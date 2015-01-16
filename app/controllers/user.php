@@ -17,6 +17,7 @@ class User extends \core\controller{
 
 		// Cargamos Modelos.
 			$this->_user = new \models\user();
+			$this->_log  = new \models\log();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
@@ -51,6 +52,8 @@ class User extends \core\controller{
 
 				Session::set('user', [$encriptado['user'], $hashUser]);
 				Session::set('username', $user);
+
+				$this->_log->add('Ha iniciado sesión.', $user);
 
 				Url::redirect('user/');
 
@@ -103,6 +106,8 @@ class User extends \core\controller{
 
 		} else {
 
+			$this->_log->add('Ha cerrado sesión.', $this->username);
+
 			Session::destroy('user');
 			Session::destroy('username');
 
@@ -137,7 +142,17 @@ class User extends \core\controller{
 
 				$result = $this->_user->setPassword($this->username, $passNueva2);
 
-				$_SESSION['error'] = ($result)? ['Contraseña cambiada con éxito.', 'bien'] : ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+				if($result){
+
+					$this->_log->add('Ha cambiado su contraseña.');
+
+					$_SESSION['error'] = ['Contraseña cambiada con éxito.', 'bien'];
+
+				} else {
+
+					$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+				}
 
 			}
 
