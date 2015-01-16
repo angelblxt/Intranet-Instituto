@@ -1,0 +1,439 @@
+@font-face {
+	
+	font-family: "Raleway";
+	
+	src: url('../fonts/Raleway.ttf') format('truetype');
+	
+	font-weight: normal;
+	font-style: normal;
+
+}
+
+html, body{
+
+	background-color: #ECECEC;
+
+	width: 100%;
+	height: 100%;
+
+	min-width: 800px;
+
+	margin: 0;
+	padding: 0;
+
+	font-family: 'Helvetica';
+	font-size: 12px;
+
+}
+
+a{
+
+	text-decoration: none;
+
+}
+
+.container{
+
+	min-height: 100%;
+
+	position: relative;
+
+}
+
+	.container header{
+
+		background-color: #FFFFFF;
+
+		width: calc(100% - 100px);
+		height: 80px;
+
+		margin-left: 100px;
+
+		line-height: 80px;
+
+		border-bottom: 2px solid #D5D5D5;
+
+	}
+
+		.container header i.icon{
+
+			margin: 0 30px;
+
+			line-height: 80px;
+
+			color: #8bc34a;
+			font-size: 40px;
+
+			float: left;
+
+		}
+
+		.container header .userName{
+
+			position: absolute;
+
+			font-family: 'Raleway';
+			font-size: 25px;
+
+			display: inline;
+
+			float: left;
+
+		}
+
+			.container header .userName .surname{
+
+				color: #A1A1A1;
+
+				display: inline;
+
+			}
+
+			.container header .userName .name{
+
+				color: #434343;
+
+				display: inline;
+
+			}
+
+		.container header a i.logoutButton{
+
+			margin: 0 30px;
+
+			line-height: 80px;
+
+			font-size: 40px;
+			color: #434343;
+
+			display: inline;
+
+			float: right;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+			.container header a i.logoutButton:hover{
+
+				color: #767676;
+
+				-webkit-transition: all 0.1s linear;
+						transition: all 0.1s linear;
+
+			}
+
+	.container aside{
+
+		background-color: #2F2F2F;
+
+		height: 100%;
+		width: 100px;
+		min-height: 100%;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+
+	}
+
+		.container aside .topZone{
+
+			position: relative;
+
+			padding-top: 20px;
+
+			background-color: #3F3F3F;
+
+			width: 100%;
+
+		}
+
+			.container aside .topZone .circle{
+
+				width: 60px;
+				height: 60px;
+
+				border-radius: 30px;
+
+				line-height: 60px;
+				text-align: center;
+				font-family: 'Raleway';
+				font-size: 35px;
+				color: #FFFFFF;
+
+				margin-bottom: calc(50% - 30px);
+				margin-right: calc(50% - 30px);
+				margin-left: calc(50% - 30px);
+
+			}
+
+			.container aside .topZone .logout{
+
+				background-color: #2F2F2F;
+
+				width: 100%;
+				height: auto;
+
+				padding: 5px 0;
+
+				text-align: center;
+
+				border-top: 1px solid #292929;
+
+			}
+
+				.container aside .topZone .logout a{
+
+					color: #5A5A5A;
+					font-size: 15px;
+
+					text-shadow: 0 1px 0 rgba(0,0,0, .4);
+
+					-webkit-transition: all 0.1s linear;
+							transition: all 0.1s linear;
+
+				}
+
+					.container aside .topZone .logout a:hover{
+
+						color: #737373;
+
+						-webkit-transition: all 0.1s linear;
+								transition: all 0.1s linear;
+
+					}
+
+			.container aside .topZone .mediumBar{
+
+				background-color: #3F3F3F;
+
+				width: 100%;
+				height: 10px;
+
+				border-top: 1px solid #4D4D4D;
+				border-bottom: 1px solid #292929;
+
+			}
+
+		.container aside .menu{
+
+			width: 100%;
+			height: auto;
+
+		}
+
+			.container aside .menu .boton{
+
+				width: 100px;
+				height: 75px;
+
+				text-align: center;
+
+			}
+
+				.container aside .menu .boton a{
+
+					color: #3F3F3F;
+
+					line-height: 75px;
+					font-size: 40px;
+
+					text-shadow: 0 1px 0 rgba(0,0,0, .2);
+
+					-webkit-transition: all 0.1s linear;
+							transition: all 0.1s linear;
+
+				}
+
+					.container aside .menu .boton a:hover{
+
+						color: #5A5A5A;
+
+						-webkit-transition: all 0.1s linear;
+								transition: all 0.1s linear;
+
+					}
+
+				.container aside .menu .boton.seleccionado{
+
+					border-left: 3px solid #8bc34a;
+
+				}
+
+					.container aside .menu .boton.seleccionado a{
+
+						color: #FFFFFF;
+
+						margin-right: 3px;
+
+					}
+
+	.container .contenido{
+
+		width: calc(100% - 100px);
+
+		margin-left: 100px;
+
+	}
+
+		.container .contenido .box{
+
+			background-color: #FFFFFF;
+
+			width: calc(100% - 60px);
+			height: auto;
+
+			margin: 30px;
+			padding: 20px;
+
+			border-bottom: 2px solid #D5D5D5;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+		.container .contenido .copyright{
+
+			text-align: center;
+
+			margin-top: -10px;
+
+			color: rgba(0,0,0, .4);
+
+		}
+
+.sectionTitle{
+
+	font-family: 'Raleway';
+	font-size: 20px;
+	color: rgba(0,0,0, .4);
+
+	margin-bottom: 20px;
+
+}
+
+/* SECCIÓN ACERCA DE */
+
+	.about_logo{
+
+		background-image: url('../img/logo_login.png');
+
+		width: 600px;
+		height: 156px;
+
+	}
+
+	.about_title{
+
+		font-family: 'Raleway';
+		font-size: 40px;
+		color: rgba(0,0,0, .8);
+
+	}
+
+	.about_subtitle{
+
+		font-family: 'Raleway';
+		font-size: 20px;
+		color: rgba(0,0,0, .5);
+
+	}
+
+	.about_developer{
+
+		font-family: 'Raleway';
+		font-size: 15px;
+		color: rgba(0,0,0, .7);
+
+		margin-top: 30px;
+
+	}
+
+	.about_socialNetworks{
+
+		margin: 20px 0 10px 0;
+
+	}
+
+	.about_socialButton{
+
+		font-size: 40px;
+		color: rgba(0,0,0, .8);
+
+		margin: 0 5px;
+
+		-webkit-transition: all 0.1s linear;
+				transition: all 0.1s linear;
+
+	}
+
+		.about_socialButton:hover{
+
+			color: rgba(0,0,0, .6);
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+/* SECCIÓN DE PREFERENCIAS */
+
+	.preferences_button{
+
+		width: calc(20% - 3px);
+
+		margin: 0;
+
+		text-align: center;
+
+		display: inline-block;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing   : border-box;
+		box-sizing        : border-box;
+
+	}
+
+		.preferences_button a i{
+
+			color: rgba(0,0,0, .2);
+			font-size: 100px;
+
+			display: block;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a span{
+
+			color: rgba(0,0,0, .4);
+			font-size: 14px;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a:hover i{
+
+			color: #8bc34a;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button a:hover span{
+
+			color: #8bc34a;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
