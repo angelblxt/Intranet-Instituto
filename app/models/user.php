@@ -15,6 +15,44 @@ class User extends \core\model {
 
 	/**
 	*
+	* Método encargado de registrar un Usuario.
+	*
+	*/
+
+		/* public function register()
+		{
+
+			$hash = md5(microtime());
+
+			$usuarios = [
+				'hash'              => $hash,
+				'usuario'           => Seguridad::encriptar('davidblxt', 1),
+				'password'          => hash('sha512', 'k9cbbzk9cbbz'),
+				'color_circulo'     => '607d8b',
+				'tiempo_registrado' => time()];
+
+			$rangos = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hash,
+				'rango'        => Seguridad::encriptar('0', 1)];
+
+			$datos_personales = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hash,
+				'nombre'       => 'David',
+				'apellidos'    => 'Villar Piñero',
+				'curso'        => Seguridad::encriptar('ADM1', 1)];
+
+			$this->_db->insert('usuarios', $usuarios);
+			$this->_db->insert('rangos', $rangos);
+			$this->_db->insert('datos_personales', $datos_personales);
+
+			echo 'Ok!';
+
+		} */
+
+	/**
+	*
 	* Método encargado de comprobar un usuario y una contraseña.
 	*
 	* @param string $user Usuario.

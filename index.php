@@ -92,6 +92,8 @@ use \core\router,
 	Router::any('messages/(:any)/delete/(:any)', '\controllers\messages@delete');
 	Router::any('messages/new', '\controllers\messages@newMessage');
 
+	// Router::any('register', '\controllers\user@register');
+
 //if no route found
 Router::error('\core\error@index');
 
