@@ -86,6 +86,7 @@ use \core\router,
 	Router::any('messages', '\controllers\messages@index');
 	Router::any('messages/in', '\controllers\messages@in');
 	Router::any('messages/out', '\controllers\messages@out');
+	Router::any('messages/(:any)', '\controllers\messages@message');
 
 //if no route found
 Router::error('\core\error@index');

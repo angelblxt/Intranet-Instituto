@@ -41,7 +41,7 @@ class Message extends \core\model {
 
 			}
 
-			$number = $this->_db->num("SELECT id FROM mensajes_privados WHERE ". $where ." = :hashUsuario", [':hashUsuario' => $hashUsuario]);
+			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE ". $where ." = :hashUsuario", [':hashUsuario' => $hashUsuario]);
 
 			return (int)$number;
 
@@ -61,7 +61,7 @@ class Message extends \core\model {
 
 			$hashUsuario = $this->_user->getHash($this->username);
 
-			$number = $this->_db->num("SELECT id FROM mensajes_privados WHERE hash_receptor = :hashReceptor AND leido_receptor = '0'", [':hashReceptor' => $hashUsuario]);
+			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE hash_receptor = :hashReceptor AND leido_receptor = '0'", [':hashReceptor' => $hashUsuario]);
 
 			return (int)$number;
 
@@ -91,7 +91,7 @@ class Message extends \core\model {
 
 			}
 
-			$data = $this->_db->select("SELECT * FROM mensajes_privados WHERE ". $where ." = :hashReceptor AND borrado_receptor = '0'". $limit, [':hashReceptor' => $hashUsuario]);
+			$data = $this->_db->select("SELECT * FROM mensajes_privados WHERE ". $where ." = :hashReceptor AND borrado_receptor = '0' ORDER BY id DESC ". $limit, [':hashReceptor' => $hashUsuario]);
 
 			return $data;
 

@@ -3,7 +3,8 @@ use core\view,
 	helpers\nocsrf as NoCSRF,
 	helpers\url as Url,
 	helpers\session as Session,
-	helpers\security as Seguridad;
+	helpers\security as Seguridad,
+	helpers\system as System;
 
 class Messages extends \core\controller{
 
@@ -49,33 +50,6 @@ class Messages extends \core\controller{
 
 			$mensajesSinLeer = $this->_message->number_unreaded();
 
-			/* // PAGINADOR //
-
-				$pages = new \helpers\paginator('10', 'p');
-
-				$logs = $this->_message->get('in', $pages->get_limit());
-
-				$pages->set_total($this->_message->number('in'));
-
-				$logsArray = [];
-
-				if(count($logs) > 0){
-
-					foreach($logs as $log){
-
-						$logsArray[] = $log;
-
-					}
-
-				}
-
-			// FIN DEL PAGINADOR //
-
-			$data = [
-				'title'      => 'Mensajes',
-				'logs'       => $logsArray,
-				'page_links' => $pages->page_links()]; */
-
 			$data = ['title' => 'Mensajes'];
 
 			$section = [
@@ -120,7 +94,28 @@ class Messages extends \core\controller{
 
 					foreach($mensajes as $mensaje){
 
+						$cssClassLeido = ($mensaje->leido_receptor == 0)? 'no_leido' : '';
+
+						$user = $this->_user->getUser($mensaje->hash_emisor);
 						
+						$nombreEmisor = $this->_user->getNameSurname($user);
+						$circleColor  = $this->_user->getCircleColor($user);
+
+						$desencriptado = [
+							'asunto'    => Seguridad::desencriptar($mensaje->asunto, 1),
+							'contenido' => Seguridad::desencriptar($mensaje->contenido, 2)];
+
+						$mensajesArray[] = [
+							'hash'          => $mensaje->hash,
+							'emisor'        => [
+								'hash'        => $mensaje->hash_emisor,
+								'nombre'      => $nombreEmisor,
+								'inicial'     => utf8_encode($nombreEmisor['nombre'][0]),
+								'circleColor' => $circleColor],
+							'asunto'        => $desencriptado['asunto'],
+							'contenido'     => System::cortarTexto($desencriptado['contenido'], 10),
+							'tiempo'        => System::timeAgo($mensaje->tiempo_enviado),
+							'cssClassLeido' => $cssClassLeido];
 
 					}
 
@@ -129,7 +124,6 @@ class Messages extends \core\controller{
 			// FIN DEL PAGINADOR //
 
 			$section = [
-				'sinLeer'    => ($mensajesSinLeer > 0)? '(<b>'. $mensajesSinLeer .'</b>)' : '',
 				'mensajes'   => $mensajesArray,
 				'page_links' => $pages->page_links()];
 			
@@ -139,6 +133,75 @@ class Messages extends \core\controller{
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
 			View::render('user/messages/in', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function out()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$this->_log->add('Ha entrado en la sección "Bandeja de Salida".');
+
+			$data = ['title' => 'Bandeja de Salida'];
+
+			// PAGINADOR //
+
+				$pages = new \helpers\paginator('10', 'p');
+
+				$mensajes = $this->_message->get('out', $pages->get_limit());
+
+				$pages->set_total($this->_message->number('out'));
+
+				$mensajesArray = [];
+
+				if(count($mensajes) > 0){
+
+					foreach($mensajes as $mensaje){
+
+						$user = $this->_user->getUser($mensaje->hash_receptor);
+						
+						$nombreReceptor = $this->_user->getNameSurname($user);
+						$circleColor    = $this->_user->getCircleColor($user);
+
+						$desencriptado = [
+							'asunto'    => Seguridad::desencriptar($mensaje->asunto, 1),
+							'contenido' => Seguridad::desencriptar($mensaje->contenido, 2)];
+
+						$mensajesArray[] = [
+							'hash'          => $mensaje->hash,
+							'receptor'      => [
+								'hash'        => $mensaje->hash_receptor,
+								'nombre'      => $nombreReceptor,
+								'inicial'     => utf8_encode($nombreReceptor['nombre'][0]),
+								'circleColor' => $circleColor],
+							'asunto'        => $desencriptado['asunto'],
+							'contenido'     => System::cortarTexto($desencriptado['contenido'], 10),
+							'tiempo'        => System::timeAgo($mensaje->tiempo_enviado)];
+
+					}
+
+				}
+
+			// FIN DEL PAGINADOR //
+
+			$section = [
+				'mensajes'   => $mensajesArray,
+				'page_links' => $pages->page_links()];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/messages/out', $section);
 			View::rendertemplate('footer');
 
 		}
