@@ -26,11 +26,13 @@ class Messages extends \core\controller{
 
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
+			$mensajesSinLeer = $this->_message->number_unreaded();
 
 			$this->templateData = [
-				'nombre'       => $nombreApellidos,
-				'inicial'      => utf8_encode($nombreApellidos['nombre'][0]),
-				'colorCirculo' => $this->_user->getCircleColor()];
+				'nombre'        => $nombreApellidos,
+				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
+				'colorCirculo'  => $this->_user->getCircleColor(),
+				'shake_message' => ($mensajesSinLeer > 0)? true : false];
 
 	}
 
@@ -74,8 +76,6 @@ class Messages extends \core\controller{
 				'logs'       => $logsArray,
 				'page_links' => $pages->page_links()]; */
 
-			$this->templateData['shake_message'] = ($mensajesSinLeer > 0)? true : false;
-
 			$data = ['title' => 'Mensajes'];
 
 			$section = [
@@ -87,6 +87,58 @@ class Messages extends \core\controller{
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
 			View::render('user/messages/messages', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function in()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$this->_log->add('Ha entrado en la sección "Bandeja de Entrada".');
+
+			$data = ['title' => 'Bandeja de Entrada'];
+
+			// PAGINADOR //
+
+				$pages = new \helpers\paginator('10', 'p');
+
+				$mensajes = $this->_message->get('in', $pages->get_limit());
+
+				$pages->set_total($this->_message->number('in'));
+
+				$mensajesArray = [];
+
+				if(count($mensajes) > 0){
+
+					foreach($mensajes as $mensaje){
+
+						
+
+					}
+
+				}
+
+			// FIN DEL PAGINADOR //
+
+			$section = [
+				'sinLeer'    => ($mensajesSinLeer > 0)? '(<b>'. $mensajesSinLeer .'</b>)' : '',
+				'mensajes'   => $mensajesArray,
+				'page_links' => $pages->page_links()];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/messages/in', $section);
 			View::rendertemplate('footer');
 
 		}
