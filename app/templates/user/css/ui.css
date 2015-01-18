@@ -307,7 +307,7 @@ a{
 
 						color: #FFFFFF;
 
-						margin-right: 3px;
+						margin-right: 5px;
 
 					}
 
@@ -473,6 +473,24 @@ a{
 		.preferences_button.blue a:hover i, .preferences_button.blue a:hover span{
 
 			color: #607d8b;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button.orange a:hover i, .preferences_button.orange a:hover span{
+
+			color: #ff9800;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.preferences_button.brown a:hover i, .preferences_button.brown a:hover span{
+
+			color: #795548;
 
 			-webkit-transition: all 0.1s linear;
 					transition: all 0.1s linear;
