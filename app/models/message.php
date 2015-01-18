@@ -35,13 +35,22 @@ class Message extends \core\model {
 
 			switch($type){
 
-				case 'in' : $where = 'hash_receptor'; break;
-				case 'out': $where = 'hash_emisor'; break;
-				default   : $where = 'hash_receptor'; break;
+				case 'in' :
+
+					$where   = 'hash_receptor';
+					$deleted = 'borrado_receptor';
+
+				break;
+				case 'out':
+
+					$where   = 'hash_emisor';
+					$deleted = 'borrado_emisor';
+
+				break;
 
 			}
 
-			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE ". $where ." = :hashUsuario", [':hashUsuario' => $hashUsuario]);
+			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE ". $where ." = :hashUsuario AND ". $deleted ." = '0' ", [':hashUsuario' => $hashUsuario]);
 
 			return (int)$number;
 
@@ -61,7 +70,7 @@ class Message extends \core\model {
 
 			$hashUsuario = $this->_user->getHash($this->username);
 
-			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE hash_receptor = :hashReceptor AND leido_receptor = '0'", [':hashReceptor' => $hashUsuario]);
+			$number = $this->_db->num("SELECT COUNT(id) FROM mensajes_privados WHERE hash_receptor = :hashReceptor AND leido_receptor = '0' AND borrado_receptor = '0' ", [':hashReceptor' => $hashUsuario]);
 
 			return (int)$number;
 
@@ -85,13 +94,22 @@ class Message extends \core\model {
 
 			switch($type){
 
-				case 'in' : $where = 'hash_receptor'; break;
-				case 'out': $where = 'hash_emisor'; break;
-				default   : $where = 'hash_receptor'; break;
+				case 'in' :
+
+					$where   = 'hash_receptor';
+					$deleted = 'borrado_receptor';
+
+				break;
+				case 'out':
+
+					$where   = 'hash_emisor';
+					$deleted = 'borrado_emisor';
+
+				break;
 
 			}
 
-			$data = $this->_db->select("SELECT * FROM mensajes_privados WHERE ". $where ." = :hashReceptor AND borrado_receptor = '0' ORDER BY id DESC ". $limit, [':hashReceptor' => $hashUsuario]);
+			$data = $this->_db->select("SELECT * FROM mensajes_privados WHERE ". $where ." = :hashReceptor AND ". $deleted ." = '0' ORDER BY id DESC ". $limit, [':hashReceptor' => $hashUsuario]);
 
 			return $data;
 
@@ -130,6 +148,34 @@ class Message extends \core\model {
 		{
 
 			$result = $this->_db->update('mensajes_privados', ['leido_receptor' => '1'], ['hash' => $hash]);
+
+			return ($result)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de eliminar un mensaje privado.
+	*
+	* @param string $hash HASH del Mensaje Privado.
+	* @param string $for ['e', 'r'] Para quién eliminar el Mensaje Privado.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete($hash, $for)
+		{
+
+			switch($for){
+
+				case 'e': $update = ['borrado_emisor'   => '1']; break;
+				case 'r': $update = ['borrado_receptor' => '1']; break;
+				default : $update = ['borrado_emisor'   => '1']; break;
+
+			}
+
+			$result = $this->_db->update('mensajes_privados', $update, ['hash' => $hash]);
 
 			return ($result)? true : false;
 
