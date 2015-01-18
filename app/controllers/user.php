@@ -187,9 +187,7 @@ class User extends \core\controller{
 
 		}
 
-		$result = $this->_user->setCircleColor($hex);
-
-		if($result){
+		if($this->_user->setCircleColor($hex)){
 
 			$this->_log->add('Ha cambiado de color el Círculo de la Interfaz.');
 
