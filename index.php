@@ -82,6 +82,9 @@ use \core\router,
 	Router::any('preferences/password', '\controllers\preferences@password');
 	Router::any('preferences/circleColor', '\controllers\preferences@circleColor');
 
+// Rutas de las secciones de "Mensajes Privados".
+	Router::any('messages', '\controllers\messages@index');
+
 //if no route found
 Router::error('\core\error@index');
 
