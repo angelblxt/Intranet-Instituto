@@ -17,8 +17,9 @@ class About extends \core\controller{
 		$this->language->load('login');
 
 		// Cargamos Modelos.
-			$this->_user = new \models\user();
-			$this->_log  = new \models\log();
+			$this->_user    = new \models\user();
+			$this->_log     = new \models\log();
+			$this->_message = new \models\message();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
