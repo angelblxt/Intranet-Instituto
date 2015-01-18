@@ -68,6 +68,8 @@ use \core\router,
     Router::post('post/login', '\controllers\user@login');
     Router::post('post/changePassword', '\controllers\user@changePassword');
     Router::any('post/changeCircleColor/(:any)', '\controllers\user@changeCircleColor');
+    Router::post('post/sendMessage', '\controllers\messages@send');
+    Router::any('post/searchUser', '\controllers\user@search');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
@@ -88,6 +90,7 @@ use \core\router,
 	Router::any('messages/out', '\controllers\messages@out');
 	Router::any('messages/(:any)', '\controllers\messages@message');
 	Router::any('messages/(:any)/delete/(:any)', '\controllers\messages@delete');
+	Router::any('messages/new', '\controllers\messages@newMessage');
 
 //if no route found
 Router::error('\core\error@index');
