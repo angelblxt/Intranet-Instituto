@@ -20,7 +20,8 @@
 						\helpers\url::template_path() . 'css/messages.css',
 						\helpers\url::template_path() . 'css/switch.css',
 						\helpers\url::template_path() . 'css/tables.css',
-						\helpers\url::template_path() . 'css/hint.min.css'
+						\helpers\url::template_path() . 'css/hint.min.css',
+						\helpers\url::template_path() . 'css/csshake.min.css'
 					));
 
 				// Archivos JS.
