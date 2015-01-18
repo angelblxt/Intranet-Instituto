@@ -222,7 +222,7 @@ class Messages extends \core\controller{
 			$hashUsuario = $this->_user->getHash($this->username);
 			$mensaje     = $this->_message->message($hash)[0];
 
-			if(count($mensaje) == 0 || $hashUsuario != $mensaje->hash_emisor || $hashUsuario != $mensaje->hash_receptor){
+			if(count($mensaje) == 0 || ($hashUsuario != $mensaje->hash_emisor && $hashUsuario != $mensaje->hash_receptor)){
 
 				Url::redirect('');
 
