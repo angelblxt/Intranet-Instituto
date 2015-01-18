@@ -181,6 +181,39 @@ class Message extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de enviar un Mensaje Privado.
+	*
+	* @param string $receptor HASH del Receptor.
+	* @param string $asunto Asunto del Mensaje.
+	* @param string $contenido Contenido del Mensaje.
+	*
+	* @return boolean TRUE si se ha mandado, FALSE si no.
+	*
+	*/
+
+		public function send($receptor, $asunto, $contenido)
+		{
+
+			$encriptado = [
+				'asunto'    => Seguridad::encriptar($asunto, 1),
+				'contenido' => Seguridad::encriptar($contenido, 2)];
+
+			$insert = [
+				'hash'           => md5(microtime()),
+				'hash_emisor'    => $this->_user->getHash($this->username),
+				'hash_receptor'  => $receptor,
+				'asunto'         => $encriptado['asunto'],
+				'contenido'      => $encriptado['contenido'],
+				'tiempo_enviado' => time()];
+
+			$result = $this->_db->insert('mensajes_privados', $insert);
+
+			return ($result)? true : false;
+
+		}
+
 }
 
 ?>

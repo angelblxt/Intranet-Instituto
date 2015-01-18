@@ -363,4 +363,55 @@ class Messages extends \core\controller{
 
 	}
 
+	public function send()
+	{
+
+		if(isset($_POST['send']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+			$nombreCompleto = $_POST['nombreCompleto'];
+			$asunto         = $_POST['asunto'];
+			$contenido      = $_POST['contenido'];
+
+			$receptor = $this->_user->getUserByName($nombreCompleto)->hash_usuario;
+
+			if(empty($nombreCompleto) || empty($asunto) || empty($contenido)){
+
+				$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+			} else {
+
+				if($receptor == NULL){
+
+					$_SESSION['error'] = ['El Destinatario especificado no existe.', 'mal'];
+
+				} else {
+
+					$result = $this->_message->send($receptor, $asunto, $contenido);
+
+					if($result){
+
+						$this->_log->add('Ha enviado un Mensaje Privado a '. $nombreCompleto);
+
+						$_SESSION['error'] = ['Mensaje enviado a <b>'. $nombreCompleto .'</b> con éxito.', 'bien'];
+
+					} else {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					}
+
+				}
+
+			}
+
+			Url::redirect('messages/new');
+
+		} else {
+
+			Url::redirect('');
+
+		}
+
+	}
+
 }
