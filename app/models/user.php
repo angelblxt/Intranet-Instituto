@@ -239,6 +239,25 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener el usuario por medio del Nombre Completo.
+	*
+	* @param string $nombreCompleto Nombre Completo del Usuario.
+	*
+	* @return string Usuario.
+	*
+	*/
+
+		public function getUserByName($nombreCompleto)
+		{
+
+			$result = $this->_db->select("SELECT hash_usuario FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $nombreCompleto ."' IN BOOLEAN MODE) LIMIT 1");
+
+			return $result[0];
+
+		}
+
 }
 
 ?>
