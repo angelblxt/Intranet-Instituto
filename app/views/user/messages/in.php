@@ -26,7 +26,7 @@
 
 			?>
 
-				<a href="messages/<?php echo $mensaje['hash'] ?>">
+				<a href="<?php echo DIR; ?>messages/<?php echo $mensaje['hash'] ?>">
 
 					<div class="private_message <?php echo $mensaje['cssClassLeido'] ?>">
 
