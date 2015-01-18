@@ -150,8 +150,6 @@ class Messages extends \core\controller{
 
 			$this->_log->add('Ha entrado en la sección "Bandeja de Salida".');
 
-			$data = ['title' => 'Bandeja de Salida'];
-
 			// PAGINADOR //
 
 				$pages = new \helpers\paginator('10', 'p');
@@ -192,6 +190,8 @@ class Messages extends \core\controller{
 
 			// FIN DEL PAGINADOR //
 
+			$data = ['title' => 'Bandeja de Salida'];
+
 			$section = [
 				'mensajes'   => $mensajesArray,
 				'page_links' => $pages->page_links()];
@@ -203,6 +203,74 @@ class Messages extends \core\controller{
 			View::rendertemplate('aside', $this->templateData);
 			View::render('user/messages/out', $section);
 			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function message($hash)
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$this->_log->add('Ha entrado al contenido de un Mensaje Privado.');
+
+			$hashUsuario = $this->_user->getHash($this->username);
+			$mensaje     = $this->_message->message($hash)[0];
+
+			if(count($mensaje) == 0 || $hashUsuario != $mensaje->hash_emisor || $hashUsuario != $mensaje->hash_receptor){
+
+				Url::redirect('');
+
+			} else {
+
+				$soyEmisor = ($hashUsuario != $mensaje->hash_receptor)? 1 : 0;
+
+				if(!$soyEmisor && $mensaje->leido_receptor == 0)
+					$this->_message->setReaded($hash);
+
+				$emisor   = $this->_user->getUser($mensaje->hash_emisor);
+				$receptor = $this->_user->getUser($mensaje->hash_receptor);
+						
+				$nombreEmisor   = $this->_user->getNameSurname($emisor);
+				$nombreReceptor = $this->_user->getNameSurname($receptor);
+				
+				$circleColorEmisor   = $this->_user->getCircleColor($emisor);
+				$circleColorReceptor = $this->_user->getCircleColor($receptor);
+
+				$desencriptado = [
+					'asunto'    => Seguridad::desencriptar($mensaje->asunto, 1),
+					'contenido' => Seguridad::desencriptar($mensaje->contenido, 2)];
+
+				$dataMensaje = [
+					'hash'          => $mensaje->hash,
+					'persona'       => [
+						'hash'        => ($soyEmisor)? $mensaje->hash_receptor : $mensaje->hash_emisor,
+						'nombre'      => ($soyEmisor)? $nombreEmisor : $nombreReceptor,
+						'inicial'     => ($soyEmisor)? utf8_encode($nombreReceptor['nombre'][0]) : utf8_encode($nombreEmisor['nombre'][0]),
+						'circleColor' => ($soyEmisor)? $circleColorReceptor : $circleColorEmisor],
+					'asunto'        => $desencriptado['asunto'],
+					'contenido'     => $desencriptado['contenido'],
+					'tiempo'        => System::timeAgo($mensaje->tiempo_enviado)];
+
+				$section = [
+					'mensaje' => $dataMensaje];
+
+				$data = ['title' => 'Mensaje'];
+
+				Session::set('template', 'user');
+
+				View::rendertemplate('header', $data);
+				View::rendertemplate('topHeader', $this->templateData);
+				View::rendertemplate('aside', $this->templateData);
+				View::render('user/messages/view', $section);
+				View::rendertemplate('footer');
+
+			}
 
 		}
 

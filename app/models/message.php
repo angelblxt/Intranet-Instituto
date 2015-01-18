@@ -97,6 +97,44 @@ class Message extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener información de un Mensaje Privado.
+	*
+	* @param string $hash HASH del Mensaje Privado.
+	*
+	* @return array Información del Mensaje Privado.
+	*
+	*/
+
+		public function message($hash)
+		{
+
+			$data = $this->_db->select("SELECT hash, hash_emisor, hash_receptor, asunto, contenido, tiempo_enviado FROM mensajes_privados WHERE hash = :hash", [':hash' => $hash]);
+
+			return $data;
+
+		}
+
+	/**
+	*
+	* Método encargado de marcar un mensaje como leído.
+	*
+	* @param string $hash HASH del Mensaje Privado.
+	*
+	* @return boolean TRUE si se ha marcado como leído, FALSE si no.
+	*
+	*/
+
+		public function setReaded($hash)
+		{
+
+			$result = $this->_db->update('mensajes_privados', ['leido_receptor' => '1'], ['hash' => $hash]);
+
+			return ($result)? true : false;
+
+		}
+
 }
 
 ?>

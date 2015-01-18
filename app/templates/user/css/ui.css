@@ -753,6 +753,14 @@ a{
 				transition: all 0.1s linear;
 
 	}
+		.private_message.large{
+
+			background-color: #FFFFFF;
+			height: auto;
+
+			border: none;
+
+		}
 
 		.private_message:hover{
 
