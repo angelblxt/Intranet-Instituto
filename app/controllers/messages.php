@@ -74,6 +74,8 @@ class Messages extends \core\controller{
 				'logs'       => $logsArray,
 				'page_links' => $pages->page_links()]; */
 
+			$this->templateData['shake_message'] = ($mensajesSinLeer > 0)? true : false;
+
 			$data = ['title' => 'Mensajes'];
 
 			$section = [
