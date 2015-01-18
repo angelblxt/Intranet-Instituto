@@ -338,4 +338,29 @@ class Messages extends \core\controller{
 
 	}
 
+	public function newMessage()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$data = ['title' => 'Nuevo Menasje'];
+
+			$section = ['token' => NoCSRF::generate('token')];
+
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/messages/new', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
 }

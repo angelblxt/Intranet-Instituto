@@ -206,4 +206,21 @@ class User extends \core\controller{
 
 	}
 
+	public function search()
+	{
+
+		$return = [];
+
+		$results = $this->_user->searchLike($_REQUEST['term']);
+
+		foreach($results as $resultado){
+
+			$return[] = ['label' => $resultado->nombre .' '. $resultado->apellidos];
+
+		}
+
+		echo json_encode($return);
+
+	}
+
 }

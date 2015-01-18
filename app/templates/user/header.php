@@ -21,14 +21,16 @@
 						\helpers\url::template_path() . 'css/switch.css',
 						\helpers\url::template_path() . 'css/tables.css',
 						\helpers\url::template_path() . 'css/hint.min.css',
-						\helpers\url::template_path() . 'css/csshake.min.css'
+						\helpers\url::template_path() . 'css/csshake.min.css',
+						\helpers\url::template_path() . 'css/jquery-ui.css'
 					));
 
 				// Archivos JS.
 
 					\helpers\assets::js(array(
 						\helpers\url::template_path() . 'js/prefixfree.min.js',
-						\helpers\url::template_path() . 'js/jquery.min.css',
+						\helpers\url::template_path() . 'js/jquery.min.js',
+						\helpers\url::template_path() . 'js/jquery-ui.js'
 					));
 
 			?>
