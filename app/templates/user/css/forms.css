@@ -71,6 +71,23 @@ input[type=week]{
 
 }
 
+textarea{
+
+	background-color: #f8f8f8;
+
+	min-width: 100%;
+	max-width: 100%;
+	min-height: 150px;
+
+	padding: 10px;
+	margin-bottom: 20px;
+
+	color: #8A8A8A;
+
+	border: 1px solid #D7D7D7;
+
+}
+
 form .wrapper{
 
 	-webkit-box-sizing: border-box;

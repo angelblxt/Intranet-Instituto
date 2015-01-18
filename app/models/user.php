@@ -219,6 +219,26 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener usuarios cercanos a un término de 
+	* búsqueda por Nombre y Apellidos.
+	*
+	* @param string $termino Término de Búsqueda.
+	*
+	* @return array Nombres y Apellidos encontrados.
+	*
+	*/
+
+		public function searchLike($termino)
+		{
+
+			$results = $this->_db->select("SELECT nombre, apellidos FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $termino ."' IN BOOLEAN MODE)");
+
+			return $results;
+
+		}
+
 }
 
 ?>
