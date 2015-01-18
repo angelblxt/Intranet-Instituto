@@ -228,7 +228,7 @@ class Messages extends \core\controller{
 
 			} else {
 
-				$soyEmisor = ($hashUsuario != $mensaje->hash_receptor)? 1 : 0;
+				$soyEmisor = ($hashUsuario != $mensaje->hash_receptor)? true : false;
 
 				if(!$soyEmisor && $mensaje->leido_receptor == 0)
 					$this->_message->setReaded($hash);
@@ -269,6 +269,68 @@ class Messages extends \core\controller{
 				View::rendertemplate('aside', $this->templateData);
 				View::render('user/messages/view', $section);
 				View::rendertemplate('footer');
+
+			}
+
+		}
+
+	}
+
+	public function delete($hash, $action)
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$hashUsuario = $this->_user->getHash($this->username);
+			$mensaje     = $this->_message->message($hash)[0];
+
+			if(count($mensaje) == 0 || $hashUsuario != $mensaje->hash_emisor || $hashUsuario != $mensaje->hash_receptor){
+
+				Url::redirect('');
+
+			} else {
+
+				if($action == 0){
+
+					$data = ['title' => 'Eliminar Mensaje'];
+
+					$section = ['hash' => $hash];
+
+					Session::set('template', 'user');
+
+					View::rendertemplate('header', $data);
+					View::rendertemplate('topHeader', $this->templateData);
+					View::rendertemplate('aside', $this->templateData);
+					View::render('user/messages/delete', $section);
+					View::rendertemplate('footer');
+
+				} else {
+
+					$soyEmisor = ($hashUsuario != $mensaje->hash_receptor)? true : false;
+
+					$for = ($soyEmisor)? 'e' : 'r';
+
+					$result = $this->_message->delete($hash, $for);
+
+					if($result){
+
+						$this->_log->add('Ha eliminado un Mensaje Privado.');
+
+						$_SESSION['error'] = ['Mensaje Privado eliminado con éxito.', 'bien'];
+
+					} else {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					}
+
+					Url::redirect('messages');
+
+				}
 
 			}
 
