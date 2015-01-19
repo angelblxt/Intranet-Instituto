@@ -250,11 +250,11 @@ class Messages extends \core\controller{
 					'hash'          => $mensaje->hash,
 					'persona'       => [
 						'hash'        => ($soyEmisor)? $mensaje->hash_receptor : $mensaje->hash_emisor,
-						'nombre'      => ($soyEmisor)? $nombreEmisor : $nombreReceptor,
+						'nombre'      => ($soyEmisor)? $nombreReceptor : $nombreEmisor,
 						'inicial'     => ($soyEmisor)? utf8_encode($nombreReceptor['nombre'][0]) : utf8_encode($nombreEmisor['nombre'][0]),
 						'circleColor' => ($soyEmisor)? $circleColorReceptor : $circleColorEmisor],
 					'asunto'        => $desencriptado['asunto'],
-					'contenido'     => $desencriptado['contenido'],
+					'contenido'     => nl2br($desencriptado['contenido']),
 					'tiempo'        => System::timeAgo($mensaje->tiempo_enviado)];
 
 				$section = [
