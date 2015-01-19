@@ -68,6 +68,8 @@ use \core\router,
     Router::post('post/login', '\controllers\user@login');
     Router::post('post/changePassword', '\controllers\user@changePassword');
     Router::any('post/changeCircleColor/(:any)', '\controllers\user@changeCircleColor');
+    Router::post('post/sendMessage', '\controllers\messages@send');
+    Router::any('post/searchUser', '\controllers\user@search');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
@@ -82,6 +84,16 @@ use \core\router,
 	Router::any('preferences/password', '\controllers\preferences@password');
 	Router::any('preferences/circleColor', '\controllers\preferences@circleColor');
 
+// Rutas de las secciones de "Mensajes Privados".
+	Router::any('messages', '\controllers\messages@index');
+	Router::any('messages/in', '\controllers\messages@in');
+	Router::any('messages/out', '\controllers\messages@out');
+	Router::any('messages/(:any)', '\controllers\messages@message');
+	Router::any('messages/(:any)/delete/(:any)', '\controllers\messages@delete');
+	Router::any('messages/new', '\controllers\messages@newMessage');
+
+	// Router::any('register', '\controllers\user@register');
+
 //if no route found
 Router::error('\core\error@index');
 
@@ -90,17 +102,3 @@ Router::$fallback = false;
 
 //execute matched routes
 Router::dispatch();
-
-// Evitamos ataques SQLi.
-
-	foreach( $_POST as $key => $value ){
-
-		$_POST[$key] = Seguridad::cleanInput($value);
-
-	}
-
-	foreach( $_GET as $key => $value ){
-
-		$_GET[$key] = Seguridad::cleanInput($value);
-
-	}

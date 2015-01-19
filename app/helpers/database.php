@@ -65,6 +65,24 @@ class Database extends PDO{
 		}
 	}
 
+	public function num($sql, $array = array())
+	{
+
+		$stmt = $this->prepare($sql);
+		foreach($array as $key => $value){
+			if(is_int($value)){
+				$stmt->bindValue("$key", $value, PDO::PARAM_INT); 
+			} else {
+				$stmt->bindValue("$key", $value); 
+			}
+		}
+		$stmt->execute();
+		$rows = $stmt->fetch(PDO::FETCH_NUM);
+		
+		return $rows[0];
+
+	}
+
 	/**
 	 * method for selecting records from a database
 	 * @param  string $sql       sql query

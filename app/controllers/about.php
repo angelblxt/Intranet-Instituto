@@ -17,8 +17,9 @@ class About extends \core\controller{
 		$this->language->load('login');
 
 		// Cargamos Modelos.
-			$this->_user = new \models\user();
-			$this->_log  = new \models\log();
+			$this->_user    = new \models\user();
+			$this->_log     = new \models\log();
+			$this->_message = new \models\message();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
@@ -27,9 +28,10 @@ class About extends \core\controller{
 			$nombreApellidos = $this->_user->getNameSurname();
 
 			$this->templateData = [
-				'nombre'       => $nombreApellidos,
-				'inicial'      => utf8_encode($nombreApellidos['nombre'][0]),
-				'colorCirculo' => $this->_user->getCircleColor()];
+				'nombre'        => $nombreApellidos,
+				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
+				'colorCirculo'  => $this->_user->getCircleColor(),
+				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false];
 
 	}
 
