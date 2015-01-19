@@ -27,13 +27,25 @@ class Messages extends \core\controller{
 
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
-			$mensajesSinLeer = $this->_message->number_unreaded();
 
 			$this->templateData = [
 				'nombre'        => $nombreApellidos,
 				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
 				'colorCirculo'  => $this->_user->getCircleColor(),
-				'shake_message' => ($mensajesSinLeer > 0)? true : false];
+				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false];
+
+		// Envitamos ataques.
+			foreach( $_POST as $key => $value ){
+
+				$_POST[$key] = Seguridad::cleanInput($value);
+
+			}
+
+			foreach( $_GET as $key => $value ){
+
+				$_GET[$key] = Seguridad::cleanInput($value);
+
+			}
 
 	}
 
