@@ -102,17 +102,3 @@ Router::$fallback = false;
 
 //execute matched routes
 Router::dispatch();
-
-// Evitamos ataques SQLi.
-
-	foreach( $_POST as $key => $value ){
-
-		$_POST[$key] = Seguridad::cleanInput($value);
-
-	}
-
-	foreach( $_GET as $key => $value ){
-
-		$_GET[$key] = Seguridad::cleanInput($value);
-
-	}
