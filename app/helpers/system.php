@@ -48,4 +48,79 @@ class System {
 
 		}
 
+	/**
+	*
+	* Método encargado de mostrar de forma mas COOL una fecha.
+	*
+	* @param string $timestamp
+	*
+	* @return Hace X tiempo.
+	*
+	*/
+
+		public function timeAgo($timestamp)
+		{
+
+			$intervalos = ['segundo', 'minuto', 'hora', 'día', 'semana', 'mes', 'año'];
+			$duraciones = [60, 60, 24, 7, 4.35, 12];
+
+			$ahora = time();
+
+			if($ahora > $timestamp){
+
+				$diferencia = $ahora - $timestamp;
+				$tiempo = 'Hace';
+
+			} else {
+
+				$diferencia = $timestamp - $ahora;
+				$tiempo = 'Dentro de';
+
+			}
+
+			for($j = 0; $diferencia >= $duraciones[$j] && $j < count($duraciones); $j++){
+
+				$diferencia /= $duraciones[$j];
+
+			}
+
+			$diferencia = round($diferencia);
+
+			if($diferencia != 1){
+
+				$intervalos[5] .= 'e';
+				$intervalos[$j] .= 's';
+
+			}
+
+			return $tiempo .' '. $diferencia .' '. $intervalos[$j];
+
+		}
+
+	/**
+	*
+	* Método encargado de cortar un texto a X palabras.
+	*
+	* @param string $texto Texto a cortar.
+	* @param int $limite Límite de palabras.
+	*
+	* @return string Texto cortado.
+	*
+	*/
+
+		public function cortarTexto($texto, $limite)
+		{
+
+			if (str_word_count($texto, 0) > $limite) {
+				
+				$words = str_word_count($texto, 2);
+				$pos   = array_keys($words);
+				$texto = substr($texto, 0, $pos[$limite]) . '...';
+
+			}
+
+			return $texto;
+
+		}
+
 }

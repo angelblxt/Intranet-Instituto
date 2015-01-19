@@ -15,6 +15,44 @@ class User extends \core\model {
 
 	/**
 	*
+	* Método encargado de registrar un Usuario.
+	*
+	*/
+
+		/* public function register()
+		{
+
+			$hash = md5(microtime());
+
+			$usuarios = [
+				'hash'              => $hash,
+				'usuario'           => Seguridad::encriptar('davidblxt', 1),
+				'password'          => hash('sha512', 'k9cbbzk9cbbz'),
+				'color_circulo'     => '607d8b',
+				'tiempo_registrado' => time()];
+
+			$rangos = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hash,
+				'rango'        => Seguridad::encriptar('0', 1)];
+
+			$datos_personales = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hash,
+				'nombre'       => 'David',
+				'apellidos'    => 'Villar Piñero',
+				'curso'        => Seguridad::encriptar('ADM1', 1)];
+
+			$this->_db->insert('usuarios', $usuarios);
+			$this->_db->insert('rangos', $rangos);
+			$this->_db->insert('datos_personales', $datos_personales);
+
+			echo 'Ok!';
+
+		} */
+
+	/**
+	*
 	* Método encargado de comprobar un usuario y una contraseña.
 	*
 	* @param string $user Usuario.
@@ -216,6 +254,45 @@ class User extends \core\model {
 			$result = $this->_db->update('usuarios', $update, ['hash' => $hashUsuario]);
 
 			return ($result)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener usuarios cercanos a un término de 
+	* búsqueda por Nombre y Apellidos.
+	*
+	* @param string $termino Término de Búsqueda.
+	*
+	* @return array Nombres y Apellidos encontrados.
+	*
+	*/
+
+		public function searchLike($termino)
+		{
+
+			$results = $this->_db->select("SELECT nombre, apellidos FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $termino ."' IN BOOLEAN MODE)");
+
+			return $results;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el usuario por medio del Nombre Completo.
+	*
+	* @param string $nombreCompleto Nombre Completo del Usuario.
+	*
+	* @return string Usuario.
+	*
+	*/
+
+		public function getUserByName($nombreCompleto)
+		{
+
+			$result = $this->_db->select("SELECT hash_usuario FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $nombreCompleto ."' IN BOOLEAN MODE) LIMIT 1");
+
+			return $result[0];
 
 		}
 
