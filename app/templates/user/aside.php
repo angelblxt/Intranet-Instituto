@@ -59,7 +59,15 @@
 		</div>
 		<div class="boton <?php echo $messagesSelected ?>">
 							
-			<span class="hint--rounded hint--bounce hint--right" data-hint="Mensajes Privados"><a href="<?php echo DIR; ?>messages"><i class="fa fa-envelope"></i></a></span>
+			<span class="hint--rounded hint--bounce hint--right" data-hint="Mensajes Privados"><a href="<?php echo DIR; ?>messages">
+
+				<?php if($shake_message){ ?> <div class="shake shake-slow shake-constant"> <?php } ?>
+					
+					<i class="fa fa-envelope"></i>
+
+				<?php if($shake_message){ ?> </div> <?php } ?>
+
+			</a></span>
 
 		</div>
 		<div class="boton <?php echo $preferencesSelected ?>">
