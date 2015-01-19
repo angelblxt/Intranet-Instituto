@@ -1,27 +1,22 @@
-<div class="private_message large">
+<div class="message_view">
+	
+	<div class="data">
 
-	<div class="emisor">
-
-				<div class="circle" style="background: #<?php echo $mensaje['persona']['circleColor'] ?>"><?php echo $mensaje['persona']['inicial'] ?></div>
-
-	</div>
-
-	<div class="message_content">
-
-		<div class="message_title"><?php echo $mensaje['asunto'] ?></div>
-
-		<div class="message_text"><?php echo $mensaje['contenido'] ?></div>
-
-		<div class="message_options">
-
-			<div class="message_sender">Enviado a: <b><?php echo $mensaje['persona']['nombre']['nombre'] .' '. $mensaje['persona']['nombre']['apellidos'] ?></b></div>
-			<div class="message_time"><?php echo $mensaje['tiempo'] ?></div>
-
-			<div style="clear: both"></div>
+		<div class="emisor">
+			
+			<div class="circle" style="background: #<?php echo $mensaje['persona']['circleColor'] ?>"><?php echo $mensaje['persona']['inicial'] ?></div>
 
 		</div>
 
+		<div class="nombreEmisor"> <i class="fa fa-chevron-right"></i> <?php echo $mensaje['persona']['nombre']['nombre'] .' '. $mensaje['persona']['nombre']['apellidos'] ?></div>
+
 	</div>
+
+	<div class="sectionTitle"><?php echo $mensaje['asunto'] ?></div>
+
+	<div class="message_contenido"> <?php echo $mensaje['contenido'] ?> </div>
+
+	<div class="message_sended"><?php echo $mensaje['tiempo'] ?>.</div>
 
 </div>
 

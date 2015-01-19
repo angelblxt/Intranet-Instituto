@@ -872,3 +872,96 @@ a{
 					float: right;
 
 				}
+
+/* MENSAJE PRIVADO */
+
+.message_view{
+
+	width: 100%;
+
+}
+
+	.message_view .data{
+
+		background-color: #F5F5F5;
+
+		width: calc(100% + 30px);
+		height: 60px;
+
+		margin: 0 0 20px -20px;
+
+		padding-left: 10px;
+
+	}
+
+		.message_view .data .emisor{
+
+			width: 60px;
+			height: 60px;
+
+			position: relative;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+			float: left;
+
+		}
+
+			.message_view .data .emisor .circle{
+
+				width: 40px;
+				height: 40px;
+
+				position: absolute;
+				top: 10px;
+				left: 10px;
+
+				border-radius: 30px;
+
+				line-height: 40px;
+				text-align: center;
+				font-family: 'Raleway';
+				font-size: 25px;
+				color: #FFFFFF;
+
+			}
+
+		.message_view .data .nombreEmisor{
+
+			width: calc(100% - 60px);
+			height: 60px;
+
+			line-height: 60px;
+			font-family: 'Raleway';
+			font-size: 20px;
+			color: rgba(0,0,0, .6);
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+	.message_view .message_contenido{
+
+		width: 100%;
+		height: auto;
+
+		text-align: justify;
+
+	}
+
+	.message_view .message_sended{
+
+		width: 100%;
+		height: auto;
+
+		color: rgba(0,0,0, .4);
+
+		margin-top: 20px;
+
+	}
