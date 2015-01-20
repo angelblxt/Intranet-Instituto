@@ -3,7 +3,7 @@
 	<div class="about_logo"></div><br/>
 
 	<div class="about_title">Intranet</div>
-	<div class="about_subtitle">I.E.S Benjamín Jarnés (sección Fuentes de Ebro)</div>
+	<div class="about_subtitle">I.E.S Benjamín Jarnés (Fuentes de Ebro)</div>
 
 	<div class="about_developer">Desarrollado por <b>Ángel Querol García</b></div>
 
