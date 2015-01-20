@@ -113,4 +113,25 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de renombrar un archivo o directorio.
+	*
+	* @param string $path Directorio donde se encuentra el archivo.
+	* @param string $old Nombre antiguo.
+	* @param string $new Nombre nuevo.
+	*
+	* @return boolean TRUE si se ha renombrado, FALSE si no.
+	*
+	*/
+
+		public function rename($path, $old, $new)
+		{
+
+			$dir = FS . $path;
+
+			return (file_exists($dir . $old))? rename($dir . $old, $dir . $new) : false;
+
+		}
+
 }
