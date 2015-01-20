@@ -1,3 +1,5 @@
+<div class="sectionTitle">Bandeja de Salida</div>
+
 <?php
 
 	if(count($mensajes) == 0){
