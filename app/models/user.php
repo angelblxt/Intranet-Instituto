@@ -290,7 +290,9 @@ class User extends \core\model {
 		public function getUserByName($nombreCompleto)
 		{
 
-			$result = $this->_db->select("SELECT hash_usuario FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $nombreCompleto ."' IN BOOLEAN MODE) LIMIT 1");
+			// $result = $this->_db->select("SELECT hash_usuario FROM datos_personales WHERE MATCH(nombre,apellidos) AGAINST ('". $nombreCompleto ."' IN BOOLEAN MODE) LIMIT 1");
+
+			$result = $this->_db->select("SELECT hash_usuario FROM datos_personales WHERE CONCAT(nombre, ' ', apellidos) = '". $nombreCompleto ."'");
 
 			return $result[0];
 
