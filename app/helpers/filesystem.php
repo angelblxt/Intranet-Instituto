@@ -10,6 +10,37 @@
 
 class Filesystem {
 
+	private $fs;
+
+	/**
+	*
+	* Método encargado de inicializar el Sistema de Archivos Personal.
+	*
+	* Debe ser llamado al principio.
+	*
+	*/
+
+		public function personalFS()
+		{
+
+			$hashUsuario = $this->_user->getHash($this->username);
+
+			$personalFolder = FS_ROOT . $hashUsuario .'/';
+
+			if(!file_exists($personalFolder)){
+
+				mkdir($personalFolder, 0777, true);
+
+				$this->fs = $personalFolder;
+
+			} else {
+
+				$this->fs = $personalFolder;
+
+			}
+
+		}
+
 	/**
 	*
 	* Método encargado de Formatear los Bytes a un formato humano.
@@ -67,9 +98,9 @@ class Filesystem {
 		public function makeFolder($path)
 		{
 
-			$dir = FS . $path;
+			$dir = $this->fs . $path;
 
-			$result = (!file_exists($dir))? mkdir($dir, 0777, true) : true;
+			$result = (!file_exists($dir))? mkdir($dir, 0777, true) : false;
 
 			return $result;
 
@@ -88,7 +119,7 @@ class Filesystem {
 		public function deleteFolder($path)
 		{
 
-			$dir = FS . $path;
+			$dir = $this->fs . $path;
 			$dir = str_replace('../', '', $dir);
 
 			if(is_dir($dir)){
@@ -97,7 +128,7 @@ class Filesystem {
 
 				foreach($files as $file){
 
-					$pathToMethod = str_replace(FS, '', $file);
+					$pathToMethod = str_replace($this->fs, '', $file);
 
 					is_dir($file)? self::deleteFolder($pathToMethod) : unlink($file);
 
@@ -128,7 +159,7 @@ class Filesystem {
 		public function rename($path, $old, $new)
 		{
 
-			$dir = FS . $path;
+			$dir = $this->fs . $path;
 
 			$dir = str_replace('../', '', $dir);
 			$old = str_replace('../', '', $old);
@@ -152,8 +183,8 @@ class Filesystem {
 		public function move($old, $new)
 		{
 
-			$old = FS . $old;
-			$new = FS . $new;
+			$old = $this->fs . $old;
+			$new = $this->fs . $new;
 
 			$old = str_replace('../', '', $old);
 			$new = str_replace('../', '', $new);

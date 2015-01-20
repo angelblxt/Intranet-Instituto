@@ -18,7 +18,7 @@ class Config {
 
 		//site address
 		define('DIR', 'http://localhost/intranet/');
-		define('FS', 'app/filesystem/');
+		define('FS_ROOT', 'app/filesystem/');
 
 		//set default controller and method for legacy calls
 		define('DEFAULT_CONTROLLER', 'login');
