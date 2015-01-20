@@ -54,4 +54,63 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de crear un nuevo directorio.
+	*
+	* @param string $path Carpeta a crear.
+	*
+	* @return boolean TRUE si se ha creado, FALSE si no.
+	*
+	*/
+
+		public function makeFolder($path)
+		{
+
+			$dir = FS . $path;
+
+			$result = (!file_exists($dir))? mkdir($dir, 0777, true) : true;
+
+			return $result;
+
+		}
+
+	/**
+	*
+	* Método encargado de eliminar un directorio.
+	*
+	* @param string $path Carpeta a eliminar.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function deleteFolder($path)
+		{
+
+			$dir = FS . $path;
+			$dir = str_replace('../', '', $dir);
+
+			if(is_dir($dir)){
+
+				$files = glob($dir . '/*');
+
+				foreach($files as $file){
+
+					$pathToMethod = str_replace(FS, '', $file);
+
+					is_dir($file)? self::deleteFolder($pathToMethod) : unlink($file);
+
+				}
+
+				return rmdir($dir);
+
+			} else {
+
+				return false;
+
+			}
+
+		}
+
 }
