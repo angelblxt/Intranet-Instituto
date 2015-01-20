@@ -130,7 +130,35 @@ class Filesystem {
 
 			$dir = FS . $path;
 
+			$dir = str_replace('../', '', $dir);
+			$old = str_replace('../', '', $old);
+			$new = str_replace('../', '', $new);
+
 			return (file_exists($dir . $old))? rename($dir . $old, $dir . $new) : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de mover un archivo o directorio.
+	*
+	* @param string $old Archivo o Directorio a mover.
+	* @param string $new Archivo o Directorio de destino.
+	*
+	* @return boolean TRUE si se ha movido, FALSE si no.
+	*
+	*/
+
+		public function move($old, $new)
+		{
+
+			$old = FS . $old;
+			$new = FS . $new;
+
+			$old = str_replace('../', '', $old);
+			$new = str_replace('../', '', $new);
+
+			return (file_exists($old))? rename($old, $new) : false;
 
 		}
 
