@@ -263,6 +263,8 @@ class Filesystem {
 
 				closedir($opendir);
 
+				array_multisort($return, SORT_REGULAR);
+
 				return $return;
 
 			} else {
