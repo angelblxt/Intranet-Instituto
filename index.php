@@ -92,6 +92,9 @@ use \core\router,
 	Router::any('messages/(:any)/delete/(:any)', '\controllers\messages@delete');
 	Router::any('messages/new', '\controllers\messages@newMessage');
 
+// Rutas de las secciones de "Archivos".
+	Router::any('folders', '\controllers\folders@index');
+
 	// Router::any('register', '\controllers\user@register');
 
 //if no route found
