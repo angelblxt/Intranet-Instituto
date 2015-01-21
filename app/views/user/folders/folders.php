@@ -1,12 +1,26 @@
 <div class="sectionTitle">Carpeta Personal</div>
 
+<?php if(!empty($previous)): ?>
+
+	<a href="<?php echo DIR ?>folders/<?php echo $previous ?>">Atrás</a>
+
+<?php endif; ?>
+
 <?php foreach($files as $file): ?>
 
 	<div class="folders_file">
 
 		<div class="icono"> <?php echo $file['icon'] ?> </div>
 
-		<div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name'] ?> </div>
+		<?php if($file['type'] == 'dir'): ?>
+
+			<a href="<?php echo DIR ?>folders/<?php echo $file['next'] ?>"><div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name']['decrypted'] ?> </div></a>
+
+		<?php else: ?>
+
+			<div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name']['decrypted'] ?> </div>
+
+		<?php endif; ?>
 
 		<div class="opciones">
 
