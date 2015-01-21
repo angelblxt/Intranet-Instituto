@@ -981,7 +981,19 @@ a{
 
 		border-bottom: 1px solid #DCDCDC;
 
+		-webkit-transition: all 0.1s linear;
+				transition: all 0.1s linear;
+
 	}
+
+		.folders_file:hover{
+
+			background-color: #F8F8F8;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
 
 		.folders_file:first-child{
 

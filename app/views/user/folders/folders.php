@@ -1,29 +1,29 @@
-<!-- <div class="folders_file">
+<div class="sectionTitle">Carpeta Personal</div>
 
-	<div class="icono">
+<?php foreach($files as $file): ?>
 
-		<!-- <div class="file-icon" data-type="xls"></div> -->
+	<div class="folders_file">
 
-		<!-- <i class="fa fa-folder"></i> -->
+		<div class="icono"> <?php echo $file['icon'] ?> </div>
 
-	<!-- </div>
+		<div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name'] ?> </div>
 
-	<div class="nombre file">archivo.ext</div>
+		<div class="opciones">
 
-	<div class="opciones">
-
-		<div class="size">1.9 KB</div>
+			<div class="size"> <?php echo $file['size'] ?> </div>
+			
+			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Descargar">
+				<button onClick="location.href=''" class="button button-rounded button-flat-primary button-tiny"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
+			</span>
+			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Renombrar">
+				<button onClick="location.href=''" class="button button-rounded button-flat-action button-tiny"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
+			</span>
+			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Eliminar">
+				<button onClick="location.href=''" class="button button-rounded button-flat-caution button-tiny"><i class="fa fa-times-circle" style="margin: 0 -10px"></i></button>
+			</span>
 		
-		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Descargar">
-			<button onClick="location.href=''" class="button button-rounded button-flat-primary button-tiny"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
-		</span>
-		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Renombrar">
-			<button onClick="location.href=''" class="button button-rounded button-flat-action button-tiny"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
-		</span>
-		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Eliminar">
-			<button onClick="location.href=''" class="button button-rounded button-flat-caution button-tiny"><i class="fa fa-times-circle" style="margin: 0 -10px"></i></button>
-		</span>
-	
+		</div>
+
 	</div>
 
-</div> -->
+<?php endforeach; ?>
