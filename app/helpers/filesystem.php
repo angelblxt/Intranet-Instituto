@@ -18,12 +18,16 @@ class Filesystem {
 	*
 	* Debe ser llamado al principio.
 	*
+	* @param string $user Usuario para poder acceder a su Sistema de Archivos.
+	*
 	*/
 
-		public function personalFS()
+		public function personalFS($user = '')
 		{
 
-			$hashUsuario = $this->_user->getHash($this->username);
+			$user = (empty($user))? $this->username : $user;
+
+			$hashUsuario = $this->_user->getHash($user);
 
 			$personalFolder = FS_ROOT . $hashUsuario .'/';
 
