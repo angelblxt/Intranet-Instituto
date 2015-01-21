@@ -22,7 +22,8 @@
 						\helpers\url::template_path() . 'css/tables.css',
 						\helpers\url::template_path() . 'css/hint.min.css',
 						\helpers\url::template_path() . 'css/csshake.min.css',
-						\helpers\url::template_path() . 'css/jquery-ui.css'
+						\helpers\url::template_path() . 'css/jquery-ui.css',
+						\helpers\url::template_path() . 'css/fileicon.css'
 					));
 
 				// Archivos JS.

@@ -965,3 +965,97 @@ a{
 		margin-top: 20px;
 
 	}
+
+/* SISTEMA DE ARCHIVOS */
+
+	.folders_file{
+
+		background-color: #F5F5F5;
+
+		width: calc(100% + 40px);
+		height: 50px;
+
+		margin-left: -20px;
+
+		line-height: 50px;
+
+		border-bottom: 1px solid #DCDCDC;
+
+	}
+
+		.folders_file:first-child{
+
+			border-top: 1px solid #DCDCDC;
+
+		}
+
+		.folders_file .icono{
+
+			width: 50px;
+			height: 50px;
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .icono .file-icon{
+
+				margin: 9px 0 9px 13px;
+
+			}
+
+		.folders_file .nombre{
+
+			width: calc(100% - 50px - 250px);
+
+			color: rgba(0,0,0, .6);
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .nombre.file{
+
+				font-weight: normal;
+
+			}
+
+			.folders_file .nombre.dir{
+
+				font-weight: bold;
+
+			}
+
+		.folders_file .opciones{
+
+			width: 250px;
+
+			text-align: right;
+
+			padding: 0 15px;
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .opciones .size{
+
+				display: inline;
+
+				color: rgba(0,0,0, .4);
+
+				margin-right: 10px;
+
+			}
