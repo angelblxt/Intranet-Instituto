@@ -1,10 +1,12 @@
-<div class="folders_file">
+<!-- <div class="folders_file">
 
 	<div class="icono">
 
-		<div class="file-icon" data-type="xls"></div>
+		<!-- <div class="file-icon" data-type="xls"></div> -->
 
-	</div>
+		<!-- <i class="fa fa-folder"></i> -->
+
+	<!-- </div>
 
 	<div class="nombre file">archivo.ext</div>
 
@@ -24,4 +26,4 @@
 	
 	</div>
 
-</div>
+</div> -->
