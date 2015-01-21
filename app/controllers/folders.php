@@ -5,7 +5,7 @@ use core\view,
 	helpers\session as Session,
 	helpers\security as Seguridad;
 
-class Preferences extends \core\controller{
+class Folders extends \core\controller{
 
 	public $username;
 	public $templateData;
