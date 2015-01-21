@@ -47,6 +47,25 @@ class Filesystem {
 
 	/**
 	*
+	* Método encargado de obtener el tamaño de un archivo.
+	*
+	* @param string $path Dirección hasta el archivo.
+	*
+	* @return mixed Número de Bytes, FALSE si no se puede obtener.
+	*
+	*/
+
+		public function getFileSize($path)
+		{
+
+			$dir = $this->fs . $path;
+
+			return filesize($dir);
+
+		}
+
+	/**
+	*
 	* Método encargado de Formatear los Bytes a un formato humano.
 	*
 	* @param integer $bytes Número de Bytes.
