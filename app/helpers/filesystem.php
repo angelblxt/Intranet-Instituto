@@ -10,7 +10,7 @@
 
 class Filesystem {
 
-	private $fs;
+	public $fs;
 
 	/**
 	*
