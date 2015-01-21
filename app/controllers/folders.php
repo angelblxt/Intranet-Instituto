@@ -3,7 +3,8 @@ use core\view,
 	helpers\nocsrf as NoCSRF,
 	helpers\url as Url,
 	helpers\session as Session,
-	helpers\security as Seguridad;
+	helpers\security as Seguridad,
+	helpers\filesystem as FS;
 
 class Folders extends \core\controller{
 
@@ -59,15 +60,43 @@ class Folders extends \core\controller{
 
 			$this->_log->add('Ha entrado en la sección "Carpetas".');
 
+			// SISTEMA DE ARCHIVOS
+
+				FS::personalFS();
+
+				$list = FS::listFolders();
+
+				$files = [];
+
+				foreach($list as $file){
+
+					$extension = FS::getExtension($file['name']);
+					$size      = FS::formatBytes($file['size'], 2);
+
+					$icon = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
+
+					$files[] = [
+						'name' => $file['name'],
+						'icon' => $icon,
+						'size' => $size,
+						'type' => $file['type']];
+
+				}
+
+			// FIN DEL SISTEMA DE ARCHIVOS
+
 			$data = [
 				'title' => 'Carpetas'];
+
+			$section = [
+				'files' => $files];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/folders');
+			View::render('user/folders/folders', $section);
 			View::rendertemplate('footer');
 
 		}
