@@ -10,7 +10,7 @@
 
 class Filesystem {
 
-	public $fs;
+	private $fs;
 
 	/**
 	*
@@ -246,7 +246,8 @@ class Filesystem {
 							$return[] = [
 								'type' => 'dir',
 								'name' => $archivo,
-								'size' => self::getFileSize($path . $archivo)];
+								'size' => self::getFileSize($path . $archivo),
+								'path' => $path . $archivo .'/'];
 						
 						}
 
@@ -255,7 +256,8 @@ class Filesystem {
 						$return[] = [
 							'type' => 'file',
 							'name' => $archivo,
-							'size' => self::getFileSize($path . $archivo)];
+							'size' => self::getFileSize($path . $archivo),
+							'path' => $path . $archivo];
 
 					}
 
@@ -272,6 +274,47 @@ class Filesystem {
 				return false;
 
 			}
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar la existencia de una carpeta.
+	*
+	* @param string $folder Carpeta.
+	*
+	* @return boolean TRUE si existe, FALSE si no.
+	*
+	*/
+
+		public function comprobeFolder($folder)
+		{
+
+			return is_dir($this->fs . $folder);
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener la carpeta anterior de un PATH.
+	*
+	* @param string $path PATH.
+	*
+	* @return string Dirección.
+	*
+	*/
+
+		public function getAnteriorPath($path)
+		{
+
+			$dirs   = explode('/', $path);
+			$number = count($dirs);
+			
+			unset($dirs[$number - 2]);
+			
+			$previous = implode('/', $dirs);
+
+			return $previous;
 
 		}
 

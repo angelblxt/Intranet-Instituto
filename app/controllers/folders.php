@@ -49,7 +49,7 @@ class Folders extends \core\controller{
 
 	}
 
-	public function index()
+	public function index($folder = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -64,7 +64,23 @@ class Folders extends \core\controller{
 
 				FS::personalFS();
 
-				$list = FS::listFolders();
+				if(!empty($folder)){
+
+					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
+
+					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
+
+					/* Manejo de la Carpeta anterior */
+
+						$previous = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
+
+					/* FIN del Manejo de la Carpeta anterior */
+
+				} else {
+
+					$list = FS::listFolders();
+
+				}
 
 				$files = [];
 
@@ -72,14 +88,32 @@ class Folders extends \core\controller{
 
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
+					$icon      = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
+					$next      = ($file['type'] == 'dir')? base64_encode(Seguridad::encriptar($file['path'], 2)) : '';
 
-					$icon = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
+					if($file['type'] == 'dir'){
 
-					$files[] = [
-						'name' => $file['name'],
-						'icon' => $icon,
-						'size' => $size,
-						'type' => $file['type']];
+						$files[] = [
+							'name'     => [
+								'decrypted' => $file['name'],
+								'encrypted' => $encriptedName],
+							'icon'     => $icon,
+							'size'     => $size,
+							'type'     => $file['type'],
+							'next'     => $next,
+							'previous' => $previous];
+
+					} else {
+
+						$files[] = [
+							'name' => [
+								'decrypted' => $file['name'],
+								'encrypted' => $encriptedName],
+							'icon' => $icon,
+							'size' => $size,
+							'type' => $file['type']];
+
+					}
 
 				}
 
@@ -89,7 +123,8 @@ class Folders extends \core\controller{
 				'title' => 'Carpetas'];
 
 			$section = [
-				'files' => $files];
+				'files'    => $files,
+				'previous' => $previous];
 			
 			Session::set('template', 'user');
 

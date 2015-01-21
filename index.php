@@ -94,6 +94,7 @@ use \core\router,
 
 // Rutas de las secciones de "Archivos".
 	Router::any('folders', '\controllers\folders@index');
+	Router::any('folders/(:any)', '\controllers\folders@index');
 
 	// Router::any('register', '\controllers\user@register');
 
