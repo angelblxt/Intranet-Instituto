@@ -1008,6 +1008,15 @@ a{
 
 			}
 
+			.folders_file .icono i{
+
+				font-size: 30px;
+				color: rgba(0,0,0, .4);
+
+				margin: 10px 10px;
+
+			}
+
 		.folders_file .nombre{
 
 			width: calc(100% - 50px - 250px);
