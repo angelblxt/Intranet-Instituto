@@ -216,4 +216,61 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de mostrar un listado de los archivos 
+	* y directorios de una carpeta.
+	*
+	* @param string $path Carpeta a la que se ha movido.
+	*
+	* @return array Directorios.
+	*
+	*/
+
+		public function listFolders($path = '')
+		{
+
+			$dir     = $this->fs . $path;
+			$opendir = opendir($dir);
+
+			$return = [];
+
+			if(is_dir($dir)){
+
+				while($archivo = readdir($opendir)){
+
+					if(is_dir($dir . $archivo)){
+
+						if($archivo != '.' && $archivo != '..'){
+							
+							$return[] = [
+								'type' => 'dir',
+								'name' => $archivo,
+								'size' => self::getFileSize($path . $archivo)];
+						
+						}
+
+					} else {
+
+						$return[] = [
+							'type' => 'file',
+							'name' => $archivo,
+							'size' => self::getFileSize($path . $archivo)];
+
+					}
+
+				}
+
+				closedir($opendir);
+
+				return $return;
+
+			} else {
+
+				return false;
+
+			}
+
+		}
+
 }
