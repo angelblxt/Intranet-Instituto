@@ -2,7 +2,7 @@
 
 <?php if(!empty($previous)): ?>
 
-	<a href="<?php echo DIR ?>folders/<?php echo $previous ?>">Atrás</a>
+	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
 
 <?php endif; ?>
 
