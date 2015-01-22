@@ -40,7 +40,7 @@
 				<button onClick="location.href=''" class="button button-rounded button-flat-highlight button-tiny" style="padding: 0 15px"><i class="fa fa-cog" style="margin: 0 -10px"></i></button>
 			</span>
 			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Eliminar">
-				<button onClick="location.href=''" class="button button-rounded button-flat-caution button-tiny" style="padding: 0 15px"><i class="fa fa-times" style="margin: 0 -10px"></i></button>
+				<button onClick="location.href='<?php echo $file['buttons']['delete'] ?>'" class="button button-rounded button-flat-caution button-tiny" style="padding: 0 15px"><i class="fa fa-times" style="margin: 0 -10px"></i></button>
 			</span>
 		
 		</div>
