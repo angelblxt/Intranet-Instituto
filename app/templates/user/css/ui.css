@@ -1098,3 +1098,24 @@ a{
 			margin-right: 5px;
 
 		}
+
+	.folders_nothing{
+
+		width: 100%;
+		height: auto;
+
+		font-family: 'Raleway';
+		font-size: 20px;
+		color: rgba(0,0,0, .4);
+
+		margin: 15px 0;
+
+		text-align: center;
+
+	}
+
+		.folders_nothing i{
+
+			margin-right: 5px;
+
+		}
