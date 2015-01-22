@@ -103,7 +103,9 @@ class Folders extends \core\controller{
 							'size'     => $size,
 							'type'     => $file['type'],
 							'next'     => $next,
-							'previous' => $previous];
+							'previous' => $previous,
+							'buttons'  => [
+								'rename' => DIR . 'folders/'. $next .'/rename/folder']];
 
 					} else {
 
@@ -113,11 +115,15 @@ class Folders extends \core\controller{
 								'encrypted' => $encriptedName],
 							'icon' => $icon,
 							'size' => $size,
-							'type' => $file['type']];
+							'type' => $file['type'],
+							'buttons' => [
+								'rename' => '']];
 
 					}
 
 				}
+
+				$nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($folderToGo));
 
 			// FIN DEL SISTEMA DE ARCHIVOS
 
@@ -125,9 +131,10 @@ class Folders extends \core\controller{
 				'title' => 'Carpetas'];
 
 			$section = [
-				'files'    => $files,
-				'previous' => $previous,
-				'actual'   => $actual];
+				'files'        => $files,
+				'previous'     => $previous,
+				'actual'       => $actual,
+				'titleSection' => (empty($nombreCarpetaActual))? 'Carpeta Personal' : $nombreCarpetaActual];
 			
 			Session::set('template', 'user');
 
@@ -194,6 +201,76 @@ class Folders extends \core\controller{
 			} else {
 
 				$_SESSION['error'] = ['Carpeta creada con éxito.', 'bien'];
+
+				Url::redirect('folders/'. $folder);
+
+			}
+
+		} else {
+
+			Url::redirect('');
+
+		}
+
+	}
+
+	public function renameFolder($folder = '')
+	{
+
+		$folderDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($folder), 2));
+
+		$nombreActual = FS::getFolderName($folderDecrypted);
+
+		$data = [
+			'title' => 'Renombrar Carpeta'];
+
+		$section = [
+			'folder' => [
+				'encrypted'  => $folder,
+				'decrypted'  => (empty($folderDecrypted))? '/' : $folderDecrypted,
+				'actualName' => $nombreActual],
+			'token' => NoCSRF::generate('token')];
+			
+		Session::set('template', 'user');
+
+		View::rendertemplate('header', $data);
+		View::rendertemplate('topHeader', $this->templateData);
+		View::rendertemplate('aside', $this->templateData);
+		View::render('user/folders/renameFolder', $section);
+		View::rendertemplate('footer');
+
+	}
+
+	public function editFolder()
+	{
+
+		FS::personalFS();
+
+		$name   = str_replace(' ', '_', $_POST['nombre']);
+		$folder = $_POST['folder'];
+
+		$folderDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
+
+		$anteriorPath = FS::getAnteriorPath($folderDecrypted);
+		$nombreActual = FS::getFolderName($folderDecrypted);
+
+		if(isset($_POST['create']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+			if(empty($name)){
+
+				$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+				Url::redirect('folders/'. $folder .'/rename/folder');
+
+			} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
+
+				$_SESSION['error'] = ['No ha sido posible renombrar la Carpeta.', 'mal'];
+
+				Url::redirect('folders/'. $folder .'/rename/folder');
+
+			} else {
+
+				$_SESSION['error'] = ['Carpeta renombrada con éxito.', 'bien'];
 
 				Url::redirect('folders/'. $folder);
 

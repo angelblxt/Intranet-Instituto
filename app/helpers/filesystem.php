@@ -329,4 +329,26 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener el nombre de la carpeta de un PATH.
+	*
+	* @param string $path PATH.
+	*
+	* @return string Nombre de la Carpeta.
+	*
+	*/
+
+		public function getFolderName($path)
+		{
+
+			$explode = explode('/', $path);
+			$numero = count($explode);
+
+			$nombre = $explode[$numero - 2];
+
+			return $nombre;
+
+		}
+
 }

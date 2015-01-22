@@ -71,6 +71,7 @@ use \core\router,
     Router::post('post/sendMessage', '\controllers\messages@send');
     Router::any('post/searchUser', '\controllers\user@search');
     Router::post('post/new/folder', '\controllers\folders@addFolder');
+    Router::post('post/rename/folder', '\controllers\folders@editFolder');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
@@ -97,6 +98,7 @@ use \core\router,
 	Router::any('folders', '\controllers\folders@index');
 	Router::any('folders/(:any)', '\controllers\folders@index');
 	Router::any('folders/(:any)/new/folder', '\controllers\folders@newFolder');
+	Router::any('folders/(:any)/rename/folder', '\controllers\folders@renameFolder');
 
 	// Router::any('register', '\controllers\user@register');
 
