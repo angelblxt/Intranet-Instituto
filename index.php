@@ -70,6 +70,7 @@ use \core\router,
     Router::any('post/changeCircleColor/(:any)', '\controllers\user@changeCircleColor');
     Router::post('post/sendMessage', '\controllers\messages@send');
     Router::any('post/searchUser', '\controllers\user@search');
+    Router::post('post/new/folder', '\controllers\folders@addFolder');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');
@@ -95,6 +96,7 @@ use \core\router,
 // Rutas de las secciones de "Archivos".
 	Router::any('folders', '\controllers\folders@index');
 	Router::any('folders/(:any)', '\controllers\folders@index');
+	Router::any('folders/(:any)/new/folder', '\controllers\folders@newFolder');
 
 	// Router::any('register', '\controllers\user@register');
 

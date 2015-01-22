@@ -82,6 +82,8 @@ class Folders extends \core\controller{
 
 				}
 
+				$actual = base64_encode(Seguridad::encriptar($folderToGo, 2));
+
 				$files = [];
 
 				foreach($list as $file){
@@ -124,7 +126,8 @@ class Folders extends \core\controller{
 
 			$section = [
 				'files'    => $files,
-				'previous' => $previous];
+				'previous' => $previous,
+				'actual'   => $actual];
 			
 			Session::set('template', 'user');
 
@@ -133,6 +136,72 @@ class Folders extends \core\controller{
 			View::rendertemplate('aside', $this->templateData);
 			View::render('user/folders/folders', $section);
 			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function newFolder($folder = '')
+	{
+
+		$folderDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($folder), 2));
+
+		$data = [
+			'title' => 'Nueva Carpeta'];
+
+		$section = [
+			'folder' => [
+				'encrypted' => $folder,
+				'decrypted' => (empty($folderDecrypted))? '/' : $folderDecrypted],
+			'token' => NoCSRF::generate('token')];
+			
+		Session::set('template', 'user');
+
+		View::rendertemplate('header', $data);
+		View::rendertemplate('topHeader', $this->templateData);
+		View::rendertemplate('aside', $this->templateData);
+		View::render('user/folders/newFolder', $section);
+		View::rendertemplate('footer');
+
+	}
+
+	public function addFolder()
+	{
+
+		FS::personalFS();
+
+		$name   = str_replace(' ', '_', $_POST['nombre']);
+		$folder = $_POST['folder'];
+
+		$folderDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
+
+		$pathFinal = $folderDecrypted . $name . '/';
+
+		if(isset($_POST['create']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+			if(empty($name)){
+
+				$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+				Url::redirect('folders/'. $folder .'/new/folder');
+
+			} elseif(!FS::makeFolder($pathFinal)) {
+
+				$_SESSION['error'] = ['La carpeta ya existe o ha habido un error al crearla.', 'mal'];
+
+				Url::redirect('folders/'. $folder .'/new/folder');
+
+			} else {
+
+				$_SESSION['error'] = ['Carpeta creada con éxito.', 'bien'];
+
+				Url::redirect('folders/'. $folder);
+
+			}
+
+		} else {
+
+			Url::redirect('');
 
 		}
 

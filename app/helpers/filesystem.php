@@ -34,6 +34,7 @@ class Filesystem {
 			if(!file_exists($personalFolder)){
 
 				mkdir($personalFolder, 0777, true);
+				chmod($personalFolder, 0777);
 
 				$this->fs = $personalFolder;
 
@@ -123,7 +124,17 @@ class Filesystem {
 
 			$dir = $this->fs . $path;
 
-			$result = (!file_exists($dir))? mkdir($dir, 0777, true) : false;
+			if(!file_exists($dir)){
+
+				$result = mkdir($dir, 0777, true);
+
+				chmod($dir, 0777);
+
+			} else {
+
+				$result = false;
+				
+			}
 
 			return $result;
 
@@ -245,7 +256,7 @@ class Filesystem {
 							
 							$return[] = [
 								'type' => 'dir',
-								'name' => $archivo,
+								'name' => str_replace('_', ' ', $archivo),
 								'size' => self::getFileSize($path . $archivo),
 								'path' => $path . $archivo .'/'];
 						
