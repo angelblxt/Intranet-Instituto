@@ -1080,3 +1080,21 @@ a{
 				margin-right: 10px;
 
 			}
+
+	.folders_showName{
+
+		width: 100%;
+		height: auto;
+
+		color: rgba(0,0,0, .5);
+		font-size: 14px;
+
+		margin-bottom: 15px;
+
+	}
+
+		.folders_showName i{
+
+			margin-right: 5px;
+
+		}
