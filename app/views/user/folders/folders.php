@@ -1,4 +1,4 @@
-<div class="sectionTitle">Carpeta Personal</div>
+<div class="sectionTitle"><?php echo $titleSection; ?></div>
 
 <?php \helpers\messages::comprobarErrores(); ?>
 
@@ -34,7 +34,7 @@
 				<button onClick="location.href=''" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 15px"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
 			</span>
 			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Renombrar">
-				<button onClick="location.href=''" class="button button-rounded button-flat-action button-tiny" style="padding: 0 15px"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
+				<button onClick="location.href='<?php echo $file['buttons']['rename'] ?>'" class="button button-rounded button-flat-action button-tiny" style="padding: 0 15px"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
 			</span>
 			<span class="hint--rounded hint--bounce hint--bottom" data-hint="Opciones">
 				<button onClick="location.href=''" class="button button-rounded button-flat-highlight button-tiny" style="padding: 0 15px"><i class="fa fa-cog" style="margin: 0 -10px"></i></button>
