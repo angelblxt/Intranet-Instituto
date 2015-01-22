@@ -1,10 +1,14 @@
 <div class="sectionTitle">Carpeta Personal</div>
 
+<?php \helpers\messages::comprobarErrores(); ?>
+
 <?php if(!empty($previous)): ?>
 
 	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
 
 <?php endif; ?>
+
+	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $actual ?>/new/folder'" class="button button-rounded button-flat-action button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-folder"></i> Nueva Carpeta</button>
 
 <?php foreach($files as $file): ?>
 
