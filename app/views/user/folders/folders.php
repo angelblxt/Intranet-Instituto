@@ -39,7 +39,7 @@ if(!empty($previous)): ?>
 				<div class="size"> <?php echo $file['size'] ?> </div>
 				
 				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Descargar">
-					<button onClick="location.href=''" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 15px"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
+					<button onClick="location.href='<?php echo $file['buttons']['download'] ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 15px"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
 				</span>
 				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Renombrar">
 					<button onClick="location.href='<?php echo $file['buttons']['rename'] ?>'" class="button button-rounded button-flat-action button-tiny" style="padding: 0 15px"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
