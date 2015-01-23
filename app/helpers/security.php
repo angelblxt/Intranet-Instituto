@@ -176,7 +176,7 @@
 
                     foreach( $value as $key => $val ) {
 
-                        $value[$key] = cleanInput($val);
+                        $value[$key] = self::cleanInput($val);
 
                     }
 

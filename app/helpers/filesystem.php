@@ -526,4 +526,65 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de subir archivos.
+	*
+	* @param string $path PATH.
+	* @param array $files $_FILES.
+	*
+	* @return boolean TRUE si se han subido los archivo, FALSE si no.
+	*
+	*/
+
+		public function upload($path, $files)
+		{
+
+			// Datos iniciales.
+			$invalidFormats = [
+				'php', 'exe', 'pif', 'application', 'gadget', 'msi', 'msp', 'com', 'scr', 'hta', 
+				'sh', 'bash', 'jar', 'bat', 'cmd', 'vb', 'vbs', 'js', 'jse', 'css', 'jse', 'lnk', 
+				'reg', 'bin', 'dll', 'sys', 'ocx', 'sql'];
+			$maxFileSize = MAX_SIZE * 1024 * 1024;
+
+			$errors = 0;
+
+			$dir = $this->fs . $path;
+
+			foreach($files['files']['name'] as $f => $name){
+
+				if($files['files']['error'][$f] == 4)
+					continue;
+
+				if($files['files']['error'][$f] == 0){
+
+					if($files['files']['size'][$f] > $maxFileSize){
+
+						$errors++;
+						continue;
+
+					} elseif(in_array(pathinfo($name, PATHINFO_EXTENSION), $invalidFormats)){
+
+						$errors++;
+						continue;
+
+					} else {
+
+						if(!move_uploaded_file($files['files']['tmp_name'][$f], $dir . $name)){
+
+							$errors++;
+							continue;
+
+						}
+
+					}
+
+				}
+
+			}
+
+			return $errors;
+
+		}
+
 }
