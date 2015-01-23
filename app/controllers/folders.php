@@ -280,23 +280,25 @@ class Folders extends \core\controller{
 
 			FS::personalFS();
 
-			$name   = str_replace(' ', '_', $_POST['nombre']);
+			$name   = $_POST['nombre'];
 			$folder = $_POST['folder'];
 
 			$folderDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
 
-			$anteriorPath = FS::getAnteriorPath($folderDecrypted);
+			$nuevoNombre  = str_replace(' ', '_', $name);
 			$nombreActual = FS::getFolderName($folderDecrypted);
+
+			$pathAnterior = FS::getAnteriorPath($folderDecrypted);
 
 			if(isset($_POST['rename']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
 
-				if(empty($name)){
+				if(empty($nuevoNombre)){
 
 					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
 
 					Url::redirect('folders/'. $folder .'/rename/folder');
 
-				} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
+				} elseif(!FS::rename($pathAnterior, $nombreActual, $nuevoNombre)) {
 
 					$_SESSION['error'] = ['No ha sido posible renombrar la Carpeta.', 'mal'];
 
