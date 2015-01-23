@@ -565,14 +565,57 @@ class Folders extends \core\controller{
 
 			if(FS::comprobeFolder($fileDecrypted)){
 
-				$name = time('dmYhis');
+				$name = date('dmYhis');
 
-				if(FS::comprimeFolder($fileDecrypted, $name))
-					FS::download($name . '.zip');
+				$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
+
+				if(FS::comprimeFolder($fileDecrypted, $name) === true){
+
+					if(!FS::download($name . '.zip'))
+						Url::redirect('folders/'. $carpetaAnterior);
+
+				}
 
 			} else {
 
 				FS::download($fileDecrypted, false, false);
+
+			}
+
+		}
+
+	}
+
+	public function upload($folder = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			FS::personalFS();
+
+			$fileDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
+
+			if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == 'POST'){
+
+				if(FS::upload($fileDecrypted, $_FILES) === 0){
+
+					$_SESSION['error'] = ['Archivos subidos correctamente.', 'bien'];
+
+				} else {
+
+					$_SESSION['error'] = ['Algunos archivos no han podido ser subidos.', 'precaucion'];
+
+				}
+
+				Url::redirect('folders/'. $folder);
+
+			} else {
+
+				Url::redirect('');
 
 			}
 

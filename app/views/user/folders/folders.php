@@ -1,3 +1,14 @@
+<script>
+
+	function uploadForm()
+	{
+
+		$('#uploadForm').slideToggle('slow');
+
+	}
+
+</script>
+
 <div class="sectionTitle"><?php echo $titleSection; ?></div>
 
 <?php 
@@ -10,7 +21,20 @@ if(!empty($previous)): ?>
 
 <?php endif; ?>
 
-	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $actual ?>/new/folder'" class="button button-rounded button-flat-action button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-folder"></i> Nueva Carpeta</button>
+	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $actual ?>/new/folder'" class="button button-rounded button-flat-highlight button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-folder"></i> Nueva Carpeta</button>
+	<button onClick="uploadForm()" class="button button-rounded button-flat-action button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-upload"></i> Subir archivos aquí</button>
+
+	<div id="uploadForm" class="folders_upload_form">
+		
+		<form method="post" action="<?php echo DIR ?>post/upload/<?php echo $actual ?>" enctype="multipart/form-data">
+
+			<input type="file" name="files[]" multiple><br/>
+
+			<button type="submit" name="upload" class="button button-rounded button-flat-action button-tiny" style="margin-top: 10px"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Subir</button>
+
+		</form>
+
+	</div>
 
 <?php if(count($files) == 0): ?>
 
