@@ -440,11 +440,11 @@ class Folders extends \core\controller{
 					'title' => 'Eliminar Carpeta'];
 
 				$section = [
-					'folder' => [
+					'folder'   => [
 						'encrypted'  => $folder,
 						'decrypted'  => (empty($folderDecrypted))? '/' : $folderDecrypted,
 						'actualName' => $nombreActual],
-						'previous'   => $anteriorPath];
+					'previous' => $anteriorPath];
 					
 				Session::set('template', 'user');
 
@@ -473,6 +473,72 @@ class Folders extends \core\controller{
 				}
 
 				Url::redirect('folders/'. $anteriorPath);
+
+			}
+
+		}
+
+	}
+
+	public function deleteFile($file = '', $action = 0)
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			if($action == 0){
+
+				$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
+
+				$anteriorPath = FS::getFolderOfFile($fileDecrypted);
+				$nombreActual = FS::getFileName($fileDecrypted);
+
+				$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+
+				$data = [
+					'title' => 'Eliminar Archivo'];
+
+				$section = [
+					'file'     => [
+						'encrypted'  => $file,
+						'actualName' => $nombreActual],
+					'previous' => $anteriorPathEncriptado];
+					
+				Session::set('template', 'user');
+
+				View::rendertemplate('header', $data);
+				View::rendertemplate('topHeader', $this->templateData);
+				View::rendertemplate('aside', $this->templateData);
+				View::render('user/folders/deleteFile', $section);
+				View::rendertemplate('footer');
+
+			} else {
+
+				$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
+
+				$nombreActual = FS::getFileName($fileDecrypted);
+
+				$anteriorPath           = FS::getFolderOfFile($fileDecrypted);
+				$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+
+				FS::personalFS();
+
+				if(FS::deleteFile($fileDecrypted)){
+
+					$this->_log->add('Ha eliminado un Archivo "'. $nombreActual .'".');
+
+					$_SESSION['error'] = ['Archivo eliminado con éxito.', 'bien'];
+
+				} else {
+
+					$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+				}
+
+				Url::redirect('folders/'. $anteriorPathEncriptado);
 
 			}
 

@@ -180,6 +180,34 @@ class Filesystem {
 
 	/**
 	*
+	* Método encargado de eliminar un archivo.
+	*
+	* @param string $path PATH.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function deleteFile($path)
+		{
+
+			$dir = $this->fs . $path;
+			$dir = str_replace('../', '', $dir);
+
+			if(file_exists($dir)){
+
+				return (unlink($dir))? true : false;
+
+			} else {
+
+				return false;
+
+			}
+
+		}
+
+	/**
+	*
 	* Método encargado de renombrar un archivo o directorio.
 	*
 	* @param string $path Directorio donde se encuentra el archivo.
