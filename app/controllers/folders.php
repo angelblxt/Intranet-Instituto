@@ -216,6 +216,8 @@ class Folders extends \core\controller{
 
 				} else {
 
+					$this->_log->add('Ha creado una nueva carpeta "'. $pathFinal .'".');
+
 					$_SESSION['error'] = ['Carpeta creada con éxito.', 'bien'];
 
 					Url::redirect('folders/'. $folder);
@@ -296,6 +298,8 @@ class Folders extends \core\controller{
 
 				} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
 
+					$this->_log->add('Ha renombrado una Carpeta "'. $nombreActual .'" > "'. $name .'".');
+
 					$_SESSION['error'] = ['No ha sido posible renombrar la Carpeta.', 'mal'];
 
 					Url::redirect('folders/'. $folder .'/rename/folder');
@@ -360,6 +364,8 @@ class Folders extends \core\controller{
 				FS::personalFS();
 
 				if(FS::deleteFolder($folderDecrypted)){
+
+					$this->_log->add('Ha eliminado una Carpeta "'. $folderDecrypted .'".');
 
 					$_SESSION['error'] = ['Carpeta eliminada con éxito.', 'bien'];
 
