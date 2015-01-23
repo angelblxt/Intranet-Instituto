@@ -105,8 +105,9 @@ class Folders extends \core\controller{
 							'next'     => $next,
 							'previous' => $previous,
 							'buttons'  => [
-								'rename' => DIR . 'folders/'. $next .'/rename/folder',
-								'delete' => DIR . 'folders/'. $next .'/delete/folder/0']];
+								'rename'   => DIR . 'folders/'. $next .'/rename/folder',
+								'delete'   => DIR . 'folders/'. $next .'/delete/folder/0',
+								'download' => DIR . 'folders/'. $next .'/download']];
 
 					} else {
 
@@ -118,8 +119,9 @@ class Folders extends \core\controller{
 							'size' => $size,
 							'type' => $file['type'],
 							'buttons' => [
-								'rename' => DIR . 'folders/'. $next .'/rename/file',
-								'delete' => DIR . 'folders/'. $next .'/delete/file/0']];
+								'rename'   => DIR . 'folders/'. $next .'/rename/file',
+								'delete'   => DIR . 'folders/'. $next .'/delete/file/0',
+								'download' => DIR . 'folders/'. $next .'/download']];
 
 					}
 
@@ -541,6 +543,36 @@ class Folders extends \core\controller{
 				}
 
 				Url::redirect('folders/'. $anteriorPathEncriptado);
+
+			}
+
+		}
+
+	}
+
+	public function download($file = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			FS::personalFS();
+
+			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
+
+			if(FS::comprobeFolder($fileDecrypted)){
+
+				$name = time('dmYhis');
+
+				if(FS::comprimeFolder($fileDecrypted, $name))
+					FS::download($name . '.zip');
+
+			} else {
+
+				FS::download($fileDecrypted, false, false);
 
 			}
 
