@@ -336,7 +336,7 @@ class Folders extends \core\controller{
 			$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
 
 			$nombreActual = FS::getFileName($fileDecrypted);
-			$nombreActual = str_replace('.'. FS::getExtension($fileDecrypted), '', $nombreActual);
+			$nombreActual = str_replace('.' . FS::getExtension($fileDecrypted), '', $nombreActual);
 
 			$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($fileDecrypted), 2));
 
@@ -378,24 +378,24 @@ class Folders extends \core\controller{
 			$nombre = $_POST['nombre'];
 
 			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
-			$fileExtension = FS::getExtension($fileDecrypted);
 
-			$name = str_replace(' ', '_', $nombre) .'.'. $fileExtension;
-
-			$anteriorPath = FS::getFolderOfFile($fileDecrypted);
+			$extension    = FS::getExtension($fileDecrypted);
+			$nuevoNombre  = str_replace(' ', '_', $nombre .'.'. $extension);
 			$nombreActual = FS::getFileName($fileDecrypted);
 
-			$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+			$pathAnterior = [
+				'desencriptado' => FS::getFolderOfFile($fileDecrypted),
+				'encriptado'    => base64_encode(Seguridad::encriptar(FS::getFolderOfFile($fileDecrypted)))];
 
 			if(isset($_POST['rename']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
 
-				if(empty($nombre)){
+				if(empty($nuevoNombre)){
 
 					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
 
 					Url::redirect('folders/'. $file .'/rename/file');
 
-				} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
+				} elseif(!FS::rename($pathAnterior['desencriptado'], $nombreActual, $nuevoNombre)){
 
 					$_SESSION['error'] = ['No ha sido posible renombrar el Archivo.', 'mal'];
 
@@ -407,7 +407,7 @@ class Folders extends \core\controller{
 
 					$_SESSION['error'] = ['Archivo renombrado con éxito.', 'bien'];
 
-					Url::redirect('folders/'. $anteriorPathEncriptado);
+					Url::redirect('folders/'. $pathAnterior['encriptado']);
 
 				}
 
