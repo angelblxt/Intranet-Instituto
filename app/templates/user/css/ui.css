@@ -995,6 +995,15 @@ a{
 
 		}
 
+		.folders_file:hover .icono i{
+
+			color: rgba(0,0,0, .3);
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
 		.folders_file:first-child{
 
 			border-top: 1px solid #DCDCDC;
