@@ -351,4 +351,105 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de comprimir en un ZIP un Directorio.
+	*
+	* @param string $path PATH a Comprimir.
+	* @param string $nombre Nombre del archivo ZIP.
+	*
+	* @return boolean TRUE si se ha comprimido, FALSE si no.
+	*
+	*/
+
+		public function comprimeFolder($path = '', $nombre)
+		{
+
+			$zipSalida = $nombre .'.zip';
+
+			$pathComprimir = realpath($this->fs . $path);
+			$pathSalida    = FS_ROOT . 'tmp/' . $zipSalida;
+
+			if(file_exists($pathSalida))
+				unlink($pathSalida);
+
+			$zip = new \ZipArchive;
+
+			if(!$zip->open($pathSalida, \ZIPARCHIVE::CREATE))
+				return false;
+
+			if(is_dir($pathComprimir)){
+
+				$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathComprimir), \RecursiveIteratorIterator::SELF_FIRST);
+
+				foreach($files as $file){
+
+					if( in_array(substr($file, strrpos($file, '/') + 1), ['.', '..']) )
+						continue;
+
+					$file = realpath($file);
+
+					if(is_dir($file)){
+
+						$zip->addEmptyDir(str_replace($pathComprimir, '', $file . '/'));
+
+					} elseif(is_file($file)){
+
+						$zip->addFromString(str_replace($pathComprimir, '', $file), file_get_contents($file));
+
+					}
+
+				}
+
+			} elseif(is_file($pathComprimir)) {
+
+				$zip->addFromString(basename($pathComprimir), file_get_contents($pathComprimir));
+
+			}
+
+			return $zip->close();
+
+		}
+
+	/**
+	*
+	* Método encargado de forzar la descarga de un archivo.
+	*
+	* @param boolean $path PATH del Archivo.
+	* @param string $tmp TRUE: está en tmp/; FALSE: no está en tmp/.
+	* @param string $delete TRUE se eliminará después de descargar. FALSE: No se eliminará.
+	*
+	* @return Archivo.
+	*
+	*/
+
+		public function download($path, $delete = true, $tmp = true)
+		{
+
+			$dir = ($tmp === true)? FS_ROOT . 'tmp/' . $path : $this->fs . $path;
+
+			if(file_exists($dir)){
+
+				header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename='. basename($dir));
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize($dir));
+				readfile($dir);
+
+				if($delete === true)
+					unlink($dir);
+
+				exit;
+
+			} else {
+
+				return false;
+
+			}
+
+		}
+
 }
