@@ -73,6 +73,7 @@ use \core\router,
     Router::post('post/new/folder', '\controllers\folders@postNewFolder');
     Router::post('post/rename/folder', '\controllers\folders@postRenameFolder');
     Router::post('post/rename/file', '\controllers\folders@postRenameFile');
+    Router::post('post/upload/(:any)', '\controllers\folders@upload');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');

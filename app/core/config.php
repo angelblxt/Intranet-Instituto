@@ -35,6 +35,9 @@ class Config {
 		define('DB_PASS', 'pass');
 		define('PREFIX', 'smvc_');
 
+		// UPLOADER
+		define('MAX_SIZE', 5); // Tamaño máximo de subida (MBs).
+
 		// Clave de encriptación.
 		define('ENCRYPTION_KEY', 'cdff38g0rc15dzas8axb');
 
