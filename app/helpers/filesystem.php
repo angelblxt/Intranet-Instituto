@@ -353,6 +353,52 @@ class Filesystem {
 
 	/**
 	*
+	* Método encargado de obtener el nombre de un archivo.
+	*
+	* @param string $path PATH.
+	*
+	* @return string Nombre del Archivo.
+	*
+	*/
+
+		public function getFileName($path)
+		{
+
+			$explode = explode('/', $path);
+			$numero = count($explode);
+
+			$nombre = $explode[$numero - 1];
+
+			return $nombre;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener la carpeta en la que está un archivo.
+	*
+	* @param string $path PATH.
+	*
+	* @return string PATH de la Carpeta.
+	*
+	*/
+
+		public function getFolderOfFile($path)
+		{
+
+			$explode = explode('/', $path);
+			$numero = count($explode);
+
+			unset($explode[$numero - 1]);
+
+			$newPath = implode('/', $explode);
+
+			return $newPath .'/';
+
+		}
+
+	/**
+	*
 	* Método encargado de comprimir en un ZIP un Directorio.
 	*
 	* @param string $path PATH a Comprimir.

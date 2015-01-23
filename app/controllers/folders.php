@@ -91,7 +91,7 @@ class Folders extends \core\controller{
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
 					$icon      = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
-					$next      = ($file['type'] == 'dir')? base64_encode(Seguridad::encriptar($file['path'], 2)) : '';
+					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
 
 					if($file['type'] == 'dir'){
 
@@ -118,8 +118,8 @@ class Folders extends \core\controller{
 							'size' => $size,
 							'type' => $file['type'],
 							'buttons' => [
-								'rename' => '',
-								'delete' => '']];
+								'rename' => DIR . 'folders/'. $next .'/rename/file',
+								'delete' => DIR . 'folders/'. $next .'/delete/file/0']];
 
 					}
 
@@ -288,7 +288,7 @@ class Folders extends \core\controller{
 			$anteriorPath = FS::getAnteriorPath($folderDecrypted);
 			$nombreActual = FS::getFolderName($folderDecrypted);
 
-			if(isset($_POST['create']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+			if(isset($_POST['rename']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
 
 				if(empty($name)){
 
@@ -298,17 +298,114 @@ class Folders extends \core\controller{
 
 				} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
 
-					$this->_log->add('Ha renombrado una Carpeta "'. $nombreActual .'" > "'. $name .'".');
-
 					$_SESSION['error'] = ['No ha sido posible renombrar la Carpeta.', 'mal'];
 
 					Url::redirect('folders/'. $folder .'/rename/folder');
 
 				} else {
 
+					$this->_log->add('Ha renombrado una Carpeta "'. $nombreActual .'" > "'. $name .'".');
+
 					$_SESSION['error'] = ['Carpeta renombrada con éxito.', 'bien'];
 
 					Url::redirect('folders/'. $folder);
+
+				}
+
+			} else {
+
+				Url::redirect('');
+
+			}
+
+		}
+
+	}
+
+	public function renameFile($file = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
+
+			$nombreActual = FS::getFileName($fileDecrypted);
+			$nombreActual = str_replace('.'. FS::getExtension($fileDecrypted), '', $nombreActual);
+
+			$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($fileDecrypted), 2));
+
+			$data = [
+				'title' => 'Renombrar Archivo'];
+
+			$section = [
+				'file'         => [
+					'encrypted'  => $file,
+					'decrypted'  => (empty($fileDecrypted))? '/' : $fileDecrypted,
+					'actualName' => $nombreActual],
+				'folderOfFile' => $carpetaContenida,
+				'token'        => NoCSRF::generate('token')];
+				
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/folders/renameFile', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function postRenameFile()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			FS::personalFS();
+
+			$file   = $_POST['file'];
+			$nombre = $_POST['nombre'];
+
+			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
+			$fileExtension = FS::getExtension($fileDecrypted);
+
+			$name = str_replace(' ', '_', $nombre) .'.'. $fileExtension;
+
+			$anteriorPath = FS::getFolderOfFile($fileDecrypted);
+			$nombreActual = FS::getFileName($fileDecrypted);
+
+			$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+
+			if(isset($_POST['rename']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+				if(empty($nombre)){
+
+					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+					Url::redirect('folders/'. $file .'/rename/file');
+
+				} elseif(!FS::rename($anteriorPath, $nombreActual, $name)) {
+
+					$_SESSION['error'] = ['No ha sido posible renombrar el Archivo.', 'mal'];
+
+					Url::redirect('folders/'. $file .'/rename/file');
+
+				} else {
+
+					$this->_log->add('Ha renombrado un Archivo "'. $nombreActual .'" > "'. $name .'".');
+
+					$_SESSION['error'] = ['Archivo renombrado con éxito.', 'bien'];
+
+					Url::redirect('folders/'. $anteriorPathEncriptado);
 
 				}
 

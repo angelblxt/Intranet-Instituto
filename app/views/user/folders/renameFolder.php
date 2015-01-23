@@ -16,7 +16,7 @@
 		<input type="hidden" name="token" value="<?php echo $token; ?>">
 		<input type="hidden" name="folder" value="<?php echo $folder['encrypted'] ?>">
 
-		<button type="submit" name="create" class="button button-rounded button-flat-action" style="margin-top: 10px"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Renombrar</button>
+		<button type="submit" name="rename" class="button button-rounded button-flat-action" style="margin-top: 10px"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Renombrar</button>
 
 	</center>
 

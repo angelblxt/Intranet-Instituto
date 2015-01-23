@@ -1040,7 +1040,7 @@ a{
 
 		.folders_file .nombre{
 
-			width: calc(100% - 50px - 250px);
+			width: calc(100% - 50px - 300px);
 
 			color: rgba(0,0,0, .6);
 
@@ -1066,7 +1066,7 @@ a{
 
 		.folders_file .opciones{
 
-			width: 250px;
+			width: 300px;
 
 			text-align: right;
 
