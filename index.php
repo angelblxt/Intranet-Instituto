@@ -101,10 +101,7 @@ use \core\router,
 	Router::any('folders/(:any)', '\controllers\folders@index');
 	Router::any('folders/(:any)/new/folder', '\controllers\folders@newFolder');
 	Router::any('folders/(:any)/rename', '\controllers\folders@rename');
-	// Router::any('folders/(:any)/rename/folder', '\controllers\folders@renameFolder');
-	// Router::any('folders/(:any)/rename/file', '\controllers\folders@renameFile');
-	Router::any('folders/(:any)/delete/folder/(:num)', '\controllers\folders@deleteFolder');
-	Router::any('folders/(:any)/delete/file/(:num)', '\controllers\folders@deleteFile');
+	Router::any('folders/(:any)/delete/(:num)', '\controllers\folders@delete');
 	Router::any('folders/(:any)/download', '\controllers\folders@download');
 
 	// Router::any('register', '\controllers\user@register');
