@@ -384,7 +384,7 @@ class Folders extends \core\controller{
 
 			if(FS::comprobeFolder($fileDecrypted)){
 
-				$name = date('dmYhis');
+				$name = date('d-m-Y-h-i-s');
 
 				$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
 
