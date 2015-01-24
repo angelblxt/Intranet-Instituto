@@ -105,7 +105,7 @@ class Folders extends \core\controller{
 							'next'     => $next,
 							'previous' => $previous,
 							'buttons'  => [
-								'rename'   => DIR . 'folders/'. $next .'/rename/folder',
+								'rename'   => DIR . 'folders/'. $next .'/rename',
 								'delete'   => DIR . 'folders/'. $next .'/delete/folder/0',
 								'download' => DIR . 'folders/'. $next .'/download']];
 
@@ -119,7 +119,7 @@ class Folders extends \core\controller{
 							'size' => $size,
 							'type' => $file['type'],
 							'buttons' => [
-								'rename'   => DIR . 'folders/'. $next .'/rename/file',
+								'rename'   => DIR . 'folders/'. $next .'/rename',
 								'delete'   => DIR . 'folders/'. $next .'/delete/file/0',
 								'download' => DIR . 'folders/'. $next .'/download']];
 
@@ -236,7 +236,7 @@ class Folders extends \core\controller{
 
 	}
 
-	public function renameFolder($folder = '')
+	public function rename($path = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -245,26 +245,57 @@ class Folders extends \core\controller{
 
 		} else {
 
-			$folderDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($folder), 2));
+			FS::personalFS();
 
-			$nombreActual = FS::getFolderName($folderDecrypted);
+			$path = [
+				'encriptado'    => $path,
+				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
 
-			$data = [
-				'title' => 'Renombrar Carpeta'];
+			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
 
-			$section = [
-				'folder' => [
-					'encrypted'  => $folder,
-					'decrypted'  => (empty($folderDecrypted))? '/' : $folderDecrypted,
-					'actualName' => $nombreActual],
-				'token' => NoCSRF::generate('token')];
-				
+			if(FS::comprobeFolder($path['desencriptado'])){
+
+				$nombreActual = FS::getFolderName($nombreEspaciado);
+
+				$data = ['title' => 'Renombrar Carpeta'];
+
+				$section = [
+					'folder' => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual]];
+
+				$templateView = 'user/folders/renameFolder';
+
+			} else {
+
+				$extension    = FS::getExtension($nombreEspaciado);
+				$nombreActual = FS::getFileName($nombreEspaciado);
+				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
+
+				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($nombreEspaciado), 2));
+
+				$data = ['title' => 'Renombrar Archivo'];
+
+				$section = [
+					'file'         => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual],
+					'folderOfFile' => $carpetaContenida];
+
+				$templateView = 'user/folders/renameFile';
+
+			}
+
+			$section['token'] = NoCSRF::generate('token');
+
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/renameFolder', $section);
+			View::render($templateView, $section);
 			View::rendertemplate('footer');
 
 		}
@@ -321,46 +352,6 @@ class Folders extends \core\controller{
 				Url::redirect('');
 
 			}
-
-		}
-
-	}
-
-	public function renameFile($file = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
-
-			$nombreActual = FS::getFileName($fileDecrypted);
-			$nombreActual = str_replace('.' . FS::getExtension($fileDecrypted), '', $nombreActual);
-
-			$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($fileDecrypted), 2));
-
-			$data = [
-				'title' => 'Renombrar Archivo'];
-
-			$section = [
-				'file'         => [
-					'encrypted'  => $file,
-					'decrypted'  => (empty($fileDecrypted))? '/' : $fileDecrypted,
-					'actualName' => $nombreActual],
-				'folderOfFile' => $carpetaContenida,
-				'token'        => NoCSRF::generate('token')];
-				
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $this->templateData);
-			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/renameFile', $section);
-			View::rendertemplate('footer');
-
 		}
 
 	}
