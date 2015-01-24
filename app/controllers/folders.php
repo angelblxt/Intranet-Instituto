@@ -47,7 +47,16 @@ class Folders extends \core\controller{
 
 			}
 
+		// Iniciamos el Sistema de Archivos.
+			FS::personalFS();
+
 	}
+
+/*
+|-----------------------------------------------
+| Listado de Carpetas y Archivos
+|-----------------------------------------------
+*/
 
 	public function index($folder = '')
 	{
@@ -62,19 +71,12 @@ class Folders extends \core\controller{
 
 			// SISTEMA DE ARCHIVOS
 
-				FS::personalFS();
-
 				if(!empty($folder)){
 
 					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
+					$previous   = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
 
 					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
-
-					/* Manejo de la Carpeta anterior */
-
-						$previous = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
-
-					/* FIN del Manejo de la Carpeta anterior */
 
 				} else {
 
@@ -90,38 +92,25 @@ class Folders extends \core\controller{
 
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
-					$icon      = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
 					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
 
 					if($file['type'] == 'dir'){
 
 						$files[] = [
-							'name'     => [
-								'decrypted' => $file['name'],
-								'encrypted' => $encriptedName],
-							'icon'     => $icon,
+							'name'     => $file['name'],
+							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['type'],
 							'next'     => $next,
-							'previous' => $previous,
-							'buttons'  => [
-								'rename'   => DIR . 'folders/'. $next .'/rename/folder',
-								'delete'   => DIR . 'folders/'. $next .'/delete/folder/0',
-								'download' => DIR . 'folders/'. $next .'/download']];
+							'previous' => $previous];
 
 					} else {
 
 						$files[] = [
-							'name' => [
-								'decrypted' => $file['name'],
-								'encrypted' => $encriptedName],
-							'icon' => $icon,
+							'name' => $file['name'],
+							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
-							'type' => $file['type'],
-							'buttons' => [
-								'rename'   => DIR . 'folders/'. $next .'/rename/file',
-								'delete'   => DIR . 'folders/'. $next .'/delete/file/0',
-								'download' => DIR . 'folders/'. $next .'/download']];
+							'type' => $file['type']];
 
 					}
 
@@ -131,8 +120,7 @@ class Folders extends \core\controller{
 
 			// FIN DEL SISTEMA DE ARCHIVOS
 
-			$data = [
-				'title' => 'Carpetas'];
+			$data = ['title' => 'Carpetas'];
 
 			$section = [
 				'files'        => $files,
@@ -151,6 +139,12 @@ class Folders extends \core\controller{
 		}
 
 	}
+
+/*
+|-----------------------------------------------
+| Formulario para Nueva Carpeta.
+|-----------------------------------------------
+*/
 
 	public function newFolder($folder = '')
 	{
@@ -184,7 +178,13 @@ class Folders extends \core\controller{
 
 	}
 
-	public function postNewFolder()
+/*
+|-----------------------------------------------
+| Formulario para Renombrar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
+	public function rename($path = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -193,7 +193,276 @@ class Folders extends \core\controller{
 
 		} else {
 
-			FS::personalFS();
+			$path = [
+				'encriptado'    => $path,
+				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
+
+			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
+
+			if(FS::comprobeFolder($path['desencriptado'])){
+
+				$nombreActual = FS::getFolderName($nombreEspaciado);
+
+				$data = ['title' => 'Renombrar Carpeta'];
+
+				$section = [
+					'folder' => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual]];
+
+				$templateView = 'user/folders/renameFolder';
+
+			} else {
+
+				$extension    = FS::getExtension($nombreEspaciado);
+				$nombreActual = FS::getFileName($nombreEspaciado);
+				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
+
+				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($nombreEspaciado), 2));
+
+				$data = ['title' => 'Renombrar Archivo'];
+
+				$section = [
+					'file'         => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual],
+					'folderOfFile' => $carpetaContenida];
+
+				$templateView = 'user/folders/renameFile';
+
+			}
+
+			$section['token'] = NoCSRF::generate('token');
+
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render($templateView, $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Formulario para borrar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
+	public function delete($path = '', $action = 0)
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$path = [
+				'encriptado'    => $path,
+				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
+
+			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
+
+			$templateView = '';
+
+			if(FS::comprobeFolder($path['desencriptado'])){
+
+				$anteriorPath = FS::getAnteriorPath($nombreEspaciado);
+
+				if($action == 0){
+
+					$nombreActual = FS::getFolderName($nombreEspaciado);
+
+					$data = ['title' => 'Eliminar Carpeta'];
+
+					$section = [
+						'folder'   => [
+							'encrypted'  => $path['encriptado'],
+							'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+							'actualName' => $nombreActual],
+						'previous' => $anteriorPath];
+
+					$templateView = 'user/folders/deleteFolder';
+
+				} else {
+
+					if(FS::deleteFolder($path['desencriptado'])){
+
+						$this->_log->add('Ha eliminado una Carpeta "'. $path['desencriptado'] .'".');
+
+						$_SESSION['error'] = ['Carpeta eliminada con éxito.', 'bien'];
+
+					} else {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					}
+
+					Url::redirect('folders/'. $anteriorPath);
+
+				}
+
+			} else {
+
+				$nombreActual = FS::getFileName($path['desencriptado']);
+				$anteriorPath = FS::getFolderOfFile($path['desencriptado']);
+
+				if($action == 0){
+
+					$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+
+					$data = ['title' => 'Eliminar Archivo'];
+
+					$section = [
+						'file'     => [
+							'encrypted'  => $path['encriptado'],
+							'actualName' => $nombreActual],
+						'previous' => $anteriorPathEncriptado];
+
+					$templateView = 'user/folders/deleteFile';
+
+				} else {
+
+					$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
+
+					if(FS::deleteFile($path['desencriptado'])){
+
+						$this->_log->add('Ha eliminado un Archivo "'. $nombreActual .'".');
+
+						$_SESSION['error'] = ['Archivo eliminado con éxito.', 'bien'];
+
+					} else {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					}
+
+					Url::redirect('folders/'. $anteriorPathEncriptado);
+
+				}
+
+			}
+
+			if(!empty($templateView)){
+
+				Session::set('template', 'user');
+
+				View::rendertemplate('header', $data);
+				View::rendertemplate('topHeader', $this->templateData);
+				View::rendertemplate('aside', $this->templateData);
+				View::render($templateView, $section);
+				View::rendertemplate('footer');
+
+			}
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Sección para Descargar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
+	public function download($file = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
+
+			if(FS::comprobeFolder($fileDecrypted)){
+
+				$name = date('d-m-Y-h-i-s');
+
+				$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
+
+				if(FS::comprimeFolder($fileDecrypted, $name) === true){
+
+					if(!FS::download($name . '.zip'))
+						Url::redirect('folders/'. $carpetaAnterior);
+
+				}
+
+			} else {
+
+				FS::download($fileDecrypted, false, false);
+
+			}
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Formulario para subir Archivos.
+|-----------------------------------------------
+*/
+
+	public function upload($folder = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$fileDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
+
+			if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == 'POST'){
+
+				$total  = count($_FILES['files']['error']);
+				$errors = FS::upload($fileDecrypted, $_FILES);
+
+				if($errors === 0){
+
+					$_SESSION['error'] = ['Archivos subidos correctamente.', 'bien'];
+
+				} else {
+
+					$_SESSION['error'] = [$errors . ' de '. $total .' archivos no han podido ser subidos.', 'precaucion'];
+
+				}
+
+				Url::redirect('folders/'. $folder);
+
+			} else {
+
+				Url::redirect('');
+
+			}
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Procesamiento de una Nueva Carpeta.
+|-----------------------------------------------
+*/
+
+	public function postNewFolder()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
 
 			$name   = str_replace(' ', '_', $_POST['nombre']);
 			$folder = $_POST['folder'];
@@ -236,40 +505,11 @@ class Folders extends \core\controller{
 
 	}
 
-	public function renameFolder($folder = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			$folderDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($folder), 2));
-
-			$nombreActual = FS::getFolderName($folderDecrypted);
-
-			$data = [
-				'title' => 'Renombrar Carpeta'];
-
-			$section = [
-				'folder' => [
-					'encrypted'  => $folder,
-					'decrypted'  => (empty($folderDecrypted))? '/' : $folderDecrypted,
-					'actualName' => $nombreActual],
-				'token' => NoCSRF::generate('token')];
-				
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $this->templateData);
-			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/renameFolder', $section);
-			View::rendertemplate('footer');
-
-		}
-
-	}
+/*
+|-----------------------------------------------
+| Procesamiento de Renombrar Carpeta.
+|-----------------------------------------------
+*/
 
 	public function postRenameFolder()
 	{
@@ -279,8 +519,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$name   = $_POST['nombre'];
 			$folder = $_POST['folder'];
@@ -321,49 +559,15 @@ class Folders extends \core\controller{
 				Url::redirect('');
 
 			}
-
 		}
 
 	}
 
-	public function renameFile($file = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
-
-			$nombreActual = FS::getFileName($fileDecrypted);
-			$nombreActual = str_replace('.' . FS::getExtension($fileDecrypted), '', $nombreActual);
-
-			$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($fileDecrypted), 2));
-
-			$data = [
-				'title' => 'Renombrar Archivo'];
-
-			$section = [
-				'file'         => [
-					'encrypted'  => $file,
-					'decrypted'  => (empty($fileDecrypted))? '/' : $fileDecrypted,
-					'actualName' => $nombreActual],
-				'folderOfFile' => $carpetaContenida,
-				'token'        => NoCSRF::generate('token')];
-				
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $this->templateData);
-			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/renameFile', $section);
-			View::rendertemplate('footer');
-
-		}
-
-	}
+/*
+|-----------------------------------------------
+| Procesamiento de Renombrar Archivo.
+|-----------------------------------------------
+*/
 
 	public function postRenameFile()
 	{
@@ -373,8 +577,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$file   = $_POST['file'];
 			$nombre = $_POST['nombre'];
@@ -412,209 +614,6 @@ class Folders extends \core\controller{
 					Url::redirect('folders/'. $pathAnterior['encriptado']);
 
 				}
-
-			} else {
-
-				Url::redirect('');
-
-			}
-
-		}
-
-	}
-
-	public function deleteFolder($folder = '', $action = 0)
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			$anteriorPath = FS::getAnteriorPath($folderDecrypted);
-
-			if($action == 0){
-
-				$folderDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($folder), 2));
-
-				$nombreActual = FS::getFolderName($folderDecrypted);
-
-				$data = [
-					'title' => 'Eliminar Carpeta'];
-
-				$section = [
-					'folder'   => [
-						'encrypted'  => $folder,
-						'decrypted'  => (empty($folderDecrypted))? '/' : $folderDecrypted,
-						'actualName' => $nombreActual],
-					'previous' => $anteriorPath];
-					
-				Session::set('template', 'user');
-
-				View::rendertemplate('header', $data);
-				View::rendertemplate('topHeader', $this->templateData);
-				View::rendertemplate('aside', $this->templateData);
-				View::render('user/folders/deleteFolder', $section);
-				View::rendertemplate('footer');
-
-			} else {
-
-				$folderDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
-
-				FS::personalFS();
-
-				if(FS::deleteFolder($folderDecrypted)){
-
-					$this->_log->add('Ha eliminado una Carpeta "'. $folderDecrypted .'".');
-
-					$_SESSION['error'] = ['Carpeta eliminada con éxito.', 'bien'];
-
-				} else {
-
-					$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
-
-				}
-
-				Url::redirect('folders/'. $anteriorPath);
-
-			}
-
-		}
-
-	}
-
-	public function deleteFile($file = '', $action = 0)
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			if($action == 0){
-
-				$fileDecrypted = str_replace('_', ' ', Seguridad::desencriptar(base64_decode($file), 2));
-
-				$anteriorPath = FS::getFolderOfFile($fileDecrypted);
-				$nombreActual = FS::getFileName($fileDecrypted);
-
-				$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
-
-				$data = [
-					'title' => 'Eliminar Archivo'];
-
-				$section = [
-					'file'     => [
-						'encrypted'  => $file,
-						'actualName' => $nombreActual],
-					'previous' => $anteriorPathEncriptado];
-					
-				Session::set('template', 'user');
-
-				View::rendertemplate('header', $data);
-				View::rendertemplate('topHeader', $this->templateData);
-				View::rendertemplate('aside', $this->templateData);
-				View::render('user/folders/deleteFile', $section);
-				View::rendertemplate('footer');
-
-			} else {
-
-				$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
-
-				$nombreActual = FS::getFileName($fileDecrypted);
-
-				$anteriorPath           = FS::getFolderOfFile($fileDecrypted);
-				$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
-
-				FS::personalFS();
-
-				if(FS::deleteFile($fileDecrypted)){
-
-					$this->_log->add('Ha eliminado un Archivo "'. $nombreActual .'".');
-
-					$_SESSION['error'] = ['Archivo eliminado con éxito.', 'bien'];
-
-				} else {
-
-					$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
-
-				}
-
-				Url::redirect('folders/'. $anteriorPathEncriptado);
-
-			}
-
-		}
-
-	}
-
-	public function download($file = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			FS::personalFS();
-
-			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
-
-			if(FS::comprobeFolder($fileDecrypted)){
-
-				$name = date('dmYhis');
-
-				$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
-
-				if(FS::comprimeFolder($fileDecrypted, $name) === true){
-
-					if(!FS::download($name . '.zip'))
-						Url::redirect('folders/'. $carpetaAnterior);
-
-				}
-
-			} else {
-
-				FS::download($fileDecrypted, false, false);
-
-			}
-
-		}
-
-	}
-
-	public function upload($folder = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			FS::personalFS();
-
-			$fileDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
-
-			if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == 'POST'){
-
-				$total  = count($_FILES['files']['error']);
-				$errors = FS::upload($fileDecrypted, $_FILES);
-
-				if($errors === 0){
-
-					$_SESSION['error'] = ['Archivos subidos correctamente.', 'bien'];
-
-				} else {
-
-					$_SESSION['error'] = [$errors . ' de '. $total .' archivos no han podido ser subidos.', 'precaucion'];
-
-				}
-
-				Url::redirect('folders/'. $folder);
 
 			} else {
 
