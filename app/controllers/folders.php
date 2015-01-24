@@ -74,14 +74,9 @@ class Folders extends \core\controller{
 				if(!empty($folder)){
 
 					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
+					$previous   = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
 
 					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
-
-					/* Manejo de la Carpeta anterior */
-
-						$previous = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
-
-					/* FIN del Manejo de la Carpeta anterior */
 
 				} else {
 
@@ -97,38 +92,25 @@ class Folders extends \core\controller{
 
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
-					$icon      = ($file['type'] == 'dir')? '<i class="fa fa-folder"></i>' : '<div class="file-icon" data-type="'. $extension .'"></div>';
 					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
 
 					if($file['type'] == 'dir'){
 
 						$files[] = [
-							'name'     => [
-								'decrypted' => $file['name'],
-								'encrypted' => $encriptedName],
-							'icon'     => $icon,
+							'name'     => $file['name'],
+							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['type'],
 							'next'     => $next,
-							'previous' => $previous,
-							'buttons'  => [
-								'rename'   => DIR . 'folders/'. $next .'/rename',
-								'delete'   => DIR . 'folders/'. $next .'/delete/0',
-								'download' => DIR . 'folders/'. $next .'/download']];
+							'previous' => $previous];
 
 					} else {
 
 						$files[] = [
-							'name' => [
-								'decrypted' => $file['name'],
-								'encrypted' => $encriptedName],
-							'icon' => $icon,
+							'name' => $file['name'],
+							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
-							'type' => $file['type'],
-							'buttons' => [
-								'rename'   => DIR . 'folders/'. $next .'/rename',
-								'delete'   => DIR . 'folders/'. $next .'/delete/0',
-								'download' => DIR . 'folders/'. $next .'/download']];
+							'type' => $file['type']];
 
 					}
 
@@ -138,8 +120,7 @@ class Folders extends \core\controller{
 
 			// FIN DEL SISTEMA DE ARCHIVOS
 
-			$data = [
-				'title' => 'Carpetas'];
+			$data = ['title' => 'Carpetas'];
 
 			$section = [
 				'files'        => $files,
