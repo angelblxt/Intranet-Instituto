@@ -47,7 +47,16 @@ class Folders extends \core\controller{
 
 			}
 
+		// Iniciamos el Sistema de Archivos.
+			FS::personalFS();
+
 	}
+
+/*
+|-----------------------------------------------
+| Listado de Carpetas y Archivos
+|-----------------------------------------------
+*/
 
 	public function index($folder = '')
 	{
@@ -61,8 +70,6 @@ class Folders extends \core\controller{
 			$this->_log->add('Ha entrado en la sección "Carpetas".');
 
 			// SISTEMA DE ARCHIVOS
-
-				FS::personalFS();
 
 				if(!empty($folder)){
 
@@ -152,6 +159,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Formulario para Nueva Carpeta.
+|-----------------------------------------------
+*/
+
 	public function newFolder($folder = '')
 	{
 
@@ -184,6 +197,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Formulario para Renombrar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
 	public function rename($path = '')
 	{
 
@@ -192,8 +211,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$path = [
 				'encriptado'    => $path,
@@ -250,6 +267,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Formulario para borrar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
 	public function delete($path = '', $action = 0)
 	{
 
@@ -258,8 +281,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$path = [
 				'encriptado'    => $path,
@@ -363,6 +384,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Sección para Descargar Archivos o Carpetas.
+|-----------------------------------------------
+*/
+
 	public function download($file = '')
 	{
 
@@ -371,8 +398,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
 
@@ -399,6 +424,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Formulario para subir Archivos.
+|-----------------------------------------------
+*/
+
 	public function upload($folder = '')
 	{
 
@@ -407,8 +438,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$fileDecrypted = Seguridad::desencriptar(base64_decode($folder), 2);
 
@@ -439,6 +468,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Procesamiento de una Nueva Carpeta.
+|-----------------------------------------------
+*/
+
 	public function postNewFolder()
 	{
 
@@ -447,8 +482,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$name   = str_replace(' ', '_', $_POST['nombre']);
 			$folder = $_POST['folder'];
@@ -491,6 +524,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Procesamiento de Renombrar Carpeta.
+|-----------------------------------------------
+*/
+
 	public function postRenameFolder()
 	{
 
@@ -499,8 +538,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$name   = $_POST['nombre'];
 			$folder = $_POST['folder'];
@@ -545,6 +582,12 @@ class Folders extends \core\controller{
 
 	}
 
+/*
+|-----------------------------------------------
+| Procesamiento de Renombrar Archivo.
+|-----------------------------------------------
+*/
+
 	public function postRenameFile()
 	{
 
@@ -553,8 +596,6 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
-
-			FS::personalFS();
 
 			$file   = $_POST['file'];
 			$nombre = $_POST['nombre'];
