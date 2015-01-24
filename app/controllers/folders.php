@@ -601,13 +601,16 @@ class Folders extends \core\controller{
 
 			if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == 'POST'){
 
-				if(FS::upload($fileDecrypted, $_FILES) === 0){
+				$total  = count($_FILES['files']['error']);
+				$errors = FS::upload($fileDecrypted, $_FILES);
+
+				if($errors === 0){
 
 					$_SESSION['error'] = ['Archivos subidos correctamente.', 'bien'];
 
 				} else {
 
-					$_SESSION['error'] = ['Algunos archivos no han podido ser subidos.', 'precaucion'];
+					$_SESSION['error'] = [$errors . ' de '. $total .' archivos no han podido ser subidos.', 'precaucion'];
 
 				}
 
