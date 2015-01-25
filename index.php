@@ -74,6 +74,8 @@ use \core\router,
     Router::post('post/rename/folder', '\controllers\folders@postRenameFolder');
     Router::post('post/rename/file', '\controllers\folders@postRenameFile');
     Router::post('post/upload/(:any)', '\controllers\folders@upload');
+    Router::post('post/share/file', '\controllers\folders@shareFile');
+    Router::post('post/share/folder', '\controllers\folders@shareFolder');
 
 // Rutas primarias del Usuario.
 	Router::any('', '\controllers\login@index');

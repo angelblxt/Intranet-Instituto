@@ -21,6 +21,7 @@ class Folders extends \core\controller{
 			$this->_user    = new \models\user();
 			$this->_log     = new \models\log();
 			$this->_message = new \models\message();
+			$this->_fs      = new \models\filesystem();
 
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
@@ -491,7 +492,7 @@ class Folders extends \core\controller{
 				$nombreActual = FS::getFileName($nombreEspaciado);
 				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
 
-				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($nombreEspaciado), 2));
+				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($path['desencriptado']), 2));
 
 				$data = ['title' => 'Compartir Archivo'];
 
@@ -685,6 +686,79 @@ class Folders extends \core\controller{
 					Url::redirect('folders/'. $pathAnterior['encriptado']);
 
 				}
+
+			} else {
+
+				Url::redirect('');
+
+			}
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Procesamiento de Compartir Archivo.
+|-----------------------------------------------
+*/
+
+	public function shareFile()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			if(isset($_POST['share']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+				$personas = $_POST['personas'];
+				$file     = $_POST['file'];
+
+				if(empty($personas)){
+
+					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
+
+				} else {
+
+					$hashes = [];
+
+					$personas = explode(',', $personas);
+
+					foreach($personas as $persona){
+
+						if(!empty($persona)){
+
+							$persona = trim($persona);
+
+							$hash = $this->_user->getUserByName($persona)->hash_usuario;
+
+							if(!is_null($hash))
+								$hashes[] = $hash;
+
+						}
+
+					}
+
+					if(count($hashes) == 0){
+
+						$_SESSION['error'] = ['No se ha compartido con nadie el Archivo.', 'precaucion'];
+
+					} elseif($this->_fs->share($file, $hashes)) {
+
+						$_SESSION['error'] = ['El Archivo ha sido compartido con éxito.', 'bien'];
+
+					} else {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					}
+
+				}
+
+				Url::redirect('folders/'. $file .'/share');
 
 			} else {
 
