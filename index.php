@@ -105,6 +105,7 @@ use \core\router,
 	Router::any('folders/(:any)/delete/(:num)', '\controllers\folders@delete');
 	Router::any('folders/(:any)/download', '\controllers\folders@download');
 	Router::any('folders/(:any)/share', '\controllers\folders@share');
+	Router::any('folders/(:any)/unshare/(:any)', '\controllers\folders@unshare');
 
 	// Router::any('register', '\controllers\user@register');
 

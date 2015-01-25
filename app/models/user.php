@@ -296,6 +296,25 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de comprobar si un usuario existe.
+	*
+	* @param string $hash HASH del Usuario.
+	*
+	* @return boolean TRUE si existe, FALSE si no.
+	*
+	*/
+
+		public function exists($hash)
+		{
+
+			$results = $this->_db->num("SELECT COUNT(*) FROM usuarios WHERE hash = :hash LIMIT 1", [':hash' => $hash]);
+
+			return ($results > 0)? true : false;
+
+		}
+
 }
 
 ?>

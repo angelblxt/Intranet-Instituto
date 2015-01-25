@@ -52,7 +52,14 @@
 
 						</div>
 
-						<div class="nombreEmisor"> <i class="fa fa-chevron-right"></i> <?php echo $user['name']['nombre'] .' '. $user['name']['apellidos'] ?></div>
+						<div class="nombreEmisor">
+
+							<i class="fa fa-chevron-right"></i> <?php echo $user['name']['nombre'] .' '. $user['name']['apellidos'] ?> 
+							<span class="hint--rounded hint--bounce hint--right" style="font-family: Helvetica" data-hint="Dejar de Compartir">
+								<a href="<?php echo DIR ?>folders/<?php echo $file['encrypted'] ?>/unshare/<?php echo $user['hash'] ?>"><i class="fa fa-times-circle" style="margin-left: 20px"></i></a>
+							</span>
+
+						</div>
 
 					</div>
 
