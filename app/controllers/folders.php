@@ -110,7 +110,8 @@ class Folders extends \core\controller{
 							'name' => $file['name'],
 							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
-							'type' => $file['type']];
+							'type' => $file['type'],
+							'next' => $next];
 
 					}
 
@@ -455,7 +456,7 @@ class Folders extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function options($path = '')
+	public function share($path = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -474,7 +475,7 @@ class Folders extends \core\controller{
 
 				$nombreActual = FS::getFolderName($nombreEspaciado);
 
-				$data = ['title' => 'Opciones de Carpeta'];
+				$data = ['title' => 'Compartir Carpeta'];
 
 				$section = [
 					'folder' => [
@@ -482,7 +483,7 @@ class Folders extends \core\controller{
 						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
 						'actualName' => $nombreActual]];
 
-				$templateView = 'user/folders/folder/options';
+				$templateView = 'user/folders/folder/share';
 
 			} else {
 
@@ -492,7 +493,7 @@ class Folders extends \core\controller{
 
 				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($nombreEspaciado), 2));
 
-				$data = ['title' => 'Opciones de Archivo'];
+				$data = ['title' => 'Compartir Archivo'];
 
 				$section = [
 					'file'         => [
@@ -501,7 +502,7 @@ class Folders extends \core\controller{
 						'actualName' => $nombreActual],
 					'folderOfFile' => $carpetaContenida];
 
-				$templateView = 'user/folders/file/options';
+				$templateView = 'user/folders/file/share';
 
 			}
 
