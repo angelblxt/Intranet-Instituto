@@ -16,11 +16,55 @@
 		<input type="hidden" name="token" value="<?php echo $token; ?>">
 		<input type="hidden" name="file" value="<?php echo $file['encrypted'] ?>">
 
-		<button type="submit" name="share" class="button button-rounded button-flat-action" style="margin-top: 10px"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Compartir</button>
+		<button type="submit" name="share" class="button button-rounded button-flat-action" style="margin: 10px 0"><i class="fa fa-check-circle" style="margin-left: -4px"></i> Compartir</button>
 
 	</center>
 
 </form>
+
+<?php
+
+	if(isset($sharedWith)){
+
+		?>
+
+			<center>
+
+				<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $folderOfFile ?>'" class="button button-rounded button-flat-primary" style="margin: 10px 0"><i class="fa fa-chevron-left" style="margin-left: -4px"></i> Volver atrás</button>
+
+			</center>
+
+			<div class="sectionTitle">Compartido con:</div>
+
+		<?php
+
+		foreach($sharedWith as $user){
+
+			?>
+
+				<div class="message_view">
+	
+					<div class="data">
+
+						<div class="emisor">
+							
+							<div class="circle" style="background: #<?php echo $user['circleColor'] ?>"><?php echo $user['inicial'] ?></div>
+
+						</div>
+
+						<div class="nombreEmisor"> <i class="fa fa-chevron-right"></i> <?php echo $user['name']['nombre'] .' '. $user['name']['apellidos'] ?></div>
+
+					</div>
+
+				</div>
+
+			<?php
+
+		}
+
+	}
+
+?>
 
 <center>
 

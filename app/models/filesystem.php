@@ -32,17 +32,57 @@ class Filesystem extends \core\model {
 		public function share($path, $hashes)
 		{
 
+			if(self::isShared($path)){
+
+				$usersShared = self::getUsersShared($path);
+				$usersPost = [];
+
+				foreach($hashes as $user){
+
+					$usersPost[] = $this->_user->getUser($user);
+
+				}
+
+				$hashes = array_merge($usersShared, $usersPost);
+				$hashes = array_unique($hashes);
+
+				$hashesFinales = [];
+
+				foreach($hashes as $hash){
+
+					$hashesFinales[] = $this->_user->getHash($hash);
+
+				}
+
+			} else {
+
+				$hashesFinales = $hashes;
+
+			}
+
 			$hash_usuario = $this->_user->getHash($this->username);
 
-			$path = Seguridad::encriptar($path, 1);
+			if(self::isShared($path)){
 
-			$insert = [
-				'hash'                      => md5(microtime()),
-				'hash_usuario'              => $hash_usuario,
-				'hash_usuarios_compartidos' => implode(';', $hashes),
-				'direccion'                 => $path];
+				$path = Seguridad::encriptar($path, 1);
 
-			$result = $this->_db->insert('comparticiones', $insert);
+				$update = ['hash_usuarios_compartidos' => implode(';', $hashesFinales)];
+
+				$result = $this->_db->update('comparticiones', $update, ['direccion' => $path]);
+
+			} else {
+
+				$path = Seguridad::encriptar($path, 1);
+
+				$insert = [
+					'hash'                      => md5(microtime()),
+					'hash_usuario'              => $hash_usuario,
+					'hash_usuarios_compartidos' => implode(';', $hashesFinales),
+					'direccion'                 => $path];
+
+				$result = $this->_db->insert('comparticiones', $insert);
+
+			}
 
 			return ($result)? true : false;
 
@@ -66,6 +106,37 @@ class Filesystem extends \core\model {
 			$result = $this->_db->num('SELECT COUNT(*) FROM comparticiones WHERE direccion = :direccion', [':direccion' => $path]);
 
 			return ($result > 0)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener los usuarios de los que están compartidos
+	* en una carpeta/archivo.
+	*
+	* @param string $path PATH de lo compartido.
+	*
+	* @return array Usuarios compartidos.
+	*
+	*/
+
+		public function getUsersShared($path = '')
+		{
+
+			$path = Seguridad::encriptar($path, 1);
+
+			$hashes = $this->_db->select("SELECT hash_usuarios_compartidos FROM comparticiones WHERE direccion = :direccion LIMIT 1", [':direccion' => $path])[0]->hash_usuarios_compartidos;
+			$hashes = explode(';', $hashes);
+
+			$users = [];
+
+			foreach($hashes as $hash){
+
+				$users[] = $this->_user->getUser($hash);
+
+			}
+
+			return $users;
 
 		}
 
