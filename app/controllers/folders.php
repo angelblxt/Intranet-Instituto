@@ -171,7 +171,7 @@ class Folders extends \core\controller{
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/newFolder', $section);
+			View::render('user/folders/folder/new', $section);
 			View::rendertemplate('footer');
 
 		}
@@ -211,7 +211,7 @@ class Folders extends \core\controller{
 						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
 						'actualName' => $nombreActual]];
 
-				$templateView = 'user/folders/renameFolder';
+				$templateView = 'user/folders/folder/rename';
 
 			} else {
 
@@ -230,7 +230,7 @@ class Folders extends \core\controller{
 						'actualName' => $nombreActual],
 					'folderOfFile' => $carpetaContenida];
 
-				$templateView = 'user/folders/renameFile';
+				$templateView = 'user/folders/file/rename';
 
 			}
 
@@ -288,7 +288,7 @@ class Folders extends \core\controller{
 							'actualName' => $nombreActual],
 						'previous' => $anteriorPath];
 
-					$templateView = 'user/folders/deleteFolder';
+					$templateView = 'user/folders/folder/delete';
 
 				} else {
 
@@ -325,7 +325,7 @@ class Folders extends \core\controller{
 							'actualName' => $nombreActual],
 						'previous' => $anteriorPathEncriptado];
 
-					$templateView = 'user/folders/deleteFile';
+					$templateView = 'user/folders/file/delete';
 
 				} else {
 
@@ -444,6 +444,76 @@ class Folders extends \core\controller{
 				Url::redirect('');
 
 			}
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Sección de Opciones de un Archivo o Carpeta.
+|-----------------------------------------------
+*/
+
+	public function options($path = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$path = [
+				'encriptado'    => $path,
+				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
+
+			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
+
+			if(FS::comprobeFolder($path['desencriptado'])){
+
+				$nombreActual = FS::getFolderName($nombreEspaciado);
+
+				$data = ['title' => 'Opciones de Carpeta'];
+
+				$section = [
+					'folder' => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual]];
+
+				$templateView = 'user/folders/folder/options';
+
+			} else {
+
+				$extension    = FS::getExtension($nombreEspaciado);
+				$nombreActual = FS::getFileName($nombreEspaciado);
+				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
+
+				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($nombreEspaciado), 2));
+
+				$data = ['title' => 'Opciones de Archivo'];
+
+				$section = [
+					'file'         => [
+						'encrypted'  => $path['encriptado'],
+						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+						'actualName' => $nombreActual],
+					'folderOfFile' => $carpetaContenida];
+
+				$templateView = 'user/folders/file/options';
+
+			}
+
+			$section['token'] = NoCSRF::generate('token');
+
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render($templateView, $section);
+			View::rendertemplate('footer');
 
 		}
 
