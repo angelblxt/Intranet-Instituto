@@ -34,15 +34,38 @@ class Filesystem extends \core\model {
 
 			$hash_usuario = $this->_user->getHash($this->username);
 
+			$path = Seguridad::encriptar($path, 1);
+
 			$insert = [
 				'hash'                      => md5(microtime()),
 				'hash_usuario'              => $hash_usuario,
 				'hash_usuarios_compartidos' => implode(';', $hashes),
-				'path'                      => $path];
+				'direccion'                 => $path];
 
 			$result = $this->_db->insert('comparticiones', $insert);
 
 			return ($result)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si un archivo o carpeta está compartido.
+	*
+	* @param string $path PATH de lo compartido.
+	*
+	* @return boolean TRUE si está compartido, FALSE si no.
+	*
+	*/
+
+		public function isShared($path = '')
+		{
+
+			$path = Seguridad::encriptar($path, 1);
+
+			$result = $this->_db->num('SELECT COUNT(*) FROM comparticiones WHERE direccion = :direccion', [':direccion' => $path]);
+
+			return ($result > 0)? true : false;
 
 		}
 

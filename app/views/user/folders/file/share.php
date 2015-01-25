@@ -4,7 +4,7 @@
 
 <div class="folders_showName"><i class="fa fa-file-o"></i> <?php echo $file['decrypted'] ?></div>
 
-<form method="post" action="<?php echo DIR ?>post/share/file">
+<form method="post" action="<?php echo DIR ?>post/share">
 
 	<center>
 

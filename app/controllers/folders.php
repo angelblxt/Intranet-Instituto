@@ -703,7 +703,7 @@ class Folders extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function shareFile()
+	public function postShare()
 	{
 
 		if(!$this->_user->isLogged()){
@@ -715,13 +715,17 @@ class Folders extends \core\controller{
 			if(isset($_POST['share']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
 
 				$personas = $_POST['personas'];
-				$file     = $_POST['file'];
+				$path     = (isset($_POST['file']))? $_POST['file'] : $_POST['folder'];
+
+				$pathToMethod = Seguridad::desencriptar(base64_decode($path), 2);
 
 				if(empty($personas)){
 
 					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
 
 				} else {
+
+					$miHash = $this->_user->getHash($this->username);
 
 					$hashes = [];
 
@@ -735,7 +739,7 @@ class Folders extends \core\controller{
 
 							$hash = $this->_user->getUserByName($persona)->hash_usuario;
 
-							if(!is_null($hash))
+							if(!is_null($hash) && $hash != $miHash)
 								$hashes[] = $hash;
 
 						}
@@ -744,11 +748,11 @@ class Folders extends \core\controller{
 
 					if(count($hashes) == 0){
 
-						$_SESSION['error'] = ['No se ha compartido con nadie el Archivo.', 'precaucion'];
+						$_SESSION['error'] = ['El elemento no se ha compartido con nadie.', 'precaucion'];
 
-					} elseif($this->_fs->share($file, $hashes)) {
+					} elseif($this->_fs->share($pathToMethod, $hashes)) {
 
-						$_SESSION['error'] = ['El Archivo ha sido compartido con éxito.', 'bien'];
+						$_SESSION['error'] = ['El Elemento ha sido compartido con éxito.', 'bien'];
 
 					} else {
 
@@ -758,7 +762,7 @@ class Folders extends \core\controller{
 
 				}
 
-				Url::redirect('folders/'. $file .'/share');
+				Url::redirect('folders/'. $path .'/share');
 
 			} else {
 
