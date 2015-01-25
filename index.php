@@ -103,6 +103,7 @@ use \core\router,
 	Router::any('folders/(:any)/rename', '\controllers\folders@rename');
 	Router::any('folders/(:any)/delete/(:num)', '\controllers\folders@delete');
 	Router::any('folders/(:any)/download', '\controllers\folders@download');
+	Router::any('folders/(:any)/options', '\controllers\folders@options');
 
 	// Router::any('register', '\controllers\user@register');
 
