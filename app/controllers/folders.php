@@ -507,6 +507,27 @@ class Folders extends \core\controller{
 
 			}
 
+			if($this->_fs->isShared($path['desencriptado'])){
+
+				$users = $this->_fs->getUsersShared($path['desencriptado']);
+				$names = [];
+
+				foreach($users as $user){
+
+					$nombreApellidos = $this->_user->getNameSurname($user);
+
+					$names[] = [
+						'hash'        => $this->_user->getHash($user),
+						'name'        => $nombreApellidos,
+						'circleColor' => $this->_user->getCircleColor($user),
+						'inicial'     => utf8_encode($nombreApellidos['nombre'][0])];
+
+				}
+
+				$section['sharedWith'] = $names;
+
+			}
+
 			$section['token'] = NoCSRF::generate('token');
 
 			Session::set('template', 'user');
