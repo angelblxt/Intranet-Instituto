@@ -587,4 +587,36 @@ class Filesystem {
 
 		}
 
+	/**
+	*
+	* Método encargado de iterar dentro de una Carpeta.
+	*
+	* @param string $path PATH.
+	*
+	* @return array Interación del Directorio.
+	*
+	*/
+
+		public function iterator($path)
+		{
+
+			$path = $this->fs . $path;
+
+			$paths = [];
+
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
+			
+			foreach($objects as $name => $object){
+
+				$name = str_replace($this->fs, '', $name);
+
+				if(substr($name, -1) != '.' && substr($name, -2) != '..')
+					$paths[] = $name;
+			
+			}
+
+			return $paths;
+
+		}
+
 }
