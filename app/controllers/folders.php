@@ -544,6 +544,46 @@ class Folders extends \core\controller{
 
 /*
 |-----------------------------------------------
+| Dejar de Compartir con una Persona.
+|-----------------------------------------------
+*/
+
+	public function unshare($path, $hash){
+
+		if(!$this->_user->isLogged() || !$this->_user->exists($hash)){
+
+			Url::redirect('');
+
+		} else {
+
+			$pathDesencriptado = Seguridad::desencriptar(base64_decode($path), 2);
+
+			/* Obtención del nombre del Usuario */
+
+				$user = $this->_user->getUser($hash);
+				$name = $this->_user->getNameSurname($user);
+				$name = $name['nombre'] .' '. $name['apellidos'];
+
+			/* Fin de la Obtención del nombre del Usuario */
+
+			if($this->_fs->unshare($pathDesencriptado, $hash)){
+
+				$_SESSION['error'] = ['Has dejade de compartir el Elemento con <b>'. $name .'</b>', 'bien'];
+
+			} else {
+
+				$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+			}
+
+			Url::redirect('folders/'. $path .'/share');
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
 | Procesamiento de una Nueva Carpeta.
 |-----------------------------------------------
 */
