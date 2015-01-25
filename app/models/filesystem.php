@@ -2,7 +2,8 @@
 
 use \helpers\security as Seguridad,
 	\helpers\session as Session,
-	\helpers\system as System;
+	\helpers\system as System,
+	\helpers\filesystem as FS;
 	 
 class Filesystem extends \core\model {
 	
@@ -31,6 +32,8 @@ class Filesystem extends \core\model {
 
 		public function share($path, $hashes)
 		{
+
+			FS::personalFS();
 
 			$hash_usuario = $this->_user->getHash($this->username);
 
@@ -98,11 +101,8 @@ class Filesystem extends \core\model {
 
 				if(count($usersShared) > 0){
 
-					foreach($usersShared as $shared){
-
+					foreach($usersShared as $shared)
 						$hashes[] = $this->_user->getHash($shared);
-
-					}
 
 				} else {
 
@@ -110,20 +110,11 @@ class Filesystem extends \core\model {
 
 				}
 
-				$path  = Seguridad::encriptar($path, 1);
-				$where = ['direccion' => $path];
+				$path   = Seguridad::encriptar($path, 1);
+				$update = ['hash_usuarios_compartidos' => implode(';', $hashes)];
+				$where  = ['direccion' => $path];
 
-				if(empty($hashes)){
-
-					$result = $this->_db->delete('comparticiones', $where);
-
-				} else {
-
-					$update = ['hash_usuarios_compartidos' => implode(';', $hashes)];
-
-					$result = $this->_db->update('comparticiones', $update, $where);
-
-				}
+				$result = (empty($hashes))? $this->_db->delete('comparticiones', $where) : $this->_db->update('comparticiones', $update, $where);
 
 				return ($result)? true : false;
 
