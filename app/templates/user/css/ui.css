@@ -946,6 +946,12 @@ a{
 
 		}
 
+			.message_view .data .nombreEmisor a{
+
+				color: rgba(0,0,0, .6);
+
+			}
+
 	.message_view .message_contenido{
 
 		width: 100%;

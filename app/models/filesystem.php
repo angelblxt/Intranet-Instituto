@@ -32,59 +32,106 @@ class Filesystem extends \core\model {
 		public function share($path, $hashes)
 		{
 
+			$hash_usuario = $this->_user->getHash($this->username);
+
 			if(self::isShared($path)){
 
 				$usersShared = self::getUsersShared($path);
 				$usersPost = [];
 
-				foreach($hashes as $user){
-
+				foreach($hashes as $user)
 					$usersPost[] = $this->_user->getUser($user);
-
-				}
 
 				$hashes = array_merge($usersShared, $usersPost);
 				$hashes = array_unique($hashes);
 
 				$hashesFinales = [];
 
-				foreach($hashes as $hash){
-
+				foreach($hashes as $hash)
 					$hashesFinales[] = $this->_user->getHash($hash);
-
-				}
-
-			} else {
-
-				$hashesFinales = $hashes;
-
-			}
-
-			$hash_usuario = $this->_user->getHash($this->username);
-
-			if(self::isShared($path)){
-
-				$path = Seguridad::encriptar($path, 1);
 
 				$update = ['hash_usuarios_compartidos' => implode(';', $hashesFinales)];
 
-				$result = $this->_db->update('comparticiones', $update, ['direccion' => $path]);
+				$result = $this->_db->update('comparticiones', $update, ['direccion' => Seguridad::encriptar($path, 1)]);
 
 			} else {
-
-				$path = Seguridad::encriptar($path, 1);
 
 				$insert = [
 					'hash'                      => md5(microtime()),
 					'hash_usuario'              => $hash_usuario,
-					'hash_usuarios_compartidos' => implode(';', $hashesFinales),
-					'direccion'                 => $path];
+					'hash_usuarios_compartidos' => implode(';', $hashes),
+					'direccion'                 => Seguridad::encriptar($path, 1)];
 
 				$result = $this->_db->insert('comparticiones', $insert);
 
 			}
 
 			return ($result)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de quitar la compartición de un usuario sobre 
+	* un PATH.
+	*
+	* @param string $path PATH a Des-compartir.
+	* @param string $hash HASH del Usuario.
+	*
+	* @return boolean TRUE si se ha descompartido, FALSE si no.
+	*
+	*/
+
+		public function unshare($path, $hash)
+		{
+
+			if(self::isShared($path)){
+
+				$user = $this->_user->getUser($hash);
+
+				$usersShared = self::getUsersShared($path);
+
+				if(($key = array_search($user, $usersShared)) !== false)
+					unset($usersShared[$key]);
+
+				$hashes = [];
+
+				if(count($usersShared) > 0){
+
+					foreach($usersShared as $shared){
+
+						$hashes[] = $this->_user->getHash($shared);
+
+					}
+
+				} else {
+
+					$hashes = '';
+
+				}
+
+				$path  = Seguridad::encriptar($path, 1);
+				$where = ['direccion' => $path];
+
+				if(empty($hashes)){
+
+					$result = $this->_db->delete('comparticiones', $where);
+
+				} else {
+
+					$update = ['hash_usuarios_compartidos' => implode(';', $hashes)];
+
+					$result = $this->_db->update('comparticiones', $update, $where);
+
+				}
+
+				return ($result)? true : false;
+
+			} else {
+
+				return false;
+
+			}
 
 		}
 
