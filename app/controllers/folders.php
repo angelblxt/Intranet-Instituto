@@ -94,11 +94,12 @@ class Folders extends \core\controller{
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
 					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
+					$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Carpeta Compartida" style="margin-left: 10px"></i>' : '';
 
 					if($file['type'] == 'dir'){
 
 						$files[] = [
-							'name'     => $file['name'],
+							'name'     => $file['name'] . $isShared,
 							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['type'],
@@ -108,7 +109,7 @@ class Folders extends \core\controller{
 					} else {
 
 						$files[] = [
-							'name' => $file['name'],
+							'name' => $file['name'] . $isShared,
 							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
 							'type' => $file['type'],
