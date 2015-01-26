@@ -149,6 +149,29 @@ class Filesystem extends \core\model {
 
 	/**
 	*
+	* Método encargado de comprobar si un path está compartido contigo.
+	*
+	* @param string $hashCompartidor HASH del Usuario Compartidor.
+	* @param string $hashUsuario HASH del Usuario.
+	* @param string $path PATH a Comprobar.
+	*
+	* @return boolean TRUE si está compartido, FALSE si no.
+	*
+	*/
+
+		public function isSharedWithMe($hashCompartidor, $hashUsuario, $path)
+		{
+
+			$path = Seguridad::encriptar($path, 1);
+
+			$result = $this->_db->num("SELECT COUNT(*) FROM comparticiones WHERE hash_usuario = :hashCompartidor AND direccion = :direccion AND hash_usuarios_compartidos LIKE '%". $hashUsuario ."%'", ['hashCompartidor' => $hashCompartidor, 'direccion' => $path]);
+
+			return ($result > 0)? true : false;
+
+		}
+
+	/**
+	*
 	* Método encargado de obtener los usuarios de los que están compartidos
 	* en una carpeta/archivo.
 	*
@@ -175,6 +198,42 @@ class Filesystem extends \core\model {
 			}
 
 			return $users;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener los PATH de los elementos compartidos 
+	* conmigo.
+	*
+	* @param string $hash HASH del Usuario.
+	*
+	* @return array PATHs ['hash del compartidor', 'path'].
+	*
+	*/
+
+		public function getPathsSharedWithMe($hash)
+		{
+
+			$result = $this->_db->select("SELECT hash_usuario, direccion FROM comparticiones WHERE hash_usuarios_compartidos LIKE '%". $hash ."%'");
+
+			$return = [];
+
+			if(count($result) > 0){
+
+				foreach($result as $par){
+
+					$path = Seguridad::desencriptar($par->direccion, 1);
+
+					$return[] = [
+						'hash' => $par->hash_usuario,
+						'path' => $path];
+
+				}
+
+			}
+
+			return $return;
 
 		}
 
