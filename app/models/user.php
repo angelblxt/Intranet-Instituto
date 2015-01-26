@@ -26,7 +26,7 @@ class User extends \core\model {
 
 			$usuarios = [
 				'hash'              => $hash,
-				'usuario'           => Seguridad::encriptar('davidblxt', 1),
+				'usuario'           => Seguridad::encriptar('aamellas', 1),
 				'password'          => hash('sha512', 'k9cbbzk9cbbz'),
 				'color_circulo'     => '607d8b',
 				'tiempo_registrado' => time()];
@@ -39,9 +39,9 @@ class User extends \core\model {
 			$datos_personales = [
 				'hash'         => md5(microtime()),
 				'hash_usuario' => $hash,
-				'nombre'       => 'David',
-				'apellidos'    => 'Villar Piñero',
-				'curso'        => Seguridad::encriptar('ADM1', 1)];
+				'nombre'       => 'Adolfo',
+				'apellidos'    => 'Amella Santolaria',
+				'curso'        => Seguridad::encriptar('BA1', 1)];
 
 			$this->_db->insert('usuarios', $usuarios);
 			$this->_db->insert('rangos', $rangos);
