@@ -55,11 +55,11 @@ class Folders extends \core\controller{
 
 /*
 |-----------------------------------------------
-| Listado de Carpetas y Archivos
+| Sección Inicial
 |-----------------------------------------------
 */
 
-	public function index($folder = '')
+	public function index()
 	{
 
 		if(!$this->_user->isLogged()){
@@ -69,6 +69,37 @@ class Folders extends \core\controller{
 		} else {
 
 			$this->_log->add('Ha entrado en la sección "Carpetas".');
+
+			$data = ['title' => 'Carpetas Compartidas'];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/folders/cloud');
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+/*
+|-----------------------------------------------
+| Listado de Carpetas y Archivos
+|-----------------------------------------------
+*/
+
+	public function folders($folder = '')
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
 
 			// SISTEMA DE ARCHIVOS
 
@@ -123,7 +154,7 @@ class Folders extends \core\controller{
 
 			// FIN DEL SISTEMA DE ARCHIVOS
 
-			$data = ['title' => 'Carpetas'];
+			$data = ['title' => 'Carpetas Privadas'];
 
 			$section = [
 				'files'        => $files,
