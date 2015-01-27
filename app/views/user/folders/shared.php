@@ -17,7 +17,7 @@
 
 if(!empty($previous)): ?>
 
-	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
+	<button onClick="location.href='<?php echo DIR ?>shared/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
 
 <?php endif; ?>
 
@@ -35,7 +35,7 @@ if(!empty($previous)): ?>
 
 			<?php if($file['type'] == 'dir'): ?>
 
-				<a href="<?php echo DIR ?>folders/<?php echo $file['next'] ?>"><div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name'] ?> </div></a>
+				<a href="<?php echo DIR ?>shared/<?php echo $file['next'] ?>"><div class="nombre <?php echo $file['type'] ?>"> <?php echo $file['name'] ?> </div></a>
 
 			<?php else: ?>
 
@@ -48,16 +48,7 @@ if(!empty($previous)): ?>
 				<div class="size"> <?php echo $file['size'] ?> </div>
 				
 				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Descargar">
-					<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $file['next'] ?>/download'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 15px"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
-				</span>
-				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Renombrar">
-					<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $file['next'] ?>/rename'" class="button button-rounded button-flat-action button-tiny" style="padding: 0 15px"><i class="fa fa-pencil" style="margin: 0 -10px"></i></button>
-				</span>
-				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Compartir">
-					<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $file['next'] ?>/share'" class="button button-rounded button-flat-highlight button-tiny" style="padding: 0 15px"><i class="fa fa-share-alt" style="margin: 0 -10px"></i></button>
-				</span>
-				<span class="hint--rounded hint--bounce hint--bottom" data-hint="Eliminar">
-					<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $file['next'] ?>/delete/0'" class="button button-rounded button-flat-caution button-tiny" style="padding: 0 15px"><i class="fa fa-times" style="margin: 0 -10px"></i></button>
+					<button onClick="location.href='<?php echo DIR ?>shared/<?php echo $file['next'] ?>/download'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 15px"><i class="fa fa-download" style="margin: 0 -10px"></i></button>
 				</span>
 			
 			</div>

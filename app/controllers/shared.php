@@ -59,7 +59,7 @@ class Shared extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function folders($folder = '')
+	public function folders($folder = '', $userCompartidor = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -76,27 +76,52 @@ class Shared extends \core\controller{
 
 			$toShow = [];
 
-			foreach($foldersShared as $par){
+			if(empty($folder) || empty($userCompartidor)){
 
-				$user = $this->_user->getUser($par['hash']);
+				foreach($foldersShared as $par){
 
-				$fs = FS::personalFS($user);
+					$user = $this->_user->getUser($par['hash']);
 
-				$anterior = FS::getAnteriorPath($par['path']);
+					FS::personalFS($user);
 
-				$folders = FS::listFolders($anterior);
+					$anterior = FS::getAnteriorPath($par['path']);
 
-				foreach($folders as $dir){
+					$folders = FS::listFolders($anterior);
 
-					if($this->_fs->isSharedWithMe($par['hash'], $myHash, $dir['path'])){
+					foreach($folders as $dir){
+
+						if($this->_fs->isSharedWithMe($par['hash'], $myHash, $dir['path'])){
+							
+							$toShow[] = [
+								'user' => $user,
+								'data' => $dir];
 						
-						$toShow[] = [
-							'user' => $user,
-							'data' => $dir];
-					
+						}
+
 					}
 
 				}
+
+			} else {
+
+				$folder          = Seguridad::desencriptar(base64_decode($folder), 2);
+				$userCompartidor = Seguridad::desencriptar(base64_decode($userCompartidor), 2);
+
+				FS::personalFS($userCompartidor);
+
+				$anterior = FS::getAnteriorPath($folder);
+
+				$folders = FS::listFolders($folder);
+
+				foreach($folders as $dir){
+							
+					$toShow[] = [
+						'user' => $userCompartidor,
+						'data' => $dir];
+
+				}
+
+				var_dump($anterior);
 
 			}
 
@@ -124,10 +149,11 @@ class Shared extends \core\controller{
 					$compartidor       = $file['user'];
 					$nombreCompartidor = $this->_user->getNameSurname($compartidor);
 
-					$extension = FS::getExtension($file['data']['name']);
-					$size      = FS::formatBytes($file['data']['size'], 2);
-					$next      = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
-					$isShared  = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Carpeta Compartida" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
+					$extension   = FS::getExtension($file['data']['name']);
+					$size        = FS::formatBytes($file['data']['size'], 2);
+					$next        = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
+					$compartidor = base64_encode(Seguridad::encriptar($file['user'], 2));
+					$isShared    = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Carpeta Compartida" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
 
 					if($file['data']['type'] == 'dir'){
 
@@ -136,7 +162,7 @@ class Shared extends \core\controller{
 							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['data']['type'],
-							'next'     => $next,
+							'next'     => $next .'/'. $compartidor,
 							'previous' => $previous];
 
 					} else {
@@ -146,7 +172,7 @@ class Shared extends \core\controller{
 							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
 							'type' => $file['data']['type'],
-							'next' => $next];
+							'next' => $next .'/'. $compartidor];
 
 					}
 
