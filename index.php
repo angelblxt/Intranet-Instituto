@@ -108,6 +108,7 @@ use \core\router,
 	Router::any('folders/(:any)/unshare/(:any)', '\controllers\folders@unshare');
 	Router::any('cloud', '\controllers\folders@index');
 	Router::any('shared', '\controllers\shared@folders');
+	Router::any('shared/(:any)/(:any)', '\controllers\shared@folders');
 
 	// Router::any('register', '\controllers\user@register');
 
