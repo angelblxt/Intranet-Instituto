@@ -57,37 +57,21 @@ class Filesystem extends \core\model {
 
 				$result = $this->_db->update('comparticiones', $update, ['direccion' => Seguridad::encriptar($path, 1)]);
 
-				return $result;
-
 			} else {
 
 				$hashes = implode(';', $hashes);
 
-				$iterator = FS::iterator($path);
+				$data = [
+					'hash'                      => md5(microtime()),
+					'hash_usuario'              => $hashUsuario,
+					'hash_usuarios_compartidos' => $hashes,
+					'direccion'                 => Seguridad::encriptar($path, 1)];
 
-				$pathsInsert = [$path];
-
-				foreach($iterator as $pathToInsert){
-
-					$pathsInsert[] = $pathToInsert;
-
-				}
-
-				foreach($pathsInsert as $insert){
-
-					$data = [
-						'hash'                      => md5(microtime()),
-						'hash_usuario'              => $hashUsuario,
-						'hash_usuarios_compartidos' => $hashes,
-						'direccion'                 => Seguridad::encriptar($insert, 1)];
-
-					$this->_db->insert('comparticiones', $data);
-
-				}
-
-				return true;
+				$result = $this->_db->insert('comparticiones', $data);
 
 			}
+
+			return $result;
 
 		}
 
@@ -129,7 +113,7 @@ class Filesystem extends \core\model {
 				}
 
 				$path   = Seguridad::encriptar($path, 1);
-				$update = ['hash_usuarios_compartidos' => implode(';', $hashes)];
+				$update = ['hash_usuarios_compartidos' => (empty($hashes))? '' : implode(';', $hashes)];
 				$where  = ['direccion' => $path];
 
 				$result = (empty($hashes))? $this->_db->delete('comparticiones', $where) : $this->_db->update('comparticiones', $update, $where);
