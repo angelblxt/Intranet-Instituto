@@ -68,7 +68,7 @@ class Shared extends \core\controller{
 
 		} else {
 
-			$this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
+			/* $this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
 
 			$myHash = $this->_user->getHash($this->username);
 
@@ -121,26 +121,7 @@ class Shared extends \core\controller{
 
 				}
 
-				var_dump($anterior);
-
 			}
-
-			// SISTEMA DE ARCHIVOS
-
-				/* if(!empty($folder)){
-
-					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
-					$previous   = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
-
-					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
-
-				} else {
-
-					$list = FS::listFolders();
-
-				}
-
-				$actual = base64_encode(Seguridad::encriptar($folderToGo, 2)); */
 
 				$files = [];
 
@@ -153,7 +134,7 @@ class Shared extends \core\controller{
 					$size        = FS::formatBytes($file['data']['size'], 2);
 					$next        = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
 					$compartidor = base64_encode(Seguridad::encriptar($file['user'], 2));
-					$isShared    = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Carpeta Compartida" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
+					$isShared    = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
 
 					if($file['data']['type'] == 'dir'){
 
@@ -196,7 +177,7 @@ class Shared extends \core\controller{
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
 			View::render('user/folders/shared', $section);
-			View::rendertemplate('footer');
+			View::rendertemplate('footer'); */
 
 		}
 
