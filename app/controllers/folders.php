@@ -125,12 +125,11 @@ class Folders extends \core\controller{
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
 					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
-					$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
 
 					if($file['type'] == 'dir'){
 
 						$files[] = [
-							'name'     => $file['name'] . $isShared,
+							'name'     => $file['name'],
 							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['type'],
@@ -140,7 +139,7 @@ class Folders extends \core\controller{
 					} else {
 
 						$files[] = [
-							'name' => $file['name'] . $isShared,
+							'name' => $file['name'],
 							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
 							'type' => $file['type'],
@@ -326,7 +325,7 @@ class Folders extends \core\controller{
 
 				} else {
 
-					if(FS::deleteFolder($path['desencriptado']) && $this->_fs->delete()){
+					if(FS::deleteFolder($path['desencriptado'])){
 
 						$this->_log->add('Ha eliminado una Carpeta "'. $path['desencriptado'] .'".');
 
@@ -478,137 +477,6 @@ class Folders extends \core\controller{
 				Url::redirect('');
 
 			}
-
-		}
-
-	}
-
-/*
-|-----------------------------------------------
-| Sección de Opciones de un Archivo o Carpeta.
-|-----------------------------------------------
-*/
-
-	public function share($path = '')
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			$path = [
-				'encriptado'    => $path,
-				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
-
-			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
-
-			if(FS::comprobeFolder($path['desencriptado'])){
-
-				$nombreActual = FS::getFolderName($nombreEspaciado);
-
-				$data = ['title' => 'Compartir Carpeta'];
-
-				$section = [
-					'folder' => [
-						'encrypted'  => $path['encriptado'],
-						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
-						'actualName' => $nombreActual]];
-
-				$templateView = 'user/folders/folder/share';
-
-			} else {
-
-				$extension    = FS::getExtension($nombreEspaciado);
-				$nombreActual = FS::getFileName($nombreEspaciado);
-				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
-
-				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($path['desencriptado']), 2));
-
-				$data = ['title' => 'Compartir Archivo'];
-
-				$section = [
-					'file'         => [
-						'encrypted'  => $path['encriptado'],
-						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
-						'actualName' => $nombreActual],
-					'folderOfFile' => $carpetaContenida];
-
-				$templateView = 'user/folders/file/share';
-
-			}
-
-			if($this->_fs->isShared($path['desencriptado'])){
-
-				$users = $this->_fs->getUsersShared($path['desencriptado']);
-				$names = [];
-
-				foreach($users as $user){
-
-					$nombreApellidos = $this->_user->getNameSurname($user);
-
-					$names[] = [
-						'hash'        => $this->_user->getHash($user),
-						'name'        => $nombreApellidos,
-						'circleColor' => $this->_user->getCircleColor($user),
-						'inicial'     => utf8_encode($nombreApellidos['nombre'][0])];
-
-				}
-
-				$section['sharedWith'] = $names;
-
-			}
-
-			$section['token'] = NoCSRF::generate('token');
-
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $this->templateData);
-			View::rendertemplate('aside', $this->templateData);
-			View::render($templateView, $section);
-			View::rendertemplate('footer');
-
-		}
-
-	}
-
-/*
-|-----------------------------------------------
-| Dejar de Compartir con una Persona.
-|-----------------------------------------------
-*/
-
-	public function unshare($path, $hash){
-
-		if(!$this->_user->isLogged() || !$this->_user->exists($hash)){
-
-			Url::redirect('');
-
-		} else {
-
-			$pathDesencriptado = Seguridad::desencriptar(base64_decode($path), 2);
-
-			/* Obtención del nombre del Usuario */
-
-				$user = $this->_user->getUser($hash);
-				$name = $this->_user->getNameSurname($user);
-				$name = $name['nombre'] .' '. $name['apellidos'];
-
-			/* Fin de la Obtención del nombre del Usuario */
-
-			if($this->_fs->unshare($pathDesencriptado, $hash)){
-
-				$_SESSION['error'] = ['Has dejade de compartir el Elemento con <b>'. $name .'</b>', 'bien'];
-
-			} else {
-
-				$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
-
-			}
-
-			Url::redirect('folders/'. $path .'/share');
 
 		}
 
@@ -779,83 +647,6 @@ class Folders extends \core\controller{
 					Url::redirect('folders/'. $pathAnterior['encriptado']);
 
 				}
-
-			} else {
-
-				Url::redirect('');
-
-			}
-
-		}
-
-	}
-
-/*
-|-----------------------------------------------
-| Procesamiento de Compartir Archivo.
-|-----------------------------------------------
-*/
-
-	public function postShare()
-	{
-
-		if(!$this->_user->isLogged()){
-
-			Url::redirect('');
-
-		} else {
-
-			if(isset($_POST['share']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
-
-				$personas = $_POST['personas'];
-				$path     = (isset($_POST['file']))? $_POST['file'] : $_POST['folder'];
-
-				$pathToMethod = Seguridad::desencriptar(base64_decode($path), 2);
-
-				if(empty($personas)){
-
-					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
-
-				} else {
-
-					$miHash = $this->_user->getHash($this->username);
-
-					$hashes = [];
-
-					$personas = explode(',', $personas);
-
-					foreach($personas as $persona){
-
-						if(!empty($persona)){
-
-							$persona = trim($persona);
-
-							$hash = $this->_user->getUserByName($persona)->hash_usuario;
-
-							if(!is_null($hash) && $hash != $miHash)
-								$hashes[] = $hash;
-
-						}
-
-					}
-
-					if(count($hashes) == 0){
-
-						$_SESSION['error'] = ['El elemento no se ha compartido con nadie.', 'precaucion'];
-
-					} elseif($this->_fs->share($pathToMethod, $hashes)) {
-
-						$_SESSION['error'] = ['El Elemento ha sido compartido con éxito.', 'bien'];
-
-					} else {
-
-						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
-
-					}
-
-				}
-
-				Url::redirect('folders/'. $path .'/share');
 
 			} else {
 
