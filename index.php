@@ -98,6 +98,7 @@ use \core\router,
 	Router::any('messages/new', '\controllers\messages@newMessage');
 
 // Rutas de las secciones de "Archivos".
+	Router::any('cloud', '\controllers\folders@index');
 	Router::any('folders', '\controllers\folders@folders');
 	Router::any('folders/(:any)', '\controllers\folders@folders');
 	Router::any('folders/(:any)/new/folder', '\controllers\folders@newFolder');
@@ -106,9 +107,6 @@ use \core\router,
 	Router::any('folders/(:any)/download', '\controllers\folders@download');
 	Router::any('folders/(:any)/share', '\controllers\folders@share');
 	Router::any('folders/(:any)/unshare/(:any)', '\controllers\folders@unshare');
-	Router::any('cloud', '\controllers\folders@index');
-	Router::any('shared', '\controllers\shared@folders');
-	Router::any('shared/(:any)/(:any)', '\controllers\shared@folders');
 
 	// Router::any('register', '\controllers\user@register');
 
