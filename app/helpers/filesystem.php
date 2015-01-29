@@ -348,10 +348,18 @@ class Filesystem {
 
 			$dirs   = explode('/', $path);
 			$number = count($dirs);
+
+			if($number > 1){
 			
-			unset($dirs[$number - 2]);
-			
-			$previous = implode('/', $dirs);
+				unset($dirs[$number - 2]);
+				
+				$previous = implode('/', $dirs);
+
+			} else {
+
+				$previous = '';
+
+			}
 
 			return $previous;
 
