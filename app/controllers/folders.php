@@ -125,7 +125,7 @@ class Folders extends \core\controller{
 					$extension = FS::getExtension($file['name']);
 					$size      = FS::formatBytes($file['size'], 2);
 					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
-					$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Carpeta Compartida" style="margin-left: 10px"></i>' : '';
+					$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
 
 					if($file['type'] == 'dir'){
 
@@ -326,7 +326,7 @@ class Folders extends \core\controller{
 
 				} else {
 
-					if(FS::deleteFolder($path['desencriptado'])){
+					if(FS::deleteFolder($path['desencriptado']) && $this->_fs->delete()){
 
 						$this->_log->add('Ha eliminado una Carpeta "'. $path['desencriptado'] .'".');
 
