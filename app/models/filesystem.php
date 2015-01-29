@@ -35,12 +35,12 @@ class Filesystem extends \core\model {
 
 			FS::personalFS();
 
-			$hash_usuario = $this->_user->getHash($this->username);
+			$hashUsuario = $this->_user->getHash($this->username);
 
 			if(self::isShared($path)){
 
 				$usersShared = self::getUsersShared($path);
-				$usersPost = [];
+				$usersPost   = [];
 
 				foreach($hashes as $user)
 					$usersPost[] = $this->_user->getUser($user);
@@ -57,19 +57,37 @@ class Filesystem extends \core\model {
 
 				$result = $this->_db->update('comparticiones', $update, ['direccion' => Seguridad::encriptar($path, 1)]);
 
+				return $result;
+
 			} else {
 
-				$insert = [
-					'hash'                      => md5(microtime()),
-					'hash_usuario'              => $hash_usuario,
-					'hash_usuarios_compartidos' => implode(';', $hashes),
-					'direccion'                 => Seguridad::encriptar($path, 1)];
+				$hashes = implode(';', $hashes);
 
-				$result = $this->_db->insert('comparticiones', $insert);
+				$iterator = FS::iterator($path);
+
+				$pathsInsert = [$path];
+
+				foreach($iterator as $pathToInsert){
+
+					$pathsInsert[] = $pathToInsert;
+
+				}
+
+				foreach($pathsInsert as $insert){
+
+					$data = [
+						'hash'                      => md5(microtime()),
+						'hash_usuario'              => $hashUsuario,
+						'hash_usuarios_compartidos' => $hashes,
+						'direccion'                 => Seguridad::encriptar($insert, 1)];
+
+					$this->_db->insert('comparticiones', $data);
+
+				}
+
+				return true;
 
 			}
-
-			return ($result)? true : false;
 
 		}
 
