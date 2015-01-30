@@ -106,6 +106,8 @@ class Folders extends \core\controller{
 				if(!empty($folder)){
 
 					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
+					$folderToGo = ($folderToGo[0] == '/')? substr($folderToGo, 1) : $folderToGo;
+
 					$previous   = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
 
 					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
@@ -297,6 +299,8 @@ class Folders extends \core\controller{
 
 		} else {
 
+			$myHash = $this->_user->getHash($this->username);
+
 			$path = [
 				'encriptado'    => $path,
 				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
@@ -326,7 +330,7 @@ class Folders extends \core\controller{
 
 				} else {
 
-					if(FS::deleteFolder($path['desencriptado'])){
+					if(FS::deleteFolder($path['desencriptado']) && $this->_fs->delete($path['desencriptado'], $myHash)){
 
 						$this->_log->add('Ha eliminado una Carpeta "'. $path['desencriptado'] .'".');
 
@@ -365,7 +369,7 @@ class Folders extends \core\controller{
 
 					$anteriorPathEncriptado = base64_encode(Seguridad::encriptar($anteriorPath, 2));
 
-					if(FS::deleteFile($path['desencriptado'])){
+					if(FS::deleteFile($path['desencriptado']) && $this->_fs->delete($path['desencriptado'], $myHash)){
 
 						$this->_log->add('Ha eliminado un Archivo "'. $nombreActual .'".');
 
@@ -685,6 +689,8 @@ class Folders extends \core\controller{
 
 		} else {
 
+			$myHash = $this->_user->getHash($this->username);
+
 			$name   = $_POST['nombre'];
 			$folder = $_POST['folder'];
 
@@ -711,6 +717,8 @@ class Folders extends \core\controller{
 
 				} else {
 
+					$this->_fs->rename($myHash, $pathAnterior, $nombreActual, $nuevoNombre, true);
+
 					$this->_log->add('Ha renombrado una Carpeta "'. $nombreActual .'" > "'. $name .'".');
 
 					$_SESSION['error'] = ['Carpeta renombrada con éxito.', 'bien'];
@@ -724,6 +732,7 @@ class Folders extends \core\controller{
 				Url::redirect('');
 
 			}
+		
 		}
 
 	}
@@ -742,6 +751,8 @@ class Folders extends \core\controller{
 			Url::redirect('');
 
 		} else {
+
+			$myHash = $this->_user->getHash($this->username);
 
 			$file   = $_POST['file'];
 			$nombre = $_POST['nombre'];
@@ -771,6 +782,8 @@ class Folders extends \core\controller{
 					Url::redirect('folders/'. $file .'/rename/file');
 
 				} else {
+
+					$this->_fs->rename($myHash, $pathAnterior['desencriptado'], $nombreActual, $nuevoNombre, false);
 
 					$this->_log->add('Ha renombrado un Archivo "'. $nombreActual .'" > "'. $name .'".');
 

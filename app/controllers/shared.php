@@ -81,7 +81,9 @@ class Shared extends \core\controller{
 
 					FS::personalFS($user);
 
-					$folders = FS::listFolders(FS::getAnteriorPath($par['path']));
+					$anterior = FS::getAnteriorPath($par['path']);
+
+					$folders = FS::listFolders($anterior);
 
 					foreach($folders as $dir){
 
@@ -104,6 +106,8 @@ class Shared extends \core\controller{
 					'folder'          => Seguridad::desencriptar(base64_decode($folder), 2),
 					'userCompartidor' => Seguridad::desencriptar(base64_decode($userCompartidor), 2),
 					'father'          => Seguridad::desencriptar(base64_decode($father), 2)];
+
+				$desencriptado['folder'] = ($desencriptado['folder'][0] == '/')? substr($desencriptado['folder'], 1) : $desencriptado['folder'];
 
 				$previous = ($desencriptado['folder'] == $desencriptado['father'])? '' : base64_encode(Seguridad::encriptar(FS::getAnteriorPath($desencriptado['folder']), 2));
 				$previous = (empty($previous))? $previous : $previous .'/'. $userCompartidor .'/'. $father;
