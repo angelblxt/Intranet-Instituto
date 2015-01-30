@@ -59,7 +59,7 @@ class Shared extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function folders($folder = '', $userCompartidor = '')
+	public function folders($folder = '', $userCompartidor = '', $father = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -93,8 +93,9 @@ class Shared extends \core\controller{
 						if($this->_fs->isSharedWithMe($par['hash'], $myHash, $dir['path'])){
 							
 							$toShow[] = [
-								'user' => $user,
-								'data' => $dir];
+								'user'   => $user,
+								'data'   => $dir,
+								'father' => $dir['path']];
 						
 						}
 
@@ -106,6 +107,10 @@ class Shared extends \core\controller{
 
 				$folder          = Seguridad::desencriptar(base64_decode($folder), 2);
 				$userCompartidor = Seguridad::desencriptar(base64_decode($userCompartidor), 2);
+				$father          = Seguridad::desencriptar(base64_decode($father), 2);
+
+				$previous = ($folder == $father)? '' : base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folder), 2));
+				$previous = (empty($previous))? $previous : $previous .'/'. base64_encode(Seguridad::encriptar($userCompartidor, 2)) .'/'. base64_encode(Seguridad::encriptar($father, 2));
 
 				FS::personalFS($userCompartidor);
 
@@ -116,8 +121,9 @@ class Shared extends \core\controller{
 				foreach($folders as $dir){
 							
 					$toShow[] = [
-						'user' => $userCompartidor,
-						'data' => $dir];
+						'user'   => $userCompartidor,
+						'data'   => $dir,
+						'father' => $father];
 
 				}
 
@@ -134,6 +140,7 @@ class Shared extends \core\controller{
 					$size        = FS::formatBytes($file['data']['size'], 2);
 					$next        = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
 					$compartidor = base64_encode(Seguridad::encriptar($file['user'], 2));
+					$father      = base64_encode(Seguridad::encriptar($file['father'], 2));
 					$isShared    = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
 
 					if($file['data']['type'] == 'dir'){
@@ -143,7 +150,7 @@ class Shared extends \core\controller{
 							'icon'     => '<i class="fa fa-folder"></i>',
 							'size'     => '',
 							'type'     => $file['data']['type'],
-							'next'     => $next .'/'. $compartidor,
+							'next'     => $next .'/'. $compartidor .'/'. $father,
 							'previous' => $previous];
 
 					} else {
@@ -153,13 +160,13 @@ class Shared extends \core\controller{
 							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
 							'size' => $size,
 							'type' => $file['data']['type'],
-							'next' => $next .'/'. $compartidor];
+							'next' => $next .'/'. $compartidor .'/'. $father];
 
 					}
 
 				}
 
-				// $nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($folderToGo));
+				$nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($folder));
 
 			// FIN DEL SISTEMA DE ARCHIVOS
 
