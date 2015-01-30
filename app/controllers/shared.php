@@ -200,10 +200,9 @@ class Shared extends \core\controller{
 		} else {
 
 			$userCompartidor = Seguridad::desencriptar(base64_decode($userCompartidor), 2);
+			$fileDecrypted   = Seguridad::desencriptar(base64_decode($file), 2);
 
 			FS::personalFS($userCompartidor);
-
-			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
 
 			if(FS::comprobeFolder($fileDecrypted)){
 
