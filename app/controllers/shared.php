@@ -48,9 +48,6 @@ class Shared extends \core\controller{
 
 			}
 
-		// Iniciamos el Sistema de Archivos.
-			FS::personalFS();
-
 	}
 
 /*
@@ -84,9 +81,7 @@ class Shared extends \core\controller{
 
 					FS::personalFS($user);
 
-					$anterior = FS::getAnteriorPath($par['path']);
-
-					$folders = FS::listFolders($anterior);
+					$folders = FS::listFolders(FS::getAnteriorPath($par['path']));
 
 					foreach($folders as $dir){
 
@@ -105,25 +100,24 @@ class Shared extends \core\controller{
 
 			} else {
 
-				$folder          = Seguridad::desencriptar(base64_decode($folder), 2);
-				$userCompartidor = Seguridad::desencriptar(base64_decode($userCompartidor), 2);
-				$father          = Seguridad::desencriptar(base64_decode($father), 2);
+				$desencriptado = [
+					'folder'          => Seguridad::desencriptar(base64_decode($folder), 2),
+					'userCompartidor' => Seguridad::desencriptar(base64_decode($userCompartidor), 2),
+					'father'          => Seguridad::desencriptar(base64_decode($father), 2)];
 
-				$previous = ($folder == $father)? '' : base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folder), 2));
-				$previous = (empty($previous))? $previous : $previous .'/'. base64_encode(Seguridad::encriptar($userCompartidor, 2)) .'/'. base64_encode(Seguridad::encriptar($father, 2));
+				$previous = ($desencriptado['folder'] == $desencriptado['father'])? '' : base64_encode(Seguridad::encriptar(FS::getAnteriorPath($desencriptado['folder']), 2));
+				$previous = (empty($previous))? $previous : $previous .'/'. $userCompartidor .'/'. $father;
 
-				FS::personalFS($userCompartidor);
+				FS::personalFS($desencriptado['userCompartidor']);
 
-				$anterior = FS::getAnteriorPath($folder);
-
-				$folders = FS::listFolders($folder);
+				$folders = FS::listFolders($desencriptado['folder']);
 
 				foreach($folders as $dir){
 							
 					$toShow[] = [
-						'user'   => $userCompartidor,
+						'user'   => $desencriptado['userCompartidor'],
 						'data'   => $dir,
-						'father' => $father];
+						'father' => $desencriptado['father']];
 
 				}
 
@@ -196,7 +190,7 @@ class Shared extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function download($file = '')
+	public function download($file = '', $userCompartidor = '', $father = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -204,6 +198,10 @@ class Shared extends \core\controller{
 			Url::redirect('');
 
 		} else {
+
+			$userCompartidor = Seguridad::desencriptar(base64_decode($userCompartidor), 2);
+
+			FS::personalFS($userCompartidor);
 
 			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
 
