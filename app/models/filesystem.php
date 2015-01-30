@@ -239,6 +239,84 @@ class Filesystem extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de eliminar una carpeta compartida.
+	*
+	* @param string $path PATH del Elemento.
+	* @param string $hash HASH del Compartidor.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete($path, $hash)
+		{
+
+			$path = Seguridad::encriptar($path, 1);
+
+			$result = $this->_db->num("SELECT COUNT(*) FROM comparticiones WHERE direccion = :direccion AND hash_usuario = :hashUsuario", [':direccion' => $path, ':hashUsuario' => $hash]);
+
+			if($result > 0){
+
+				$where = [
+					'direccion'    => $path,
+					'hash_usuario' => $hash];
+
+				$result = $this->_db->delete('comparticiones', $where);
+
+				return $result;
+
+			} else {
+
+				return true;
+
+			}
+
+		}
+
+	/**
+	*
+	* Método encargado de renombrar una carpeta compartida.
+	*
+	* @param string $hash HASH del Compartidor.
+	* @param string $pathAnterior PATH Anterior.
+	* @param string $nombreActual Nombre Actual del PATH.
+	* @param string $nuevoNombre Nuevo Nombre del PATH.
+	* @param boolean $folder TRUE si es carpeta, FALSE si no.
+	*
+	* @return boolean TRUE si se ha renombrado, FALSE si no.
+	*
+	*/
+
+		public function rename($hash, $pathAnterior, $nombreActual, $nuevoNombre, $folder)
+		{
+
+			$finalSlash = ($folder === true)? '/' : '';
+
+			$path = [
+				'actual' => Seguridad::encriptar($pathAnterior . $nombreActual . $finalSlash, 1),
+				'nuevo'  => Seguridad::encriptar($pathAnterior . $nuevoNombre . $finalSlash, 1)];
+
+			$result = $this->_db->select("SELECT hash FROM comparticiones WHERE direccion = :direccion AND hash_usuario = :hashUsuario", [':direccion' => $path['actual'], ':hashUsuario' => $hash]);
+
+			if(count($result) > 0){
+
+				$update = ['direccion' => $path['nuevo']];
+				$where  = ['hash' => $result[0]->hash];
+
+				$query = $this->_db->update('comparticiones', $update, $where);
+
+				return ($query)? true : false;
+
+			} else {
+
+				return true;
+
+			}
+
+		}
+
 }
 
 ?>
