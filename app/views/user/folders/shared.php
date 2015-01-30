@@ -4,7 +4,7 @@
 
 \helpers\messages::comprobarErrores();
 
-if(!empty($previous)): ?>
+if(isset($previous)): ?>
 
 	<button onClick="location.href='<?php echo DIR ?>shared/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
 
