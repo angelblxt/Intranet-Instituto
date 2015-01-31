@@ -65,32 +65,53 @@ use \core\router,
     \helpers\security as Seguridad;
 
 // Rutas de los Formularios.
-    Router::post('post/login', '\controllers\user@login');
-    Router::post('post/changePassword', '\controllers\user@changePassword');
-    Router::any('post/changeCircleColor/(:any)', '\controllers\user@changeCircleColor');
-    Router::post('post/sendMessage', '\controllers\messages@send');
-    Router::any('post/searchUser', '\controllers\user@search');
+    Router::post('post/login', 										'\controllers\user@login');
+    Router::post('post/changePassword', 							'\controllers\user@changePassword');
+    Router::any('post/changeCircleColor/(:any)', 					'\controllers\user@changeCircleColor');
+    Router::post('post/sendMessage', 								'\controllers\messages@send');
+    Router::any('post/searchUser', 									'\controllers\user@search');
+    Router::post('post/new/folder', 								'\controllers\folders@postNewFolder');
+    Router::post('post/rename/folder', 								'\controllers\folders@postRenameFolder');
+    Router::post('post/rename/file', 								'\controllers\folders@postRenameFile');
+    Router::post('post/upload/(:any)', 								'\controllers\folders@upload');
+    Router::post('post/share', 										'\controllers\folders@postShare');
 
 // Rutas primarias del Usuario.
-	Router::any('', '\controllers\login@index');
-	Router::any('user', '\controllers\user@me');
-	Router::any('user/logout', '\controllers\user@logout');
+	Router::any('', 												'\controllers\login@index');
+	Router::any('user', 											'\controllers\user@me');
+	Router::any('user/logout', 										'\controllers\user@logout');
 	
 // Ruta de la sección de "Acerca De".
-	Router::any('about', '\controllers\about@about');
+	Router::any('about', 											'\controllers\about@about');
 
 // Ruta de las secciones de "Preferencias".
-	Router::any('preferences', '\controllers\preferences@preferences');
-	Router::any('preferences/password', '\controllers\preferences@password');
-	Router::any('preferences/circleColor', '\controllers\preferences@circleColor');
+	Router::any('preferences', 										'\controllers\preferences@preferences');
+	Router::any('preferences/password', 							'\controllers\preferences@password');
+	Router::any('preferences/circleColor', 							'\controllers\preferences@circleColor');
 
 // Rutas de las secciones de "Mensajes Privados".
-	Router::any('messages', '\controllers\messages@index');
-	Router::any('messages/in', '\controllers\messages@in');
-	Router::any('messages/out', '\controllers\messages@out');
-	Router::any('messages/(:any)', '\controllers\messages@message');
-	Router::any('messages/(:any)/delete/(:any)', '\controllers\messages@delete');
-	Router::any('messages/new', '\controllers\messages@newMessage');
+	Router::any('messages', 										'\controllers\messages@index');
+	Router::any('messages/in', 										'\controllers\messages@in');
+	Router::any('messages/out', 									'\controllers\messages@out');
+	Router::any('messages/(:any)', 									'\controllers\messages@message');
+	Router::any('messages/(:any)/delete/(:any)', 					'\controllers\messages@delete');
+	Router::any('messages/new', 									'\controllers\messages@newMessage');
+
+// Rutas de las secciones de "Archivos".
+	Router::any('cloud', 											'\controllers\folders@index');
+
+	Router::any('folders', 											'\controllers\folders@folders');
+	Router::any('folders/(:any)', 									'\controllers\folders@folders');
+	Router::any('folders/(:any)/new/folder', 						'\controllers\folders@newFolder');
+	Router::any('folders/(:any)/rename', 							'\controllers\folders@rename');
+	Router::any('folders/(:any)/delete/(:num)', 					'\controllers\folders@delete');
+	Router::any('folders/(:any)/download', 							'\controllers\folders@download');
+	Router::any('folders/(:any)/share', 							'\controllers\folders@share');
+	Router::any('folders/(:any)/unshare/(:any)', 					'\controllers\folders@unshare');
+
+	Router::any('shared', 											'\controllers\folders@folders');
+	Router::any('shared/(:any)/(:any)/(:any)', 						'\controllers\folders@folders');
+	Router::any('shared/(:any)/(:any)/(:any)/download', 			'\controllers\folders@download');
 
 	// Router::any('register', '\controllers\user@register');
 
