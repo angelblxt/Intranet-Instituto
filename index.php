@@ -107,9 +107,9 @@ use \core\router,
 	Router::any('folders/(:any)/share', '\controllers\folders@share');
 	Router::any('folders/(:any)/unshare/(:any)', '\controllers\folders@unshare');
 	Router::any('cloud', '\controllers\folders@index');
-	Router::any('shared', '\controllers\shared@folders');
-	Router::any('shared/(:any)/(:any)/(:any)', '\controllers\shared@folders');
-	Router::any('shared/(:any)/(:any)/(:any)/download', '\controllers\shared@download');
+	Router::any('shared', '\controllers\folders@shared');
+	Router::any('shared/(:any)/(:any)/(:any)', '\controllers\folders@shared');
+	Router::any('shared/(:any)/(:any)/(:any)/download', '\controllers\folders@download');
 
 	// Router::any('register', '\controllers\user@register');
 
