@@ -18,6 +18,7 @@ class Config {
 
 		//site address
 		define('DIR', 'http://localhost/intranet/');
+		define('FS_ROOT', 'app/filesystem/');
 
 		//set default controller and method for legacy calls
 		define('DEFAULT_CONTROLLER', 'login');
@@ -33,6 +34,9 @@ class Config {
 		define('DB_USER', 'root');
 		define('DB_PASS', 'pass');
 		define('PREFIX', 'smvc_');
+
+		// UPLOADER
+		define('MAX_SIZE', 5); // Tamaño máximo de subida (MBs).
 
 		// Clave de encriptación.
 		define('ENCRYPTION_KEY', 'cdff38g0rc15dzas8axb');
