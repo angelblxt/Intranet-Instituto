@@ -122,21 +122,29 @@ class Filesystem {
 		public function makeFolder($path)
 		{
 
-			$dir = $this->fs . $path;
+			if(empty($path)){
 
-			if(!file_exists($dir)){
-
-				$result = mkdir($dir, 0777, true);
-
-				chmod($dir, 0777);
+				return false;
 
 			} else {
 
-				$result = false;
-				
-			}
+				$dir = $this->fs . $path;
 
-			return $result;
+				if(!file_exists($dir)){
+
+					$result = mkdir($dir, 0777, true);
+
+					chmod($dir, 0777);
+
+				} else {
+
+					$result = false;
+					
+				}
+
+				return $result;
+
+			}
 
 		}
 
@@ -153,26 +161,34 @@ class Filesystem {
 		public function deleteFolder($path)
 		{
 
-			$dir = $this->fs . $path;
-			$dir = str_replace('../', '', $dir);
+			if(empty($path)){
 
-			if(is_dir($dir)){
-
-				$files = glob($dir . '/*');
-
-				foreach($files as $file){
-
-					$pathToMethod = str_replace($this->fs, '', $file);
-
-					is_dir($file)? self::deleteFolder($pathToMethod) : unlink($file);
-
-				}
-
-				return rmdir($dir);
+				return false;
 
 			} else {
 
-				return false;
+				$dir = $this->fs . $path;
+				$dir = str_replace('../', '', $dir);
+
+				if(is_dir($dir)){
+
+					$files = glob($dir . '/*');
+
+					foreach($files as $file){
+
+						$pathToMethod = str_replace($this->fs, '', $file);
+
+						is_dir($file)? self::deleteFolder($pathToMethod) : unlink($file);
+
+					}
+
+					return rmdir($dir);
+
+				} else {
+
+					return false;
+
+				}
 
 			}
 
@@ -191,16 +207,24 @@ class Filesystem {
 		public function deleteFile($path)
 		{
 
-			$dir = $this->fs . $path;
-			$dir = str_replace('../', '', $dir);
+			if(empty($path)){
 
-			if(file_exists($dir)){
-
-				return (unlink($dir))? true : false;
+				return false;
 
 			} else {
 
-				return false;
+				$dir = $this->fs . $path;
+				$dir = str_replace('../', '', $dir);
+
+				if(file_exists($dir)){
+
+					return (unlink($dir))? true : false;
+
+				} else {
+
+					return false;
+
+				}
 
 			}
 
@@ -221,13 +245,23 @@ class Filesystem {
 		public function rename($path, $old, $new)
 		{
 
-			$dir = $this->fs . $path;
+			if(empty($path) || empty($old) || empty($new)){
 
-			$dir = str_replace('../', '', $dir);
-			$old = str_replace('../', '', $old);
-			$new = str_replace('../', '', $new);
+				return false;
 
-			return (file_exists($dir . $old))? rename($dir . $old, $dir . $new) : false;
+			} else {
+
+				$dir = $this->fs . $path;
+
+				var_dump($path);
+
+				$dir = str_replace('../', '', $dir);
+				$old = str_replace('../', '', $old);
+				$new = str_replace('../', '', $new);
+
+				return (file_exists($dir . $old))? rename($dir . $old, $dir . $new) : false;
+
+			}
 
 		}
 
@@ -245,13 +279,21 @@ class Filesystem {
 		public function move($old, $new)
 		{
 
-			$old = $this->fs . $old;
-			$new = $this->fs . $new;
+			if(empty($old) || empty($new)){
 
-			$old = str_replace('../', '', $old);
-			$new = str_replace('../', '', $new);
+				return false;
 
-			return (file_exists($old))? rename($old, $new) : false;
+			} else {
+
+				$old = $this->fs . $old;
+				$new = $this->fs . $new;
+
+				$old = str_replace('../', '', $old);
+				$new = str_replace('../', '', $new);
+
+				return (file_exists($old))? rename($old, $new) : false;
+
+			}
 
 		}
 
