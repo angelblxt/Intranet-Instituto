@@ -30,7 +30,7 @@ if(!empty($previous)): ?>
 
 	<div id="uploadForm" class="folders_upload_form">
 		
-		<form method="post" action="<?php echo DIR ?>post/upload/<?php echo $actual ?>" enctype="multipart/form-data">
+		<form enctype="multipart/form-data" method="post" action="<?php echo DIR ?>post/upload/<?php echo $actual ?>">
 
 			<input type="file" name="files[]" multiple><br/>
 
