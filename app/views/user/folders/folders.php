@@ -19,6 +19,10 @@ if(!empty($previous)): ?>
 
 	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $previous ?>'" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
 
+<?php else: ?>
+
+	<button disabled="disabled" class="button button-rounded button-flat-primary button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-chevron-left"></i> Atrás</button>
+
 <?php endif; ?>
 
 	<button onClick="location.href='<?php echo DIR ?>folders/<?php echo $actual ?>/new/folder'" class="button button-rounded button-flat-highlight button-tiny" style="padding: 0 10px; margin-bottom: 15px"><i class="fa fa-folder"></i> Nueva Carpeta</button>
