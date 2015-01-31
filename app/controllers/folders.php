@@ -434,14 +434,23 @@ class Folders extends \core\controller{
 
 					if(FS::comprimeFolder($fileDecrypted, $name) === true){
 
-						if(!FS::download($name . '.zip'))
+						if(FS::download($name . '.zip')){
+
+							$this->_log->add('Ha descargado una Carpeta Personal.');
+
+						} else {
+
 							Url::redirect('folders/'. $carpetaAnterior);
+
+						}
 
 					}
 
 				} else {
 
 					FS::download($fileDecrypted, false, false);
+
+					$this->_log->add('Ha descargado un Archivo Personal.');
 
 				}
 
@@ -484,6 +493,10 @@ class Folders extends \core\controller{
 						$_SESSION['error'] = ['Archivos subidos correctamente.', 'bien'];
 
 					} else {
+
+						$subidos = $total - $errors;
+
+						$this->_log->add('Ha subido '. $subidos .' archivos.');
 
 						$_SESSION['error'] = [$errors . ' de '. $total .' archivos no han podido ser subidos.', 'precaucion'];
 
@@ -626,6 +639,8 @@ class Folders extends \core\controller{
 			/* Fin de la Obtención del nombre del Usuario */
 
 			if($this->_fs->unshare($pathDesencriptado, $hash)){
+
+				$this->_log->add('Ha dejado de compartir un elemento con '. $name .'.');
 
 				$_SESSION['error'] = ['Has dejade de compartir el Elemento con <b>'. $name .'</b>', 'bien'];
 
@@ -880,6 +895,8 @@ class Folders extends \core\controller{
 						$_SESSION['error'] = ['El elemento no se ha compartido con nadie.', 'precaucion'];
 
 					} elseif($this->_fs->share($pathToMethod, $hashes)) {
+
+						$this->_log->add('Ha compartido un Elemento.');
 
 						$_SESSION['error'] = ['El Elemento ha sido compartido con éxito.', 'bien'];
 
