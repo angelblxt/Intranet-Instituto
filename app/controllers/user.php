@@ -104,13 +104,17 @@ class User extends \core\controller{
 
 			$data = [
 				'title' => 'Inicio'];
+
+			$section = [
+				'isTeacher' => $this->templateData['isTeacher'],
+				'isAdmin'   => $this->templateData['isAdmin']];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/me');
+			View::render('user/me', $section);
 			View::rendertemplate('footer');
 
 		}
