@@ -203,7 +203,7 @@ class Database extends PDO{
 			$stmt->bindValue(":$key", $value);
 		}
 
-		$stmt->execute();
+		return $stmt->execute();
 
 	}
 

@@ -946,6 +946,12 @@ a{
 
 		}
 
+			.message_view .data .nombreEmisor a{
+
+				color: rgba(0,0,0, .6);
+
+			}
+
 	.message_view .message_contenido{
 
 		width: 100%;
@@ -963,5 +969,179 @@ a{
 		color: rgba(0,0,0, .4);
 
 		margin-top: 20px;
+
+	}
+
+/* SISTEMA DE ARCHIVOS */
+
+	.folders_file{
+
+		background-color: #F5F5F5;
+
+		width: calc(100% + 40px);
+		height: 50px;
+
+		margin-left: -20px;
+
+		line-height: 50px;
+
+		border-bottom: 1px solid #DCDCDC;
+
+		-webkit-transition: all 0.1s linear;
+				transition: all 0.1s linear;
+
+	}
+
+		.folders_file:hover{
+
+			background-color: #F8F8F8;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.folders_file:hover .icono i{
+
+			color: rgba(0,0,0, .3);
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
+		.folders_file:first-child{
+
+			border-top: 1px solid #DCDCDC;
+
+		}
+
+		.folders_file .icono{
+
+			width: 50px;
+			height: 50px;
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .icono .file-icon{
+
+				margin: 9px 0 9px 13px;
+
+			}
+
+			.folders_file .icono i{
+
+				font-size: 30px;
+				color: rgba(0,0,0, .4);
+
+				margin: 10px 10px;
+
+			}
+
+		.folders_file .nombre{
+
+			width: calc(100% - 50px - 300px);
+
+			color: rgba(0,0,0, .6);
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .nombre.file{
+
+				font-weight: normal;
+
+			}
+
+			.folders_file .nombre.dir{
+
+				font-weight: bold;
+
+			}
+
+		.folders_file .opciones{
+
+			width: 300px;
+
+			text-align: right;
+
+			padding: 0 15px;
+
+			float: left;
+
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing   : border-box;
+			box-sizing        : border-box;
+
+		}
+
+			.folders_file .opciones .size{
+
+				display: inline;
+
+				color: rgba(0,0,0, .4);
+
+				margin-right: 10px;
+
+			}
+
+	.folders_showName{
+
+		width: 100%;
+		height: auto;
+
+		color: rgba(0,0,0, .5);
+		font-size: 14px;
+
+		margin-bottom: 15px;
+
+	}
+
+		.folders_showName i{
+
+			margin-right: 5px;
+
+		}
+
+	.folders_nothing{
+
+		width: 100%;
+		height: auto;
+
+		font-family: 'Raleway';
+		font-size: 20px;
+		color: rgba(0,0,0, .4);
+
+		margin: 15px 0;
+
+		text-align: center;
+
+	}
+
+		.folders_nothing i{
+
+			margin-right: 5px;
+
+		}
+
+	.folders_upload_form{
+
+		width: 100%;
+		height: auto;
+
+		margin-bottom: 15px;
+
+		display: none;
 
 	}

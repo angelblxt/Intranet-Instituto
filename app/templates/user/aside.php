@@ -6,7 +6,7 @@
 
 		$userSelected = 'seleccionado';
 
-	} elseif(preg_match('/^folders*/i', $actual)){
+	} elseif(preg_match('/^folders*/i', $actual) || preg_match('/^cloud*/i', $actual) || preg_match('/^shared*/i', $actual)){
 
 		$foldersSelected = 'seleccionado';
 
@@ -54,7 +54,7 @@
 		</div>
 		<div class="boton <?php echo $foldersSelected ?>">
 							
-			<span class="hint--rounded hint--bounce hint--right" data-hint="Carpetas"><a href="<?php echo DIR; ?>folders"><i class="fa fa-folder"></i></a></span>
+			<span class="hint--rounded hint--bounce hint--right" data-hint="Carpetas"><a href="<?php echo DIR; ?>cloud"><i class="fa fa-folder"></i></a></span>
 
 		</div>
 		<div class="boton <?php echo $messagesSelected ?>">
