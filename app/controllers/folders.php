@@ -420,22 +420,30 @@ class Folders extends \core\controller{
 
 			$fileDecrypted = Seguridad::desencriptar(base64_decode($file), 2);
 
-			if(FS::comprobeFolder($fileDecrypted)){
+			if(empty($fileDecrypted)){
 
-				$name = date('d-m-Y-h-i-s');
-
-				$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
-
-				if(FS::comprimeFolder($fileDecrypted, $name) === true){
-
-					if(!FS::download($name . '.zip'))
-						Url::redirect('folders/'. $carpetaAnterior);
-
-				}
+				Url::redirect('folders/');
 
 			} else {
 
-				FS::download($fileDecrypted, false, false);
+				if(FS::comprobeFolder($fileDecrypted)){
+
+					$name = date('d-m-Y-h-i-s');
+
+					$carpetaAnterior = FS::getAnteriorPath($fileDecrypted);
+
+					if(FS::comprimeFolder($fileDecrypted, $name) === true){
+
+						if(!FS::download($name . '.zip'))
+							Url::redirect('folders/'. $carpetaAnterior);
+
+					}
+
+				} else {
+
+					FS::download($fileDecrypted, false, false);
+
+				}
 
 			}
 
@@ -707,13 +715,13 @@ class Folders extends \core\controller{
 
 					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
 
-					Url::redirect('folders/'. $folder .'/rename/folder');
+					Url::redirect('folders/'. $folder .'/rename');
 
 				} elseif(!FS::rename($pathAnterior, $nombreActual, $nuevoNombre)) {
 
 					$_SESSION['error'] = ['No ha sido posible renombrar la Carpeta.', 'mal'];
 
-					Url::redirect('folders/'. $folder .'/rename/folder');
+					Url::redirect('folders/'. $folder .'/rename');
 
 				} else {
 
@@ -773,13 +781,13 @@ class Folders extends \core\controller{
 
 					$_SESSION['error'] = ['No puedes dejar ningún campo vacío.', 'precaucion'];
 
-					Url::redirect('folders/'. $file .'/rename/file');
+					Url::redirect('folders/'. $file .'/rename');
 
 				} elseif(!FS::rename($pathAnterior['desencriptado'], $nombreActual, $nuevoNombre)){
 
 					$_SESSION['error'] = ['No ha sido posible renombrar el Archivo.', 'mal'];
 
-					Url::redirect('folders/'. $file .'/rename/file');
+					Url::redirect('folders/'. $file .'/rename');
 
 				} else {
 
