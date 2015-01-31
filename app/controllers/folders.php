@@ -129,10 +129,8 @@ class Folders extends \core\controller{
 
 					foreach($list as $file){
 
-						$extension = FS::getExtension($file['name']);
-						$size      = FS::formatBytes($file['size'], 2);
-						$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
-						$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
+						$next     = base64_encode(Seguridad::encriptar($file['path'], 2));
+						$isShared = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
 
 						if($file['type'] == 'dir'){
 
@@ -147,8 +145,8 @@ class Folders extends \core\controller{
 
 							$files[] = [
 								'name' => $file['name'] . $isShared,
-								'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
-								'size' => $size,
+								'icon' => '<div class="file-icon" data-type="'. FS::getExtension($file['name']) .'"></div>',
+								'size' => FS::formatBytes($file['size'], 2),
 								'type' => $file['type'],
 								'next' => $next];
 
@@ -236,8 +234,6 @@ class Folders extends \core\controller{
 						$compartidor       = $file['user'];
 						$nombreCompartidor = $this->_user->getNameSurname($compartidor);
 
-						$extension   = FS::getExtension($file['data']['name']);
-						$size        = FS::formatBytes($file['data']['size'], 2);
 						$next        = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
 						$compartidor = base64_encode(Seguridad::encriptar($file['user'], 2));
 						$father      = base64_encode(Seguridad::encriptar($file['father'], 2));
@@ -256,8 +252,8 @@ class Folders extends \core\controller{
 
 							$files[] = [
 								'name' => $file['data']['name'] . $isShared,
-								'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
-								'size' => $size,
+								'icon' => '<div class="file-icon" data-type="'. FS::getExtension($file['data']['name']) .'"></div>',
+								'size' => FS::formatBytes($file['data']['size'], 2),
 								'type' => $file['data']['type'],
 								'next' => $next .'/'. $compartidor .'/'. $father];
 
