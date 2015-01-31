@@ -1,0 +1,1 @@
+Hay que cambiar la configuración de Apache "post_max_filesize" a 128M para permitir subir muchos archivos.
