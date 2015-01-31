@@ -5,7 +5,7 @@ use core\view,
 	helpers\session as Session,
 	helpers\security as Seguridad;
 
-class About extends \core\controller{
+class Admin extends \core\controller{
 
 	public $username;
 	public $templateData;
@@ -35,9 +35,22 @@ class About extends \core\controller{
 				'isTeacher'     => $this->_user->isTeacher(),
 				'isAdmin'       => $this->_user->isAdmin()];
 
+		// Envitamos ataques.
+			foreach( $_POST as $key => $value ){
+
+				$_POST[$key] = Seguridad::cleanInput($value);
+
+			}
+
+			foreach( $_GET as $key => $value ){
+
+				$_GET[$key] = Seguridad::cleanInput($value);
+
+			}
+
 	}
 
-	public function about()
+	public function index()
 	{
 
 		if(!$this->_user->isLogged()){
@@ -46,17 +59,15 @@ class About extends \core\controller{
 
 		} else {
 
-			$this->_log->add('Ha entrado en la sección "Acerca de".');
-
 			$data = [
-				'title' => 'Acerca De'];
+				'title' => 'Administración'];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/about');
+			View::render('admin/admin');
 			View::rendertemplate('footer');
 
 		}

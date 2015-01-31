@@ -347,8 +347,10 @@ class User extends \core\model {
 	*
 	*/
 
-		public function isStudent($user)
+		public function isStudent($user = '')
 		{
+
+			$user = (empty($user))? $this->getUser() : $user;
 
 			return (self::getRank($user) === 0)? true : false;
 
@@ -364,8 +366,10 @@ class User extends \core\model {
 	*
 	*/
 
-		public function isTeacher($user)
+		public function isTeacher($user = '')
 		{
+
+			$user = (empty($user))? $this->getUser() : $user;
 
 			return (self::getRank($user) === 1)? true : false;
 
@@ -381,8 +385,10 @@ class User extends \core\model {
 	*
 	*/
 
-		public function isAdmin($user)
+		public function isAdmin($user = '')
 		{
+
+			$user = (empty($user))? $this->getUser() : $user;
 
 			return (self::getRank($user) === 2)? true : false;
 
