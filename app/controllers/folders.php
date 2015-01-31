@@ -108,7 +108,7 @@ class Folders extends \core\controller{
 					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
 					$folderToGo = ($folderToGo[0] == '/')? substr($folderToGo, 1) : $folderToGo;
 
-					$previous   = base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2));
+					$previous   = (!empty($folderToGo))? base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2)) : '';
 
 					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
 
@@ -514,73 +514,81 @@ class Folders extends \core\controller{
 				'encriptado'    => $path,
 				'desencriptado' => Seguridad::desencriptar(base64_decode($path), 2)];
 
-			$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
+			if(empty($path['desencriptado']) || $path['desencriptado'] === false){
 
-			if(FS::comprobeFolder($path['desencriptado'])){
-
-				$nombreActual = FS::getFolderName($nombreEspaciado);
-
-				$data = ['title' => 'Compartir Carpeta'];
-
-				$section = [
-					'folder' => [
-						'encrypted'  => $path['encriptado'],
-						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
-						'actualName' => $nombreActual]];
-
-				$templateView = 'user/folders/folder/share';
+				Url::redirect('folders/');
 
 			} else {
 
-				$extension    = FS::getExtension($nombreEspaciado);
-				$nombreActual = FS::getFileName($nombreEspaciado);
-				$nombreActual = str_replace('.' . $extension, '', $nombreActual);
+				$nombreEspaciado = str_replace('_', ' ', $path['desencriptado']);
 
-				$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($path['desencriptado']), 2));
+				if(FS::comprobeFolder($path['desencriptado'])){
 
-				$data = ['title' => 'Compartir Archivo'];
+					$nombreActual = FS::getFolderName($nombreEspaciado);
 
-				$section = [
-					'file'         => [
-						'encrypted'  => $path['encriptado'],
-						'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
-						'actualName' => $nombreActual],
-					'folderOfFile' => $carpetaContenida];
+					$data = ['title' => 'Compartir Carpeta'];
 
-				$templateView = 'user/folders/file/share';
+					$section = [
+						'folder' => [
+							'encrypted'  => $path['encriptado'],
+							'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+							'actualName' => $nombreActual]];
 
-			}
+					$templateView = 'user/folders/folder/share';
 
-			if($this->_fs->isShared($path['desencriptado'])){
+				} else {
 
-				$users = $this->_fs->getUsersShared($path['desencriptado']);
-				$names = [];
+					$extension    = FS::getExtension($nombreEspaciado);
+					$nombreActual = FS::getFileName($nombreEspaciado);
+					$nombreActual = str_replace('.' . $extension, '', $nombreActual);
 
-				foreach($users as $user){
+					$carpetaContenida = base64_encode(Seguridad::encriptar(FS::getFolderOfFile($path['desencriptado']), 2));
 
-					$nombreApellidos = $this->_user->getNameSurname($user);
+					$data = ['title' => 'Compartir Archivo'];
 
-					$names[] = [
-						'hash'        => $this->_user->getHash($user),
-						'name'        => $nombreApellidos,
-						'circleColor' => $this->_user->getCircleColor($user),
-						'inicial'     => utf8_encode($nombreApellidos['nombre'][0])];
+					$section = [
+						'file'         => [
+							'encrypted'  => $path['encriptado'],
+							'decrypted'  => (empty($nombreEspaciado))? '/' : $nombreEspaciado,
+							'actualName' => $nombreActual],
+						'folderOfFile' => $carpetaContenida];
+
+					$templateView = 'user/folders/file/share';
 
 				}
 
-				$section['sharedWith'] = $names;
+				if($this->_fs->isShared($path['desencriptado'])){
+
+					$users = $this->_fs->getUsersShared($path['desencriptado']);
+					$names = [];
+
+					foreach($users as $user){
+
+						$nombreApellidos = $this->_user->getNameSurname($user);
+
+						$names[] = [
+							'hash'        => $this->_user->getHash($user),
+							'name'        => $nombreApellidos,
+							'circleColor' => $this->_user->getCircleColor($user),
+							'inicial'     => utf8_encode($nombreApellidos['nombre'][0])];
+
+					}
+
+					$section['sharedWith'] = $names;
+
+				}
+
+				$section['token'] = NoCSRF::generate('token');
+
+				Session::set('template', 'user');
+
+				View::rendertemplate('header', $data);
+				View::rendertemplate('topHeader', $this->templateData);
+				View::rendertemplate('aside', $this->templateData);
+				View::render($templateView, $section);
+				View::rendertemplate('footer');
 
 			}
-
-			$section['token'] = NoCSRF::generate('token');
-
-			Session::set('template', 'user');
-
-			View::rendertemplate('header', $data);
-			View::rendertemplate('topHeader', $this->templateData);
-			View::rendertemplate('aside', $this->templateData);
-			View::render($templateView, $section);
-			View::rendertemplate('footer');
 
 		}
 
@@ -604,8 +612,7 @@ class Folders extends \core\controller{
 
 			/* Obtención del nombre del Usuario */
 
-				$user = $this->_user->getUser($hash);
-				$name = $this->_user->getNameSurname($user);
+				$name = $this->_user->getNameSurname($this->_user->getUser($hash));
 				$name = $name['nombre'] .' '. $name['apellidos'];
 
 			/* Fin de la Obtención del nombre del Usuario */
