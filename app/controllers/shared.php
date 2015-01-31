@@ -216,14 +216,23 @@ class Shared extends \core\controller{
 
 				if(FS::comprimeFolder($fileDecrypted, $name) === true){
 
-					if(!FS::download($name . '.zip'))
+					if(FS::download($name . '.zip')){
+
+						$this->_log->add('Ha descargado una Carpeta Compartida.');
+
+					} else {
+
 						Url::redirect('folders/'. $carpetaAnterior);
+
+					}
 
 				}
 
 			} else {
 
 				FS::download($fileDecrypted, false, false);
+
+				$this->_log->add('Ha descargado un Archivo Compartido.');
 
 			}
 
