@@ -2,7 +2,7 @@
 
 	<?php if($isTeacher === true || $isAdmin === true): ?>
 
-		<div class="preferences_button brown"><a href="<?php echo DIR; ?>admin"><i class="fa fa-shield"></i><span>Administración</span></a></div>
+		<div class="preferences_button red"><a href="<?php echo DIR; ?>admin"><i class="fa fa-shield"></i><span>Administración</span></a></div>
 
 	<?php endif; ?>
 
