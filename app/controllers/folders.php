@@ -90,7 +90,7 @@ class Folders extends \core\controller{
 |-----------------------------------------------
 */
 
-	public function folders($folder = '')
+	public function folders($folder = '', $userCompartidor = '', $father = '')
 	{
 
 		if(!$this->_user->isLogged()){
@@ -99,77 +99,192 @@ class Folders extends \core\controller{
 
 		} else {
 
-			$this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
+			$actualSection = Url::actual();
 
-			// SISTEMA DE ARCHIVOS
+			if(preg_match('/^folders*/i', $actualSection)){
 
-				if(!empty($folder)){
+				$this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
 
-					$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
-					$folderToGo = ($folderToGo[0] == '/')? substr($folderToGo, 1) : $folderToGo;
+				// SISTEMA DE ARCHIVOS
 
-					$previous   = (!empty($folderToGo))? base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2)) : '';
+					if(!empty($folder)){
 
-					$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
+						$folderToGo = Seguridad::desencriptar(base64_decode($folder), 2);
+						$folderToGo = ($folderToGo[0] == '/')? substr($folderToGo, 1) : $folderToGo;
 
-				} else {
+						$previous   = (!empty($folderToGo))? base64_encode(Seguridad::encriptar(FS::getAnteriorPath($folderToGo), 2)) : '';
 
-					$list = FS::listFolders();
-
-				}
-
-				$actual = base64_encode(Seguridad::encriptar($folderToGo, 2));
-
-				$files = [];
-
-				foreach($list as $file){
-
-					$extension = FS::getExtension($file['name']);
-					$size      = FS::formatBytes($file['size'], 2);
-					$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
-					$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
-
-					if($file['type'] == 'dir'){
-
-						$files[] = [
-							'name'     => $file['name'] . $isShared,
-							'icon'     => '<i class="fa fa-folder"></i>',
-							'size'     => '',
-							'type'     => $file['type'],
-							'next'     => $next,
-							'previous' => $previous];
+						$list = (FS::comprobeFolder($folderToGo))? FS::listFolders($folderToGo) : FS::listFolders();
 
 					} else {
 
-						$files[] = [
-							'name' => $file['name'] . $isShared,
-							'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
-							'size' => $size,
-							'type' => $file['type'],
-							'next' => $next];
+						$list = FS::listFolders();
+
+					}
+
+					$actual = base64_encode(Seguridad::encriptar($folderToGo, 2));
+
+					$files = [];
+
+					foreach($list as $file){
+
+						$extension = FS::getExtension($file['name']);
+						$size      = FS::formatBytes($file['size'], 2);
+						$next      = base64_encode(Seguridad::encriptar($file['path'], 2));
+						$isShared  = ($this->_fs->isShared($file['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i>' : '';
+
+						if($file['type'] == 'dir'){
+
+							$files[] = [
+								'name'     => $file['name'] . $isShared,
+								'icon'     => '<i class="fa fa-folder"></i>',
+								'size'     => '',
+								'type'     => $file['type'],
+								'next'     => $next,
+								'previous' => $previous];
+
+						} else {
+
+							$files[] = [
+								'name' => $file['name'] . $isShared,
+								'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
+								'size' => $size,
+								'type' => $file['type'],
+								'next' => $next];
+
+						}
+
+					}
+
+					$nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($folderToGo));
+
+				// FIN DEL SISTEMA DE ARCHIVOS
+
+				$data                    = ['title' => 'Carpetas Privadas'];
+				$section['titleSection'] = (empty($nombreCarpetaActual))? 'Carpeta Personal' : $nombreCarpetaActual;
+				$templateView            = 'user/folders/folders';
+
+			} elseif(preg_match('/^shared*/i', $actualSection)) {
+
+				$this->_log->add('Ha entrado en la sección "Carpetas Compartidas".');
+
+				$myHash = $this->_user->getHash($this->username);
+
+				$foldersShared = $this->_fs->getPathsSharedWithMe($myHash);
+
+				$toShow = [];
+
+				if(empty($folder) || empty($userCompartidor)){
+
+					foreach($foldersShared as $par){
+
+						$user = $this->_user->getUser($par['hash']);
+
+						FS::personalFS($user);
+
+						$anterior = FS::getAnteriorPath($par['path']);
+
+						$folders = FS::listFolders($anterior);
+
+						foreach($folders as $dir){
+
+							if($this->_fs->isSharedWithMe($par['hash'], $myHash, $dir['path'])){
+								
+								$toShow[] = [
+									'user'   => $user,
+									'data'   => $dir,
+									'father' => $dir['path']];
+							
+							}
+
+						}
+
+					}
+
+				} else {
+
+					$desencriptado = [
+						'folder'          => Seguridad::desencriptar(base64_decode($folder), 2),
+						'userCompartidor' => Seguridad::desencriptar(base64_decode($userCompartidor), 2),
+						'father'          => Seguridad::desencriptar(base64_decode($father), 2)];
+
+					$desencriptado['folder'] = ($desencriptado['folder'][0] == '/')? substr($desencriptado['folder'], 1) : $desencriptado['folder'];
+
+					$previous = ($desencriptado['folder'] == $desencriptado['father'])? '' : base64_encode(Seguridad::encriptar(FS::getAnteriorPath($desencriptado['folder']), 2));
+					$previous = (empty($previous))? $previous : $previous .'/'. $userCompartidor .'/'. $father;
+
+					FS::personalFS($desencriptado['userCompartidor']);
+
+					$folders = FS::listFolders($desencriptado['folder']);
+
+					foreach($folders as $dir){
+								
+						$toShow[] = [
+							'user'   => $desencriptado['userCompartidor'],
+							'data'   => $dir,
+							'father' => $desencriptado['father']];
 
 					}
 
 				}
 
-				$nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($folderToGo));
+					$files = [];
 
-			// FIN DEL SISTEMA DE ARCHIVOS
+					foreach($toShow as $file){
 
-			$data = ['title' => 'Carpetas Privadas'];
+						$compartidor       = $file['user'];
+						$nombreCompartidor = $this->_user->getNameSurname($compartidor);
 
-			$section = [
-				'files'        => $files,
-				'previous'     => $previous,
-				'actual'       => $actual,
-				'titleSection' => (empty($nombreCarpetaActual))? 'Carpeta Personal' : $nombreCarpetaActual];
-			
+						$extension   = FS::getExtension($file['data']['name']);
+						$size        = FS::formatBytes($file['data']['size'], 2);
+						$next        = base64_encode(Seguridad::encriptar($file['data']['path'], 2));
+						$compartidor = base64_encode(Seguridad::encriptar($file['user'], 2));
+						$father      = base64_encode(Seguridad::encriptar($file['father'], 2));
+						$isShared    = ($this->_fs->isShared($file['data']['path']))? '<i class="fa fa-share-alt" title="Compartido" style="margin-left: 10px"></i> <i>'. $nombreCompartidor['nombre'] .' '. $nombreCompartidor['apellidos'] .'</i>' : '';
+
+						if($file['data']['type'] == 'dir'){
+
+							$files[] = [
+								'name'     => $file['data']['name'] . $isShared,
+								'icon'     => '<i class="fa fa-folder"></i>',
+								'size'     => '',
+								'type'     => $file['data']['type'],
+								'next'     => $next .'/'. $compartidor .'/'. $father,
+								'previous' => $previous];
+
+						} else {
+
+							$files[] = [
+								'name' => $file['data']['name'] . $isShared,
+								'icon' => '<div class="file-icon" data-type="'. $extension .'"></div>',
+								'size' => $size,
+								'type' => $file['data']['type'],
+								'next' => $next .'/'. $compartidor .'/'. $father];
+
+						}
+
+					}
+
+					$nombreCarpetaActual = str_replace('_', ' ', FS::getFolderName($desencriptado['folder']));
+
+				// FIN DEL SISTEMA DE ARCHIVOS
+
+				$data                    = ['title' => 'Carpetas Compartidas'];
+				$section['titleSection'] = (empty($nombreCarpetaActual))? 'Carpetas Compartidas Conmigo' : $nombreCarpetaActual;
+				$templateView            = 'user/folders/shared';
+
+			}
+
+			$section['files']    = $files;
+			$section['previous'] = $previous;
+			$section['actual']   = $actual;
+
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/folders/folders', $section);
+			View::render($templateView, $section);
 			View::rendertemplate('footer');
 
 		}
@@ -191,7 +306,7 @@ class Folders extends \core\controller{
 
 		} else {
 
-			$this->_log->add('Ha entrado en la sección "Carpetas Privadas".');
+			$this->_log->add('Ha entrado en la sección "Carpetas Compartidas".');
 
 			$myHash = $this->_user->getHash($this->username);
 
