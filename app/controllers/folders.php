@@ -481,7 +481,7 @@ class Folders extends \core\controller{
 
 				if(count($_FILES) == 0){
 
-					$_SESSION['error'] = ['Ha ocurrido un error al subir los archivos.', 'mal'];
+					$_SESSION['error'] = ['El tamaño total de todos los archivos supera los 128MB.', 'mal'];
 
 				} else {
 
