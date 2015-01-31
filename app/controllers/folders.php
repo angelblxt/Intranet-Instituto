@@ -139,7 +139,6 @@ class Folders extends \core\controller{
 							$files[] = [
 								'name'     => $file['name'] . $isShared,
 								'icon'     => '<i class="fa fa-folder"></i>',
-								'size'     => '',
 								'type'     => $file['type'],
 								'next'     => $next,
 								'previous' => $previous];
@@ -249,7 +248,6 @@ class Folders extends \core\controller{
 							$files[] = [
 								'name'     => $file['data']['name'] . $isShared,
 								'icon'     => '<i class="fa fa-folder"></i>',
-								'size'     => '',
 								'type'     => $file['data']['type'],
 								'next'     => $next .'/'. $compartidor .'/'. $father,
 								'previous' => $previous];
