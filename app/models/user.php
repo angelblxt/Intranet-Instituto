@@ -315,6 +315,79 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de devolver el Rango de un Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return int Número de Rango [0: Alumno, 1: Profesor, 2: Administrador].
+	*
+	*/
+
+		public function getRank($user)
+		{
+
+			$hash = self::getHash($user);
+
+			$rank = $this->_db->select("SELECT rango FROM rangos WHERE hash_usuario = :hashUsuario LIMIT 1", [':hashUsuario' => $hash])[0]->rango;
+			$rank = Seguridad::desencriptar($rank, 1);
+
+			return (int)$rank;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si el usuario es Alumno.
+	*
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si es cierto, FALSE si no.
+	*
+	*/
+
+		public function isStudent($user)
+		{
+
+			return (self::getRank($user) === 0)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si el usuario es Profesor.
+	*
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si es cierto, FALSE si no.
+	*
+	*/
+
+		public function isTeacher($user)
+		{
+
+			return (self::getRank($user) === 1)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si el usuario es Administrador.
+	*
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si es cierto, FALSE si no.
+	*
+	*/
+
+		public function isAdmin($user)
+		{
+
+			return (self::getRank($user) === 2)? true : false;
+
+		}
+
 }
 
 ?>
