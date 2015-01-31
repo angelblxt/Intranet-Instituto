@@ -31,7 +31,9 @@ class Preferences extends \core\controller{
 				'nombre'        => $nombreApellidos,
 				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
 				'colorCirculo'  => $this->_user->getCircleColor(),
-				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false];
+				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false,
+				'isTeacher'     => $this->_user->isTeacher(),
+				'isAdmin'       => $this->_user->isAdmin()];
 
 		// Envitamos ataques.
 			foreach( $_POST as $key => $value ){
