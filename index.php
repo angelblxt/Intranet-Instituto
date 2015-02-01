@@ -114,7 +114,9 @@ use \core\router,
 	Router::any('shared/(:any)/(:any)/(:any)/download', 			'\controllers\folders@download');
 
 // Rutas de las secciones de "Admin".
-	Router::any('admin', 											'\controllers\admin@index');
+	Router::any('admin', 											'\controllers\admin\admin@index');
+	Router::any('admin/logs', 										'\controllers\admin\logs@logs');
+	Router::any('admin/logs/download', 								'\controllers\admin\logs@download');
 
 	// Router::any('register', '\controllers\user@register');
 
