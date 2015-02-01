@@ -91,6 +91,23 @@ class Log extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de eliminar los LOGS.
+	*
+	* @return boolean TRUE si se han eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete()
+		{
+
+			$this->_db->truncate('logs');
+
+			return true;
+
+		}
+
 }
 
 ?>
