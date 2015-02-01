@@ -1,4 +1,4 @@
-<?php namespace controllers;
+<?php namespace controllers\admin;
 use core\view,
 	helpers\nocsrf as NoCSRF,
 	helpers\url as Url,
@@ -26,14 +26,19 @@ class Admin extends \core\controller{
 
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
+			$isTeacher       = $this->_user->isTeacher();
+			$isAdmin         = $this->_user->isAdmin();
 
 			$this->templateData = [
 				'nombre'        => $nombreApellidos,
 				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
 				'colorCirculo'  => $this->_user->getCircleColor(),
 				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false,
-				'isTeacher'     => $this->_user->isTeacher(),
-				'isAdmin'       => $this->_user->isAdmin()];
+				'isTeacher'     => $isTeacher,
+				'isAdmin'       => $isAdmin];
+
+			if($isTeacher === false && $isAdmin === false)
+				Url::redirect('');
 
 		// Envitamos ataques.
 			foreach( $_POST as $key => $value ){
@@ -61,13 +66,17 @@ class Admin extends \core\controller{
 
 			$data = [
 				'title' => 'Administración'];
+
+			$section = [
+				'isTeacher' => $this->templateData['isTeacher'],
+				'isAdmin'   => $this->templateData['isAdmin']];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('admin/admin');
+			View::render('admin/admin', $section);
 			View::rendertemplate('footer');
 
 		}
