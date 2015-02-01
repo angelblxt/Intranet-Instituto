@@ -36,6 +36,7 @@
 			<td> <i class="fa fa-user"></i> Usuario </td>
 			<td> <i class="fa fa-graduation-cap"></i> Curso </td>
 			<td> <i class="fa fa-calendar"></i> Fecha de Registro </td>
+			<td> <i class="fa fa-cogs"></i> Acciones </td>
 
 		</tr>
 
@@ -47,6 +48,12 @@
 				<td> <?php echo $user['user'] ?> </td>
 				<td> <?php echo $user['curso'] ?> </td>
 				<td> <?php echo $user['tiempo_registro'] ?> </td>
+				<td>
+
+					<a href="<?php echo DIR ?>admin/users/<?php echo $user['hash'] ?>/edit"><i class="fa fa-pencil"></i> Editar</a> 
+					<a href="<?php echo DIR ?>admin/users/<?php echo $user['hash'] ?>/delete/0" style="margin-left: 10px"><i class="fa fa-times-circle"></i> Eliminar</a>
+
+				</td>
 
 			</tr>
 
