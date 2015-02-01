@@ -154,6 +154,57 @@ class Users extends \core\controller{
 
 	}
 
+	public function add()
+	{
+
+		if(!$this->_user->isLogged() || $this->templateData['isAdmin'] === false){
+
+			Url::redirect('');
+
+		} else {
+
+			$data = ['title' => 'Nuevo Usuario'];
+
+			$section = [
+				'token'  => NoCSRF::generate('token'),
+				'cursos' => System::cursos(),
+				'rangos' => ['Alumno', 'Profesor', 'Administrador']];
+
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('admin/users/add', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function import()
+	{
+
+		if(!$this->_user->isLogged() || $this->templateData['isAdmin'] === false){
+
+			Url::redirect('');
+
+		} else {
+
+			$data = ['title' => 'Importar Usuarios'];
+
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('admin/users/import');
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
 	public function delete($hash, $confirm = 0)
 	{
 
@@ -292,6 +343,144 @@ class Users extends \core\controller{
 				Url::redirect('');
 
 			}
+
+		}
+
+	}
+
+	public function postAddUser()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			if(isset($_POST['add']) && NoCSRF::check( 'token', $_POST, false, 60*10, false ) === true){
+
+				$nombre    = $_POST['nombre'];
+				$apellidos = $_POST['apellidos'];
+				$user      = $_POST['user'];
+				$password1 = $_POST['password1'];
+				$password2 = $_POST['password2'];
+				$curso     = $_POST['curso'];
+				$rango     = $_POST['rango'];
+
+				if(empty($nombre) || empty($apellidos) || empty($user) || empty($password1) || empty($password2) || empty($curso) || $rango == NULL){
+
+					$_SESSION['error'] = ['No puedes dejar ningún campo vacío', 'precaucion'];
+
+				} else {
+
+					if($this->_user->checkUser($user)){
+
+						$_SESSION['error'] = ['El Usuario <b>'. $user .'</b> ya existe en el Sistema.', 'mal'];
+
+					} elseif(md5($password1) != md5($password2)) {
+
+						$_SESSION['error'] = ['Las Contraseñas especificadas no coinciden.', 'mal'];
+
+					} elseif(!$this->_user->register($user, $nombre, $apellidos, $password2, $curso, $rango)) {
+
+						$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+					} else {
+
+						$this->_log->add('Ha registrado un Usuario nuevo en el Sistema "'. $user .'".');
+
+						$_SESSION['error'] = ['<b>'. $nombre .' '. $apellidos .'</b> ha sido registrada en el Sistema.', 'bien'];
+
+					}
+
+				}
+
+				Url::redirect('admin/users/new');
+
+			} else {
+
+				Url::redirect('');
+
+			}
+
+		}
+
+	}
+
+	public function postImportUsers()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			if(count($_FILES) == 0){
+
+				$_SESSION['error'] = ['El tamaño total de todos los archivos supera los 128MB.', 'mal'];
+
+			} else {
+
+				$validFormats = ['csv'];
+				$maxFileSize  = MAX_SIZE * 1024 * 1024;
+
+				$errors = 0;
+
+				if($_FILES['csv']['error'] != 0){
+
+					$_SESSION['error'] = ['Error al subir el Archivo.', 'mal'];
+
+				} else {
+
+					if($_FILES['csv']['size'] > $maxFileSize){
+
+						$_SESSION['error'] = ['El archivo CSV supera el tamaño permitido de <b>'. MAX_SIZE .'MB</b>.', 'mal'];
+
+					} elseif(!in_array(pathinfo($_FILES['csv']['name'], PATHINFO_EXTENSION), $validFormats)) {
+
+						$_SESSION['error'] = ['El formato del archivo no es válido. Solo se permiten archivos <b>CSV</b>.', 'mal'];
+
+					} else {
+
+						if(($handle = fopen($_FILES['csv']['tmp_name'], 'r')) !== false){
+
+							$total = 0;
+							$exito = 0;
+
+							while(($data = fgetcsv($handle, 0, ';')) !== false){
+
+								$user = $data[0];
+
+								if(!$this->_user->checkUser($user)){
+
+									$this->_user->register($user, $data[1], $data[2], 'IESBENJAMINJARNES', $data[3], 0);
+
+									$exito++;
+
+								}
+
+								$total++;
+
+							}
+
+							fclose($handle);
+
+							$_SESSION['error'] = [$exito .' de '. $total .' usuarios registrados exitosamente.', 'bien'];
+
+						} else {
+
+							$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+						}
+
+					}
+
+				}
+
+			}
+
+			Url::redirect('admin/users/import');
 
 		}
 
