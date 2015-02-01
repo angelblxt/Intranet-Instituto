@@ -1,7 +1,8 @@
 <?php namespace models;
 
 use \helpers\security as Seguridad,
-	\helpers\session as Session;
+	\helpers\session as Session,
+	\helpers\system as System;
 	 
 class User extends \core\model {
 
@@ -12,44 +13,6 @@ class User extends \core\model {
 		parent::__construct();
 
 	}
-
-	/**
-	*
-	* Método encargado de registrar un Usuario.
-	*
-	*/
-
-		/* public function register()
-		{
-
-			$hash = md5(microtime());
-
-			$usuarios = [
-				'hash'              => $hash,
-				'usuario'           => Seguridad::encriptar('aamellas', 1),
-				'password'          => hash('sha512', 'k9cbbzk9cbbz'),
-				'color_circulo'     => '607d8b',
-				'tiempo_registrado' => time()];
-
-			$rangos = [
-				'hash'         => md5(microtime()),
-				'hash_usuario' => $hash,
-				'rango'        => Seguridad::encriptar('0', 1)];
-
-			$datos_personales = [
-				'hash'         => md5(microtime()),
-				'hash_usuario' => $hash,
-				'nombre'       => 'Adolfo',
-				'apellidos'    => 'Amella Santolaria',
-				'curso'        => Seguridad::encriptar('BA1', 1)];
-
-			$this->_db->insert('usuarios', $usuarios);
-			$this->_db->insert('rangos', $rangos);
-			$this->_db->insert('datos_personales', $datos_personales);
-
-			echo 'Ok!';
-
-		} */
 
 	/**
 	*
@@ -87,6 +50,28 @@ class User extends \core\model {
 		{
 
 			return (hash('sha512', $password) === self::getPassword($user))? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si un usuario ya existe en la 
+	* Base de Datos.
+	*
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si existe, FALSE si no.
+	*
+	*/
+
+		public function checkUser($user)
+		{
+
+			$user = Seguridad::encriptar($user, 1);
+
+			$result = $this->_db->num("SELECT COUNT(*) FROM usuarios WHERE usuario = '". $user ."' LIMIT 1");
+
+			return ($result > 0)? true : false;
 
 		}
 
@@ -551,6 +536,57 @@ class User extends \core\model {
 			$resultRangos          = $this->_db->update('rangos', $rangos, ['hash_usuario' => $hash]);
 
 			return ($resultUsuarios && $resultDatosPersonales && $resultRangos)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de registrar un nuevo Usuario.
+	*
+	* @param string $user Usuario.
+	* @param string $nombre Nombre.
+	* @param string $apellidos Apellidos.
+	* @param string $password Contraseña.
+	* @param string $curso Curso.
+	* @param string $rango Rango.
+	*
+	* @return boolean TRUE si se registra, FALSE si no.
+	*
+	*/
+
+		public function register($user, $nombre, $apellidos, $password, $curso, $rango)
+		{
+
+			$hashUsuario = md5(microtime());
+
+			$colores       = System::circleColors();
+			$numeroColores = count($colores);
+			$circleColor   = $colores[mt_rand(0, $numeroColores - 1)];
+
+			$usuarios = [
+				'hash'              => $hashUsuario,
+				'usuario'           => Seguridad::encriptar($user, 1),
+				'password'          => hash('sha512', $password),
+				'color_circulo'     => $circleColor,
+				'tiempo_registrado' => time()];
+
+			$rangos = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hashUsuario,
+				'rango'        => Seguridad::encriptar($rango, 1)];
+
+			$datosPersonales = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hashUsuario,
+				'nombre'       => $nombre,
+				'apellidos'    => $apellidos,
+				'curso'        => Seguridad::encriptar($curso, 1)];
+
+			$resultUsuarios        = $this->_db->insert('usuarios', $usuarios);
+			$resultRangos          = $this->_db->insert('rangos', $rangos);
+			$resultDatosPersonales = $this->_db->insert('datos_personales', $datosPersonales);
+
+			return ($resultUsuarios && $resultRangos && $resultDatosPersonales)? true : false;
 
 		}
 
