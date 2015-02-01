@@ -182,6 +182,28 @@ class User extends \core\model {
 
 	/**
 	*
+	* Método encargado de obtener el Curso del Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return string Curso.
+	*
+	*/
+
+		public function getCurso($user)
+		{
+
+			$hash = self::getHash($user);
+
+			$curso = $this->_db->select("SELECT curso FROM datos_personales WHERE hash_usuario = :hashUsuario", [':hashUsuario' => $hash])[0]->curso;
+			$curso = Seguridad::desencriptar($curso, 1);
+
+			return $curso;
+
+		}
+
+	/**
+	*
 	* Método encargado de cambiar la Contraseña de un Usuario.
 	*
 	* @param string $user Usuario.
@@ -391,6 +413,42 @@ class User extends \core\model {
 			$user = (empty($user))? $this->getUser() : $user;
 
 			return (self::getRank($user) === 2)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener todos los Usuarios registrados.
+	*
+	* @param string $limit LIMIT SQL.
+	*
+	* @return array Datos de los Usuarios.
+	*
+	*/
+
+		public function getUsers($limit = '')
+		{
+
+			$users = $this->_db->select("SELECT hash, usuario, tiempo_registrado FROM usuarios ORDER BY id DESC ". $limit);
+
+			return $users;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el número de Usuarios registrados.
+	*
+	* @return int Número de Usuarios registrados. 
+	*
+	*/
+
+		public function getNumber()
+		{
+
+			$number = $this->_db->num("SELECT COUNT(*) FROM usuarios");
+
+			return (int)$number;
 
 		}
 
