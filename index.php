@@ -76,6 +76,7 @@ use \core\router,
     Router::post('post/upload/(:any)', 								'\controllers\folders@upload');
     Router::post('post/share', 										'\controllers\folders@postShare');
     Router::post('post/editUser',									'\controllers\admin\users@postEditUser');
+    Router::post('post/addUser',									'\controllers\admin\users@postAddUser');
 
 // Rutas primarias del Usuario.
 	Router::any('', 												'\controllers\login@index');
@@ -125,8 +126,7 @@ use \core\router,
 	Router::any('admin/users/download',								'\controllers\admin\users@download');
 	Router::any('admin/users/(:any)/edit',							'\controllers\admin\users@edit');
 	Router::any('admin/users/(:any)/delete/(:num)',					'\controllers\admin\users@delete');
-
-	// Router::any('register', '\controllers\user@register');
+	Router::any('admin/users/new',									'\controllers\admin\users@add');
 
 //if no route found
 Router::error('\core\error@index');

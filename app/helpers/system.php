@@ -125,6 +125,23 @@ class System {
 
 	/**
 	*
+	* Método encargado de devolver los colores del Círculo en array.
+	*
+	* @return array Colores del Círculo.
+	*
+	*/
+
+		public function circleColors()
+		{
+
+			$colors = ['f44336', 'e91e63', '9c27b0', '3f51b5', '009688', '8bc34a', 'ff9800', '795548', '607d8b'];
+
+			return $colors;
+
+		}
+
+	/**
+	*
 	* Método encargado de devolver array con los Cursos.
 	*
 	* @return array ['ID Curso' => 'Nombre Legible'].
