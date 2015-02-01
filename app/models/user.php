@@ -452,6 +452,52 @@ class User extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de eliminar a un Usuario del Sistema.
+	*
+	* @param string $hash HASH del Usuario.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete($hash)
+		{
+
+			// Cargamos Modelos
+			$fs = new \models\filesystem();
+
+			// RANGOS //
+			$rangos = $this->_db->delete('rangos', ['hash_usuario' => $hash]);
+
+			// MENSAJES PRIVADOS //
+			$mensajesPrivados1 = $this->_db->delete('mensajes_privados', ['hash_emisor' => $hash]);
+			$mensajesPrivados2 = $this->_db->delete('mensajes_privados', ['hash_receptor' => $hash]);
+
+			// DATOS PERSONALES //
+			$datosPersonales = $this->_db->delete('datos_personales', ['hash_usuario' => $hash]);
+
+			// COMPARTICIONES //
+			$comparticiones = $fs->getPathsSharedWithMe($hash);
+
+			if(count($comparticiones) > 0){
+
+				foreach($comparticiones as $comparticion){
+
+					$fs->unshare($comparticion['path'], $hash);
+
+				}
+
+			}
+
+			// USUARIO //
+			$usuario = $this->_db->delete('usuarios', ['hash' => $hash]);
+
+			return ($rangos && $mensajesPrivados1 && $mensajesPrivados2 && $datosPersonales && $usuario)? true : false;
+
+		}
+
 }
 
 ?>

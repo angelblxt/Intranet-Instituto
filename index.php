@@ -122,6 +122,8 @@ use \core\router,
 
 	Router::any('admin/users',										'\controllers\admin\users@users');
 	Router::any('admin/users/download',								'\controllers\admin\users@download');
+	Router::any('admin/users/(:any)/edit',							'\controllers\admin\users@edit');
+	Router::any('admin/users/(:any)/delete/(:num)',					'\controllers\admin\users@delete');
 
 	// Router::any('register', '\controllers\user@register');
 
