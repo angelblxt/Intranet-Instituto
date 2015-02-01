@@ -115,9 +115,12 @@ use \core\router,
 
 // Rutas de las secciones de "Admin".
 	Router::any('admin', 											'\controllers\admin\admin@index');
+
 	Router::any('admin/logs', 										'\controllers\admin\logs@logs');
 	Router::any('admin/logs/download', 								'\controllers\admin\logs@download');
 	Router::any('admin/logs/delete/(:num)',							'\controllers\admin\logs@delete');
+
+	Router::any('admin/users',										'\controllers\admin\users@users');
 
 	// Router::any('register', '\controllers\user@register');
 
