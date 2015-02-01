@@ -125,6 +125,80 @@ class System {
 
 	/**
 	*
+	* Método encargado de devolver array con los Cursos.
+	*
+	* @return array ['ID Curso' => 'Nombre Legible'].
+	*
+	*/
+
+		public function cursos()
+		{
+
+			$cursos = [
+				'1A'   => '1º ESO A',
+				'1B'   => '1º ESO B',
+				'1C'   => '1º ESO C',
+				'1D'   => '1º ESO D',
+				'1E'   => '1º ESO E',
+				'1F'   => '1º ESO F',
+				'1G'   => '1º ESO G',
+				'1PAB' => '1º P.A.B',
+				'2A'   => '2º ESO A',
+				'2B'   => '2º ESO B',
+				'2C'   => '2º ESO C',
+				'2D'   => '2º ESO D',
+				'2E'   => '2º ESO E',
+				'2F'   => '2º ESO F',
+				'2PAB' => '2º P.A.B',
+				'3A'   => '3º ESO A',
+				'3B'   => '3º ESO B',
+				'3C'   => '3º ESO C',
+				'3D'   => '3ª ESO D',
+				'3DIV' => '3º Diversificación',
+				'4A'   => '4º ESO A',
+				'4B'   => '4º ESO B',
+				'4C'   => '4º ESO C',
+				'4DIV' => '4º Diversificación',
+				'B1A'  => '1º Bachillerato A',
+				'B1B1' => '1º Bachillerato B1',
+				'B1B2' => '1º Bachillerato B2',
+				'B1C'  => '1º Bachillerato C',
+				'B2A'  => '2º Bachillerato A',
+				'B2B1' => '2º Bachillerato B1',
+				'B2B2' => '2º Bachillerato B2',
+				'B2C'  => '2º Bachillerato C',
+				'CAD1' => '1º G.M Administrativo',
+				'CAD2' => '2º G.M Administrativo',
+				'CEL1' => '1º G.M Electricidad',
+				'CEL2' => '2º G.M Electricidad',
+				'PCA1' => '1º P.C.P.I Administrativo',
+				'PCE1' => '1º P.C.P.I Electricidad'];
+
+			return $cursos;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el nombre legible de un Rango.
+	*
+	* @param int $rango Número del Rango (0, 1, 2).
+	*
+	* @return string Nombre del Rango.
+	*
+	*/
+
+		public function getRango($rango)
+		{
+
+			$rangos = ['Alumno', 'Profesor', 'Administrador'];
+
+			return $rangos[$rango];
+
+		}
+
+	/**
+	*
 	* Método encargado de obtener el Texto Legible del Curso de un Alumno.
 	*
 	* @param string $curso Curso en formato no legible. Ej.: BA1.
@@ -136,50 +210,9 @@ class System {
 		public function getCurso($curso)
 		{
 
-			switch( $curso ){
+			$cursos = self::cursos();
 
-				case '1A'  : $nombre = '1º ESO A'; break;
-				case '1B'  : $nombre = '1º ESO B'; break;
-				case '1C'  : $nombre = '1º ESO C'; break;
-				case '1D'  : $nombre = '1º ESO D'; break;
-				case '1E'  : $nombre = '1º ESO E'; break;
-				case '1F'  : $nombre = '1º ESO F'; break;
-				case '1G'  : $nombre = '1º ESO G'; break;
-				case '1PAB': $nombre = '1º P.A.B'; break;
-				case '2A'  : $nombre = '2º ESO A'; break;
-				case '2B'  : $nombre = '2º ESO B'; break;
-				case '2C'  : $nombre = '2º ESO C'; break;
-				case '2D'  : $nombre = '2º ESO D'; break;
-				case '2E'  : $nombre = '2º ESO E'; break;
-				case '2F'  : $nombre = '2º ESO F'; break;
-				case '2PAB': $nombre = '2º P.A.B'; break;
-				case '3A'  : $nombre = '3º ESO A'; break;
-				case '3B'  : $nombre = '3º ESO B'; break;
-				case '3C'  : $nombre = '3º ESO C'; break;
-				case '3D'  : $nombre = '3ª ESO D'; break;
-				case '3DIV': $nombre = '3º Diversificación'; break;
-				case '4A'  : $nombre = '4º ESO A'; break;
-				case '4B'  : $nombre = '4º ESO B'; break;
-				case '4C'  : $nombre = '4º ESO C'; break;
-				case '4DIV': $nombre = '4º Diversificación'; break;
-				case 'B1A' : $nombre = '1º Bachillerato A'; break;
-				case 'B1B1': $nombre = '1º Bachillerato B1'; break;
-				case 'B1B2': $nombre = '1º Bachillerato B2'; break;
-				case 'B1C' : $nombre = '1º Bachillerato C'; break;
-				case 'B2A' : $nombre = '2º Bachillerato A'; break;
-				case 'B2B1': $nombre = '2º Bachillerato B1'; break;
-				case 'B2B2': $nombre = '2º Bachillerato B2'; break;
-				case 'B2C' : $nombre = '2º Bachillerato C'; break;
-				case 'CAD1': $nombre = '1º G.M Administrativo'; break;
-				case 'CAD2': $nombre = '2º G.M Administrativo'; break;
-				case 'CEL1': $nombre = '1º G.M Electricidad'; break;
-				case 'CEL2': $nombre = '2º G.M Electricidad'; break;
-				case 'PCA1': $nombre = '1º P.C.P.I Administrativo'; break;
-				case 'PCE1': $nombre = '1º P.C.P.I Electricidad'; break;
-
-			}
-
-				return $nombre;
+			return $cursos[$curso];
 
 		}
 
