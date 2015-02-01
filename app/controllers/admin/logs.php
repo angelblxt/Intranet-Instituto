@@ -105,7 +105,7 @@ class Logs extends \core\controller{
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('admin/logs', $section);
+			View::render('admin/logs/list', $section);
 			View::rendertemplate('footer');
 
 		}
@@ -143,6 +143,47 @@ class Logs extends \core\controller{
 			}
 
 			CSV::exportar('logs-'. date('dmYHis'));
+
+		}
+
+	}
+
+	public function delete($confirm = 0)
+	{
+
+		if(!$this->_user->isLogged() || $this->templateData['isAdmin'] === false){
+
+			Url::redirect('');
+
+		} else {
+
+			if($confirm == 0){
+
+				$data = ['title' => 'Vaciar Registro'];
+
+				Session::set('template', 'user');
+
+				View::rendertemplate('header', $data);
+				View::rendertemplate('topHeader', $this->templateData);
+				View::rendertemplate('aside', $this->templateData);
+				View::render('admin/logs/delete');
+				View::rendertemplate('footer');
+
+			} else {
+
+				if($this->_log->delete()){
+
+					$_SESSION['error'] = ['El Registro de Actividad ha sido vaciado.', 'bien'];
+
+				} else {
+
+					$_SESSION['error'] = ['¡Oops! Hubo un error al intentar hacer eso.', 'mal'];
+
+				}
+
+				Url::redirect('admin/logs');
+
+			}
 
 		}
 
