@@ -53,6 +53,27 @@ class User extends \core\model {
 
 	/**
 	*
+	* Método encargado de obtener la contraseña de un Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return string Contraseña.
+	*
+	*/
+
+		public function getPassword($user)
+		{
+
+			$user = Seguridad::encriptar($user, 1);
+
+			$pass = $this->_db->select("SELECT password FROM usuarios WHERE usuario = '". $user ."' LIMIT 1")[0]->password;
+
+			return $pass;
+
+		}
+
+	/**
+	*
 	* Método encargado de comprobar un usuario y una contraseña.
 	*
 	* @param string $user Usuario.
@@ -65,11 +86,7 @@ class User extends \core\model {
 		public function checkPassword($user, $password)
 		{
 
-			$user = Seguridad::encriptar($user, 1);
-
-			$truePassword = $this->_db->select("SELECT password FROM usuarios WHERE usuario = '". $user ."' LIMIT 1")[0]->password;
-
-			return (hash('sha512', $password) === $truePassword)? true : false;
+			return (hash('sha512', $password) === self::getPassword($user))? true : false;
 
 		}
 
@@ -495,6 +512,45 @@ class User extends \core\model {
 			$usuario = $this->_db->delete('usuarios', ['hash' => $hash]);
 
 			return ($rangos && $mensajesPrivados1 && $mensajesPrivados2 && $datosPersonales && $usuario)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de editar un usuario.
+	*
+	* @param string $hash HASH del Usuario.
+	* @param string $user Nuevo Usuario.
+	* @param string $nombre Nombre.
+	* @param string $apellidos Apellidos.
+	* @param string $password Contraseña.
+	* @param string $curso Curso.
+	* @param string $rango Rango.
+	*
+	* @return boolean TRUE si se ha editado, FALSE si no.
+	*
+	*/
+
+		public function edit($hash, $user, $nombre, $apellidos, $password, $curso, $rango)
+		{
+
+			$usuarios = [
+				'usuario'  => Seguridad::encriptar($user, 1),
+				'password' => $password];
+
+			$datosPersonales = [
+				'nombre'    => $nombre,
+				'apellidos' => $apellidos,
+				'curso'     => Seguridad::encriptar($curso, 1)];
+
+			$rangos = [
+				'rango' => Seguridad::encriptar($rango, 1)];
+
+			$resultUsuarios        = $this->_db->update('usuarios', $usuarios, ['hash' => $hash]);
+			$resultDatosPersonales = $this->_db->update('datos_personales', $datosPersonales, ['hash_usuario' => $hash]);
+			$resultRangos          = $this->_db->update('rangos', $rangos, ['hash_usuario' => $hash]);
+
+			return ($resultUsuarios && $resultDatosPersonales && $resultRangos)? true : false;
 
 		}
 
