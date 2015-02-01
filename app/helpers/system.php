@@ -123,4 +123,64 @@ class System {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener el Texto Legible del Curso de un Alumno.
+	*
+	* @param string $curso Curso en formato no legible. Ej.: BA1.
+	*
+	* @return string Curso en formato legible.
+	*
+	*/
+
+		public function getCurso($curso)
+		{
+
+			switch( $curso ){
+
+				case '1A'  : $nombre = '1º ESO A'; break;
+				case '1B'  : $nombre = '1º ESO B'; break;
+				case '1C'  : $nombre = '1º ESO C'; break;
+				case '1D'  : $nombre = '1º ESO D'; break;
+				case '1E'  : $nombre = '1º ESO E'; break;
+				case '1F'  : $nombre = '1º ESO F'; break;
+				case '1G'  : $nombre = '1º ESO G'; break;
+				case '1PAB': $nombre = '1º P.A.B'; break;
+				case '2A'  : $nombre = '2º ESO A'; break;
+				case '2B'  : $nombre = '2º ESO B'; break;
+				case '2C'  : $nombre = '2º ESO C'; break;
+				case '2D'  : $nombre = '2º ESO D'; break;
+				case '2E'  : $nombre = '2º ESO E'; break;
+				case '2F'  : $nombre = '2º ESO F'; break;
+				case '2PAB': $nombre = '2º P.A.B'; break;
+				case '3A'  : $nombre = '3º ESO A'; break;
+				case '3B'  : $nombre = '3º ESO B'; break;
+				case '3C'  : $nombre = '3º ESO C'; break;
+				case '3D'  : $nombre = '3ª ESO D'; break;
+				case '3DIV': $nombre = '3º Diversificación'; break;
+				case '4A'  : $nombre = '4º ESO A'; break;
+				case '4B'  : $nombre = '4º ESO B'; break;
+				case '4C'  : $nombre = '4º ESO C'; break;
+				case '4DIV': $nombre = '4º Diversificación'; break;
+				case 'B1A' : $nombre = '1º Bachillerato A'; break;
+				case 'B1B1': $nombre = '1º Bachillerato B1'; break;
+				case 'B1B2': $nombre = '1º Bachillerato B2'; break;
+				case 'B1C' : $nombre = '1º Bachillerato C'; break;
+				case 'B2A' : $nombre = '2º Bachillerato A'; break;
+				case 'B2B1': $nombre = '2º Bachillerato B1'; break;
+				case 'B2B2': $nombre = '2º Bachillerato B2'; break;
+				case 'B2C' : $nombre = '2º Bachillerato C'; break;
+				case 'CAD1': $nombre = '1º G.M Administrativo'; break;
+				case 'CAD2': $nombre = '2º G.M Administrativo'; break;
+				case 'CEL1': $nombre = '1º G.M Electricidad'; break;
+				case 'CEL2': $nombre = '2º G.M Electricidad'; break;
+				case 'PCA1': $nombre = '1º P.C.P.I Administrativo'; break;
+				case 'PCE1': $nombre = '1º P.C.P.I Electricidad'; break;
+
+			}
+
+				return $nombre;
+
+		}
+
 }
