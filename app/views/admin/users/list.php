@@ -24,6 +24,9 @@
 
 		<button onClick="location.href='<?php echo DIR ?>admin'" class="button button-rounded button-flat-primary" style="margin: 10px 0"><i class="fa fa-chevron-left" style="margin-left: -4px"></i> Volver atrás</button><br/>
 
+		<button onClick="location.href='<?php echo DIR ?>admin/users/new'" class="button button-rounded button-flat-action" style="margin: 10px 0"><i class="fa fa-plus-circle" style="margin-left: -4px"></i> Nuevo Usuario</button>
+		<button onClick="location.href='<?php echo DIR ?>admin/users/import'" class="button button-rounded button-flat-action" style="margin: 10px 0"><i class="fa fa-upload" style="margin-left: -4px"></i> Importar Usuarios CSV</button><br/>
+
 		<?php echo $page_links; ?><br/>
 
 	</center>
