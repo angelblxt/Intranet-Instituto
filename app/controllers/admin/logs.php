@@ -67,6 +67,8 @@ class Logs extends \core\controller{
 
 			// PAGINADOR DE LOGS //
 
+				$this->_log->add('Ha entrado en la sección de "Actividad de Usuarios".');
+
 				$pages = new \helpers\paginator('30', 'p');
 
 				$logs = $this->_log->get($pages->get_limit());
@@ -144,6 +146,8 @@ class Logs extends \core\controller{
 
 			CSV::exportar('logs-'. date('dmYHis'));
 
+			$this->_log->add('Ha descargado un archivo CSV de la Actividad de los Usuarios.');
+
 		}
 
 	}
@@ -172,6 +176,8 @@ class Logs extends \core\controller{
 			} else {
 
 				if($this->_log->delete()){
+
+					$this->_log->add('Ha vaciado la tabla de Actividad de Usuarios.');
 
 					$_SESSION['error'] = ['El Registro de Actividad ha sido vaciado.', 'bien'];
 
