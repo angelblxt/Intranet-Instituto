@@ -89,7 +89,8 @@ class Users extends \core\controller{
 							'user'              => $username,
 							'tiempo_registrado' => date('d/m/Y H:i', $user->tiempo_registrado),
 							'name'              => $this->_user->getNameSurname($username),
-							'curso'             => System::getCurso($this->_user->getCurso($username))];
+							'curso'             => System::getCurso($this->_user->getCurso($username)),
+							'rango'             => System::getRango($this->_user->getRank($username))];
 
 					}
 
