@@ -35,6 +35,7 @@
 
 		<tr class="titulo">
 
+			<td> <i class="fa fa-shield"></i> Tipo </td>
 			<td> <i class="fa fa-user"></i> Alumno </td>
 			<td> <i class="fa fa-user"></i> Usuario </td>
 			<td> <i class="fa fa-graduation-cap"></i> Curso </td>
@@ -47,7 +48,8 @@
 
 			<tr>
 
-				<td> <?php echo $user['name']['nombre'] ?> <?php echo $user['name']['apellidos'] ?> </td>
+				<td> <?php echo $user['rango'] ?> </td>
+				<td> <b> <?php echo $user['name']['nombre'] ?> <?php echo $user['name']['apellidos'] ?> </b> </td>
 				<td> <?php echo $user['user'] ?> </td>
 				<td> <?php echo $user['curso'] ?> </td>
 				<td> <?php echo $user['tiempo_registro'] ?> </td>
