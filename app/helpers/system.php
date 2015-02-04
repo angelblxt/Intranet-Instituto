@@ -233,4 +233,42 @@ class System {
 
 		}
 
+	/**
+	*
+	* Método encargado de mostrar frases aleatorias.
+	*
+	* @param string $nombre Nombre de la Persona.
+	*
+	* @return string Frase con el Nombre.
+	*
+	*/
+
+		public function getFrases($nombre)
+		{
+
+			$frases = [
+				'Si no te esfuerzas hasta el máximo, ¿cómo sabrás donde está tu límite?',
+				'Cada fracaso supone un capítulo más en la historia de nuestra vida y una lección que nos ayuda a crecer. No te dejes desanimar por los fracasos. Aprende de ellos, y sigue adelante.',
+				'Somos dueños de nuestro destino. Somos capitanes de nuestra alma.',
+				'Nuestra gloria más grande no consiste en no haberse caido nunca, sino en haberse levantado después de cada caída.',
+				'Las oportunidades no son producto de la casualidad, mas bien son resultado del trabajo',
+				'Para empezar un gran proyecto, hace falta valentía. Para terminar un gran proyecto, hace falta perseverancia.',
+				'Si quieres triunfar, no te quedes mirando la escalera. Empieza a subir, escalón por escalón, hasta que llegues arriba.',
+				'Cuando pierdes, no te fijes en lo que has perdido, sino en lo que te queda por ganar.',
+				'Utiliza tu imaginación, no para asustarte, sino para inspirarte a lograr lo inimaginable.',
+				'Si no sueñas, nunca encontrarás lo que hay más allá de tus sueños.',
+				'Es duro fracasar en algo, pero es mucho peor no haberlo intentado.',
+				'Nunca se ha logrado nada sin entusiasmo.',
+				'Los grandes espíritus siempre han tenido que luchar contra la oposición feroz de mentes mediocres.',
+				'Saber no es suficiente; tenemos que aplicarlo.',
+				'Tener voluntad no es suficiente: tenemos que implementarla.'];
+
+			$numero = count($frases);
+
+			$frase = $frases[mt_rand(0, $numero - 1)];
+
+			echo '<div style="color: rgba(0,0,0, .8); display: inline">'. $nombre .',</div> '. $frase;
+
+		}
+
 }
