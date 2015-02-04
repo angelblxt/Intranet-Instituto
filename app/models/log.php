@@ -55,6 +55,59 @@ class Log extends \core\model {
 
 		}
 
+	/**
+	*
+	* Método encargado de obtener los LOGS.
+	*
+	* @param string $limit LIMIT SQL.
+	*
+	* @return array LOGS.
+	*
+	*/
+
+		public function get($limit = '')
+		{
+
+			$logs = $this->_db->select("SELECT * FROM logs ORDER BY id DESC ". $limit);
+
+			return $logs;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el número de LOGS.
+	*
+	* @return int Número de LOGS. 
+	*
+	*/
+
+		public function number()
+		{
+
+			$number = $this->_db->num("SELECT COUNT(*) FROM logs");
+
+			return (int)$number;
+
+		}
+
+	/**
+	*
+	* Método encargado de eliminar los LOGS.
+	*
+	* @return boolean TRUE si se han eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete()
+		{
+
+			$this->_db->truncate('logs');
+
+			return true;
+
+		}
+
 }
 
 ?>
