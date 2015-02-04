@@ -337,6 +337,14 @@ a{
 
 		}
 
+			.container .contenido .box.frases{
+
+				font-family: 'Raleway';
+				font-size: 15px;
+				color: rgba(0,0,0, .6);
+
+			}
+
 		.container .contenido .copyright{
 
 			text-align: center;
