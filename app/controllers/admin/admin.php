@@ -64,6 +64,8 @@ class Admin extends \core\controller{
 
 		} else {
 
+			$this->_log->add('Ha entrado en el Panel de Administración.');
+
 			$data = [
 				'title' => 'Administración'];
 

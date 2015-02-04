@@ -241,11 +241,4 @@ class User extends \core\controller{
 
 	}
 
-	/* public function register()
-	{
-
-		$this->_user->register();
-
-	} */
-
 }
