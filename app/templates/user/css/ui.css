@@ -1155,3 +1155,17 @@ a{
 		display: none;
 
 	}
+
+.easterEgg{
+
+	font-size: 4px;
+	color: rgba(0,0,0, .5);
+
+}
+
+	.easterEgg a{
+
+		color: rgba(0,0,0, .5);
+		cursor: default;
+
+	}

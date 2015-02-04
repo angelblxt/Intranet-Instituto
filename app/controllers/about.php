@@ -49,14 +49,41 @@ class About extends \core\controller{
 			$this->_log->add('Ha entrado en la sección "Acerca de".');
 
 			$data = [
-				'title' => 'Acerca De'];
+				'title'  => 'Acerca De'];
+
+			$section = [
+				'easter' => ((date('d') % 2) == 0)? true : false];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/about');
+			View::render('user/about', $section);
+			View::rendertemplate('footer');
+
+		}
+
+	}
+
+	public function easter()
+	{
+
+		if(!$this->_user->isLogged()){
+
+			Url::redirect('');
+
+		} else {
+
+			$data = [
+				'title'  => '???'];
+			
+			Session::set('template', 'user');
+
+			View::rendertemplate('header', $data);
+			View::rendertemplate('topHeader', $this->templateData);
+			View::rendertemplate('aside', $this->templateData);
+			View::render('user/easter');
 			View::rendertemplate('footer');
 
 		}
