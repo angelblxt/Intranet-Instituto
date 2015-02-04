@@ -7,6 +7,12 @@
 
 	<div class="about_developer">Desarrollado por <b>Ángel Querol García</b></div>
 
+	<?php if($easter === true): ?>
+
+		<div class="easterEgg"><a href="<?php echo DIR ?>easter">Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click Hazme Click</a></div>
+
+	<?php endif; ?>
+
 	<div class="about_socialNetworks">
 
 		<span class="hint--rounded hint--bounce hint--bottom" data-hint="Correo Electrónico">
