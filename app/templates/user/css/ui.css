@@ -128,7 +128,7 @@ a{
 
 		background-color: #2F2F2F;
 
-		height: 100%;
+		height: auto;
 		width: 100px;
 		min-height: 100%;
 
@@ -342,6 +342,7 @@ a{
 			text-align: center;
 
 			margin-top: -10px;
+			padding-bottom: 20px;
 
 			color: rgba(0,0,0, .4);
 
@@ -1152,5 +1153,19 @@ a{
 		margin-bottom: 15px;
 
 		display: none;
+
+	}
+
+.easterEgg{
+
+	font-size: 4px;
+	color: rgba(0,0,0, .5);
+
+}
+
+	.easterEgg a{
+
+		color: rgba(0,0,0, .5);
+		cursor: default;
 
 	}
