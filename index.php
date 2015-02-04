@@ -87,6 +87,9 @@ use \core\router,
 // Ruta de la sección de "Acerca De".
 	Router::any('about', 											'\controllers\about@about');
 
+// Ruta de la sección de "Huevo de Pascua".
+	Router::any('easter',											'\controllers\about@easter');
+
 // Ruta de las secciones de "Preferencias".
 	Router::any('preferences', 										'\controllers\preferences@preferences');
 	Router::any('preferences/password', 							'\controllers\preferences@password');
