@@ -1,11 +1,11 @@
-<?php namespace controllers;
+<?php namespace controllers\admin;
 use core\view,
 	helpers\nocsrf as NoCSRF,
 	helpers\url as Url,
 	helpers\session as Session,
 	helpers\security as Seguridad;
 
-class About extends \core\controller{
+class Admin extends \core\controller{
 
 	public $username;
 	public $templateData;
@@ -26,18 +26,36 @@ class About extends \core\controller{
 
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
+			$isTeacher       = $this->_user->isTeacher();
+			$isAdmin         = $this->_user->isAdmin();
 
 			$this->templateData = [
 				'nombre'        => $nombreApellidos,
 				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
 				'colorCirculo'  => $this->_user->getCircleColor(),
 				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false,
-				'isTeacher'     => $this->_user->isTeacher(),
-				'isAdmin'       => $this->_user->isAdmin()];
+				'isTeacher'     => $isTeacher,
+				'isAdmin'       => $isAdmin];
+
+			if($isTeacher === false && $isAdmin === false)
+				Url::redirect('');
+
+		// Envitamos ataques.
+			foreach( $_POST as $key => $value ){
+
+				$_POST[$key] = Seguridad::cleanInput($value);
+
+			}
+
+			foreach( $_GET as $key => $value ){
+
+				$_GET[$key] = Seguridad::cleanInput($value);
+
+			}
 
 	}
 
-	public function about()
+	public function index()
 	{
 
 		if(!$this->_user->isLogged()){
@@ -46,17 +64,21 @@ class About extends \core\controller{
 
 		} else {
 
-			$this->_log->add('Ha entrado en la sección "Acerca de".');
+			$this->_log->add('Ha entrado en el Panel de Administración.');
 
 			$data = [
-				'title' => 'Acerca De'];
+				'title' => 'Administración'];
+
+			$section = [
+				'isTeacher' => $this->templateData['isTeacher'],
+				'isAdmin'   => $this->templateData['isAdmin']];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/about');
+			View::render('admin/admin', $section);
 			View::rendertemplate('footer');
 
 		}

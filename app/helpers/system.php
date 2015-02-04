@@ -123,4 +123,114 @@ class System {
 
 		}
 
+	/**
+	*
+	* Método encargado de devolver los colores del Círculo en array.
+	*
+	* @return array Colores del Círculo.
+	*
+	*/
+
+		public function circleColors()
+		{
+
+			$colors = ['f44336', 'e91e63', '9c27b0', '3f51b5', '009688', '8bc34a', 'ff9800', '795548', '607d8b'];
+
+			return $colors;
+
+		}
+
+	/**
+	*
+	* Método encargado de devolver array con los Cursos.
+	*
+	* @return array ['ID Curso' => 'Nombre Legible'].
+	*
+	*/
+
+		public function cursos()
+		{
+
+			$cursos = [
+				'1A'   => '1º ESO A',
+				'1B'   => '1º ESO B',
+				'1C'   => '1º ESO C',
+				'1D'   => '1º ESO D',
+				'1E'   => '1º ESO E',
+				'1F'   => '1º ESO F',
+				'1G'   => '1º ESO G',
+				'1PAB' => '1º P.A.B',
+				'2A'   => '2º ESO A',
+				'2B'   => '2º ESO B',
+				'2C'   => '2º ESO C',
+				'2D'   => '2º ESO D',
+				'2E'   => '2º ESO E',
+				'2F'   => '2º ESO F',
+				'2PAB' => '2º P.A.B',
+				'3A'   => '3º ESO A',
+				'3B'   => '3º ESO B',
+				'3C'   => '3º ESO C',
+				'3D'   => '3ª ESO D',
+				'3DIV' => '3º Diversificación',
+				'4A'   => '4º ESO A',
+				'4B'   => '4º ESO B',
+				'4C'   => '4º ESO C',
+				'4DIV' => '4º Diversificación',
+				'B1A'  => '1º Bachillerato A',
+				'B1B1' => '1º Bachillerato B1',
+				'B1B2' => '1º Bachillerato B2',
+				'B1C'  => '1º Bachillerato C',
+				'B2A'  => '2º Bachillerato A',
+				'B2B1' => '2º Bachillerato B1',
+				'B2B2' => '2º Bachillerato B2',
+				'B2C'  => '2º Bachillerato C',
+				'CAD1' => '1º G.M Administrativo',
+				'CAD2' => '2º G.M Administrativo',
+				'CEL1' => '1º G.M Electricidad',
+				'CEL2' => '2º G.M Electricidad',
+				'PCA1' => '1º P.C.P.I Administrativo',
+				'PCE1' => '1º P.C.P.I Electricidad'];
+
+			return $cursos;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el nombre legible de un Rango.
+	*
+	* @param int $rango Número del Rango (0, 1, 2).
+	*
+	* @return string Nombre del Rango.
+	*
+	*/
+
+		public function getRango($rango)
+		{
+
+			$rangos = ['Alumno', 'Profesor', 'Administrador'];
+
+			return $rangos[$rango];
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el Texto Legible del Curso de un Alumno.
+	*
+	* @param string $curso Curso en formato no legible. Ej.: BA1.
+	*
+	* @return string Curso en formato legible.
+	*
+	*/
+
+		public function getCurso($curso)
+		{
+
+			$cursos = self::cursos();
+
+			return $cursos[$curso];
+
+		}
+
 }
