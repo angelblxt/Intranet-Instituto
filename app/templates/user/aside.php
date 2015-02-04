@@ -99,5 +99,7 @@
 </aside>
 
 <div class="contenido">
+
+	<div class="box frases"><?php echo \helpers\system::getFrases($nombre['nombre']); ?></div>
 					
 	<div class="box">
