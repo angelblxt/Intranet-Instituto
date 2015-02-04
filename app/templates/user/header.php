@@ -36,7 +36,7 @@
 
 			?>
 
-			<!-- <link rel="icon" href="<?php echo IMG; ?>favicon.ico" sizes="16x16 24x24 32x32 64x64" type="image/vnd.microsoft.icon"> -->
+			<link rel="icon" type="image/png" href="<?php echo \helpers\url::template_path(); ?>img/favicon.png">
 
 		</head>
 

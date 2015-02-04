@@ -31,7 +31,9 @@ class User extends \core\controller{
 				'nombre'        => $nombreApellidos,
 				'inicial'       => utf8_encode($nombreApellidos['nombre'][0]),
 				'colorCirculo'  => $this->_user->getCircleColor(),
-				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false];
+				'shake_message' => ($this->_message->number_unreaded() > 0)? true : false,
+				'isTeacher'     => $this->_user->isTeacher(),
+				'isAdmin'       => $this->_user->isAdmin()];
 
 		// Envitamos ataques.
 			foreach( $_POST as $key => $value ){
@@ -102,13 +104,17 @@ class User extends \core\controller{
 
 			$data = [
 				'title' => 'Inicio'];
+
+			$section = [
+				'isTeacher' => $this->templateData['isTeacher'],
+				'isAdmin'   => $this->templateData['isAdmin']];
 			
 			Session::set('template', 'user');
 
 			View::rendertemplate('header', $data);
 			View::rendertemplate('topHeader', $this->templateData);
 			View::rendertemplate('aside', $this->templateData);
-			View::render('user/me');
+			View::render('user/me', $section);
 			View::rendertemplate('footer');
 
 		}
@@ -234,12 +240,5 @@ class User extends \core\controller{
 		echo json_encode($return);
 
 	}
-
-	/* public function register()
-	{
-
-		$this->_user->register();
-
-	} */
 
 }
