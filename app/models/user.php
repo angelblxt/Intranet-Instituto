@@ -1,7 +1,8 @@
 <?php namespace models;
 
 use \helpers\security as Seguridad,
-	\helpers\session as Session;
+	\helpers\session as Session,
+	\helpers\system as System;
 	 
 class User extends \core\model {
 
@@ -15,41 +16,24 @@ class User extends \core\model {
 
 	/**
 	*
-	* Método encargado de registrar un Usuario.
+	* Método encargado de obtener la contraseña de un Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return string Contraseña.
 	*
 	*/
 
-		/* public function register()
+		public function getPassword($user)
 		{
 
-			$hash = md5(microtime());
+			$user = Seguridad::encriptar($user, 1);
 
-			$usuarios = [
-				'hash'              => $hash,
-				'usuario'           => Seguridad::encriptar('aamellas', 1),
-				'password'          => hash('sha512', 'k9cbbzk9cbbz'),
-				'color_circulo'     => '607d8b',
-				'tiempo_registrado' => time()];
+			$pass = $this->_db->select("SELECT password FROM usuarios WHERE usuario = '". $user ."' LIMIT 1")[0]->password;
 
-			$rangos = [
-				'hash'         => md5(microtime()),
-				'hash_usuario' => $hash,
-				'rango'        => Seguridad::encriptar('0', 1)];
+			return $pass;
 
-			$datos_personales = [
-				'hash'         => md5(microtime()),
-				'hash_usuario' => $hash,
-				'nombre'       => 'Adolfo',
-				'apellidos'    => 'Amella Santolaria',
-				'curso'        => Seguridad::encriptar('BA1', 1)];
-
-			$this->_db->insert('usuarios', $usuarios);
-			$this->_db->insert('rangos', $rangos);
-			$this->_db->insert('datos_personales', $datos_personales);
-
-			echo 'Ok!';
-
-		} */
+		}
 
 	/**
 	*
@@ -65,11 +49,29 @@ class User extends \core\model {
 		public function checkPassword($user, $password)
 		{
 
+			return (hash('sha512', $password) === self::getPassword($user))? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de comprobar si un usuario ya existe en la 
+	* Base de Datos.
+	*
+	* @param string $user Usuario.
+	*
+	* @return boolean TRUE si existe, FALSE si no.
+	*
+	*/
+
+		public function checkUser($user)
+		{
+
 			$user = Seguridad::encriptar($user, 1);
 
-			$truePassword = $this->_db->select("SELECT password FROM usuarios WHERE usuario = '". $user ."' LIMIT 1")[0]->password;
+			$result = $this->_db->num("SELECT COUNT(*) FROM usuarios WHERE usuario = '". $user ."' LIMIT 1");
 
-			return (hash('sha512', $password) === $truePassword)? true : false;
+			return ($result > 0)? true : false;
 
 		}
 
@@ -177,6 +179,28 @@ class User extends \core\model {
 				'apellidos' => $data->apellidos];
 
 			return $nombre;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el Curso del Usuario.
+	*
+	* @param string $user Usuario.
+	*
+	* @return string Curso.
+	*
+	*/
+
+		public function getCurso($user)
+		{
+
+			$hash = self::getHash($user);
+
+			$curso = $this->_db->select("SELECT curso FROM datos_personales WHERE hash_usuario = :hashUsuario", [':hashUsuario' => $hash])[0]->curso;
+			$curso = Seguridad::desencriptar($curso, 1);
+
+			return $curso;
 
 		}
 
@@ -391,6 +415,178 @@ class User extends \core\model {
 			$user = (empty($user))? $this->getUser() : $user;
 
 			return (self::getRank($user) === 2)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener todos los Usuarios registrados.
+	*
+	* @param string $limit LIMIT SQL.
+	*
+	* @return array Datos de los Usuarios.
+	*
+	*/
+
+		public function getUsers($limit = '')
+		{
+
+			$users = $this->_db->select("SELECT hash, usuario, tiempo_registrado FROM usuarios ORDER BY id DESC ". $limit);
+
+			return $users;
+
+		}
+
+	/**
+	*
+	* Método encargado de obtener el número de Usuarios registrados.
+	*
+	* @return int Número de Usuarios registrados. 
+	*
+	*/
+
+		public function getNumber()
+		{
+
+			$number = $this->_db->num("SELECT COUNT(*) FROM usuarios");
+
+			return (int)$number;
+
+		}
+
+	/**
+	*
+	* Método encargado de eliminar a un Usuario del Sistema.
+	*
+	* @param string $hash HASH del Usuario.
+	*
+	* @return boolean TRUE si se ha eliminado, FALSE si no.
+	*
+	*/
+
+		public function delete($hash)
+		{
+
+			// Cargamos Modelos
+			$fs = new \models\filesystem();
+
+			// RANGOS //
+			$rangos = $this->_db->delete('rangos', ['hash_usuario' => $hash]);
+
+			// MENSAJES PRIVADOS //
+			$mensajesPrivados1 = $this->_db->delete('mensajes_privados', ['hash_emisor' => $hash]);
+			$mensajesPrivados2 = $this->_db->delete('mensajes_privados', ['hash_receptor' => $hash]);
+
+			// DATOS PERSONALES //
+			$datosPersonales = $this->_db->delete('datos_personales', ['hash_usuario' => $hash]);
+
+			// COMPARTICIONES //
+			$comparticiones = $fs->getPathsSharedWithMe($hash);
+
+			if(count($comparticiones) > 0){
+
+				foreach($comparticiones as $comparticion){
+
+					$fs->unshare($comparticion['path'], $hash);
+
+				}
+
+			}
+
+			// USUARIO //
+			$usuario = $this->_db->delete('usuarios', ['hash' => $hash]);
+
+			return ($rangos && $mensajesPrivados1 && $mensajesPrivados2 && $datosPersonales && $usuario)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de editar un usuario.
+	*
+	* @param string $hash HASH del Usuario.
+	* @param string $user Nuevo Usuario.
+	* @param string $nombre Nombre.
+	* @param string $apellidos Apellidos.
+	* @param string $password Contraseña.
+	* @param string $curso Curso.
+	* @param string $rango Rango.
+	*
+	* @return boolean TRUE si se ha editado, FALSE si no.
+	*
+	*/
+
+		public function edit($hash, $user, $nombre, $apellidos, $password, $curso, $rango)
+		{
+
+			$usuarios = [
+				'usuario'  => Seguridad::encriptar($user, 1),
+				'password' => $password];
+
+			$datosPersonales = [
+				'nombre'    => $nombre,
+				'apellidos' => $apellidos,
+				'curso'     => Seguridad::encriptar($curso, 1)];
+
+			$rangos = [
+				'rango' => Seguridad::encriptar($rango, 1)];
+
+			$resultUsuarios        = $this->_db->update('usuarios', $usuarios, ['hash' => $hash]);
+			$resultDatosPersonales = $this->_db->update('datos_personales', $datosPersonales, ['hash_usuario' => $hash]);
+			$resultRangos          = $this->_db->update('rangos', $rangos, ['hash_usuario' => $hash]);
+
+			return ($resultUsuarios && $resultDatosPersonales && $resultRangos)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de registrar un nuevo Usuario.
+	*
+	* @param string $user Usuario.
+	* @param string $nombre Nombre.
+	* @param string $apellidos Apellidos.
+	* @param string $password Contraseña.
+	* @param string $curso Curso.
+	* @param string $rango Rango.
+	*
+	* @return boolean TRUE si se registra, FALSE si no.
+	*
+	*/
+
+		public function register($user, $nombre, $apellidos, $password, $curso, $rango)
+		{
+
+			$hashUsuario = md5(microtime());
+
+			$colores       = System::circleColors();
+			$numeroColores = count($colores);
+			$circleColor   = $colores[mt_rand(0, $numeroColores - 1)];
+
+			$usuarios = [
+				'hash'              => $hashUsuario,
+				'usuario'           => Seguridad::encriptar($user, 1),
+				'password'          => hash('sha512', $password),
+				'color_circulo'     => $circleColor,
+				'tiempo_registrado' => time()];
+
+			$rangos = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hashUsuario,
+				'rango'        => Seguridad::encriptar($rango, 1)];
+
+			$datosPersonales = [
+				'hash'         => md5(microtime()),
+				'hash_usuario' => $hashUsuario,
+				'nombre'       => $nombre,
+				'apellidos'    => $apellidos,
+				'curso'        => Seguridad::encriptar($curso, 1)];
+
+			$resultUsuarios        = $this->_db->insert('usuarios', $usuarios);
+			$resultRangos          = $this->_db->insert('rangos', $rangos);
+			$resultDatosPersonales = $this->_db->insert('datos_personales', $datosPersonales);
+
+			return ($resultUsuarios && $resultRangos && $resultDatosPersonales)? true : false;
 
 		}
 
