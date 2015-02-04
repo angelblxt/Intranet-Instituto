@@ -497,6 +497,15 @@ a{
 
 		}
 
+		.preferences_button.red a:hover i, .preferences_button.red a:hover span{
+
+			color: #f44336;
+
+			-webkit-transition: all 0.1s linear;
+					transition: all 0.1s linear;
+
+		}
+
 .preferences_color_button{
 
 	width: 100%;
