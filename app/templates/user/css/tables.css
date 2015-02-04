@@ -15,12 +15,6 @@
 
 	}
 
-		table.restricciones{
-
-			width: auto;
-
-		}
-
 		table tr.titulo td{
 
 			background-color: rgba(0,0,0, .06);
@@ -80,15 +74,6 @@
 			color : rgba(0,0,0, .8);
 
 		}
-
-			table.restricciones tr td{
-
-				width  : 20px;
-				height : 20px;
-				
-				padding: 0;
-
-			}
 
 			table tr td.last{
 
