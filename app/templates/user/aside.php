@@ -22,6 +22,10 @@
 
 		$aboutSelected = 'seleccionado';
 
+	} elseif(preg_match('/^admin*/i', $actual)){
+
+		$adminSelected = 'seleccionado';
+
 	}
 
 ?>
@@ -52,6 +56,15 @@
 			<span class="hint--rounded hint--bounce hint--right" data-hint="Inicio"><a href="<?php echo DIR; ?>user"><i class="fa fa-home"></i></a></span>
 						
 		</div>
+		<?php if($isTeacher === true || $isAdmin === true): ?>
+
+			<div class="boton <?php echo $adminSelected ?>">
+							
+				<span class="hint--rounded hint--bounce hint--right" data-hint="Administración"><a href="<?php echo DIR; ?>admin"><i class="fa fa-shield"></i></a></span>
+
+			</div>
+
+		<?php endif; ?>
 		<div class="boton <?php echo $foldersSelected ?>">
 							
 			<span class="hint--rounded hint--bounce hint--right" data-hint="Carpetas"><a href="<?php echo DIR; ?>cloud"><i class="fa fa-folder"></i></a></span>

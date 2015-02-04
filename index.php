@@ -75,6 +75,9 @@ use \core\router,
     Router::post('post/rename/file', 								'\controllers\folders@postRenameFile');
     Router::post('post/upload/(:any)', 								'\controllers\folders@upload');
     Router::post('post/share', 										'\controllers\folders@postShare');
+    Router::post('post/editUser',									'\controllers\admin\users@postEditUser');
+    Router::post('post/addUser',									'\controllers\admin\users@postAddUser');
+    Router::post('post/importUsers',								'\controllers\admin\users@postImportUsers');
 
 // Rutas primarias del Usuario.
 	Router::any('', 												'\controllers\login@index');
@@ -113,7 +116,19 @@ use \core\router,
 	Router::any('shared/(:any)/(:any)/(:any)', 						'\controllers\folders@folders');
 	Router::any('shared/(:any)/(:any)/(:any)/download', 			'\controllers\folders@download');
 
-	// Router::any('register', '\controllers\user@register');
+// Rutas de las secciones de "Admin".
+	Router::any('admin', 											'\controllers\admin\admin@index');
+
+	Router::any('admin/logs', 										'\controllers\admin\logs@logs');
+	Router::any('admin/logs/download', 								'\controllers\admin\logs@download');
+	Router::any('admin/logs/delete/(:num)',							'\controllers\admin\logs@delete');
+
+	Router::any('admin/users',										'\controllers\admin\users@users');
+	Router::any('admin/users/download',								'\controllers\admin\users@download');
+	Router::any('admin/users/(:any)/edit',							'\controllers\admin\users@edit');
+	Router::any('admin/users/(:any)/delete/(:num)',					'\controllers\admin\users@delete');
+	Router::any('admin/users/new',									'\controllers\admin\users@add');
+	Router::any('admin/users/import',								'\controllers\admin\users@import');
 
 //if no route found
 Router::error('\core\error@index');
