@@ -52,7 +52,7 @@
 				<td> <b> <?php echo $user['name']['nombre'] ?> <?php echo $user['name']['apellidos'] ?> </b> </td>
 				<td> <?php echo $user['user'] ?> </td>
 				<td> <?php echo $user['curso'] ?> </td>
-				<td> <?php echo $user['tiempo_registro'] ?> </td>
+				<td> <?php echo $user['tiempo_registrado'] ?> </td>
 				<td>
 
 					<a href="<?php echo DIR ?>admin/users/<?php echo $user['hash'] ?>/edit"><i class="fa fa-pencil"></i> Editar</a> 
