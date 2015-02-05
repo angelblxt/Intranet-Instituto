@@ -39,7 +39,7 @@
 			<td> <i class="fa fa-user"></i> Alumno </td>
 			<td> <i class="fa fa-user"></i> Usuario </td>
 			<td> <i class="fa fa-graduation-cap"></i> Curso </td>
-			<td> <i class="fa fa-calendar"></i> Fecha de Registro </td>
+			<td> <i class="fa fa-calendar"></i> Última Conexión </td>
 			<td> <i class="fa fa-cogs"></i> Acciones </td>
 
 		</tr>
@@ -52,7 +52,7 @@
 				<td> <b> <?php echo $user['name']['nombre'] ?> <?php echo $user['name']['apellidos'] ?> </b> </td>
 				<td> <?php echo $user['user'] ?> </td>
 				<td> <?php echo $user['curso'] ?> </td>
-				<td> <?php echo $user['tiempo_registrado'] ?> </td>
+				<td> <?php echo $user['ultimaConexion'] ?> </td>
 				<td>
 
 					<a href="<?php echo DIR ?>admin/users/<?php echo $user['hash'] ?>/edit"><i class="fa fa-pencil"></i> Editar</a> 
