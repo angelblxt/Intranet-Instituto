@@ -431,7 +431,7 @@ class User extends \core\model {
 		public function getUsers($limit = '')
 		{
 
-			$users = $this->_db->select("SELECT hash, usuario, tiempo_registrado FROM usuarios ORDER BY id DESC ". $limit);
+			$users = $this->_db->select("SELECT hash, usuario, tiempo_ultima_conexion FROM usuarios ORDER BY id DESC ". $limit);
 
 			return $users;
 
@@ -587,6 +587,26 @@ class User extends \core\model {
 			$resultDatosPersonales = $this->_db->insert('datos_personales', $datosPersonales);
 
 			return ($resultUsuarios && $resultRangos && $resultDatosPersonales)? true : false;
+
+		}
+
+	/**
+	*
+	* Método encargado de almacenar la última conexión del Usuario.
+	*
+	* @return boolean TRUE si se ha hecho, FALSE si no.
+	*
+	*/
+
+		public function setLastConnection()
+		{
+
+			$user = Session::get('username');
+			$hash = self::getHash($user);
+
+			$result = $this->_db->update('usuarios', ['tiempo_ultima_conexion' => time()], ['hash' => $hash]);
+
+			return $result;
 
 		}
 
