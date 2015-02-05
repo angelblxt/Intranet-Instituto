@@ -26,6 +26,8 @@ class Users extends \core\controller{
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
 
+		$this->_user->setLastConnection();
+
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
 			$isTeacher       = $this->_user->isTeacher();
@@ -85,12 +87,12 @@ class Users extends \core\controller{
 						$username = Seguridad::desencriptar($user->usuario, 1);
 
 						$usersData[] = [
-							'hash'              => $user->hash,
-							'user'              => $username,
-							'tiempo_registrado' => date('d/m/Y H:i', $user->tiempo_registrado),
-							'name'              => $this->_user->getNameSurname($username),
-							'curso'             => System::getCurso($this->_user->getCurso($username)),
-							'rango'             => System::getRango($this->_user->getRank($username))];
+							'hash'           => $user->hash,
+							'user'           => $username,
+							'ultimaConexion' => System::timeAgo($user->tiempo_ultima_conexion),
+							'name'           => $this->_user->getNameSurname($username),
+							'curso'          => System::getCurso($this->_user->getCurso($username)),
+							'rango'          => System::getRango($this->_user->getRank($username))];
 
 					}
 

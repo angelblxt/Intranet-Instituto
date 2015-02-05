@@ -24,6 +24,8 @@ class Preferences extends \core\controller{
 		if($this->_user->isLogged())
 			$this->username = Session::get('username');
 
+		$this->_user->setLastConnection();
+
 		// Datos del Template.
 			$nombreApellidos = $this->_user->getNameSurname();
 
