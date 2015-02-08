@@ -17,3 +17,4 @@ define('DB_PASS', 'pass');
 RewriteBase /intranet/
 ```
 * En el archivo **php.ini** de configuración del PHP del Servidor cambiar **post_max_filesize** a un valor de **128M**.
+* Dar permisos de lectura y escritura a la carpeta **app/filesystem/** y al archivo **errorlog.html**.
